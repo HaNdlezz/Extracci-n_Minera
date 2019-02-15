@@ -1,0 +1,625 @@
+{% extends "base.html" %}
+{% load static %}
+{% block stylesheet %}
+<link href="{% static 'css/plugins/datapicker/datepicker3.css' %}" rel="stylesheet">
+<link href="{% static 'css/plugins/sweetalert/sweetalert.css' %}" rel="stylesheet">
+<link href="{% static 'bootstrap-select.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/plugins/footable/footable.core.css' %}" rel="stylesheet">
+{% endblock stylesheet %}
+
+{% block content %}
+<div class="row">
+    <form action="{% url 'Historic_Data' %}" method="post">
+     {% csrf_token %}
+        <div class="col-md-12">
+            <div class="ibox">
+                <div class="ibox-title bg-info">
+                    <h5 style="font-size:20px">Filtro</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+<!--
+                        <div class="col-md-3">
+                            <div class="form-group" id="datePicker">
+                                <label for="nombre" class="control-label">Fecha:</label>
+                                <div class="input-group date col-lg-12">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </span>
+                                    <input name="date" id="date" readonly="true" type="text" class="form-control" value="01/01/2018">
+                                </div>
+                            </div>
+                        </div>
+-->
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="fecha" class="control-label">Fecha: </label>
+                                <select name="fecha" id="fecha" class="form-control">
+                                {% for x in diario %}
+                                <option value="{{x.pk}}">{{x.fecha}}</option>
+                                {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button type="submit" class="btn btn-primary btn-block"><i class="fa fa-download"></i> Obtener Datos</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="ibox">
+            <div class="ibox-title bg-info">
+                <h5 style="font-size:20px">Trámites Mineros Encontrados</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="row">
+                    <div class="col-md-12">
+                       <form action="{% url 'Obtener_Datos_General' %}" method="post" >
+                        {% csrf_token %}
+                        <input value="{{fecha}}" type="text" id="pk_diario_2" style="display: none;" name="pk_diario_2">
+                        <button type="submit" class="btn btn-block btn-primary">Ejecutar Algoritmo de Reconocimiento</button>
+                       </form>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <input type="text" class="form-control input-sm m-b-xs" id="filter" placeholder="Buscar: ">
+                        <table data-page-size="20" data-filter=#filter class="table table-bordered footable">
+                            <thead>
+                                <th class="text-center">Solicitud</th>
+                                <th class="text-center">Acciones</th>
+                            </thead>
+                            <tbody>
+                                {% for x in solicitudes %}
+                                    <tr>
+                                        <td class="col-md-6 text-center" style="vertical-align:middle">{{x.tipo_tramite}} - {{x.cve}}</td>
+                                        <td>
+                                            <div class="col-md-4">
+                                                <button target="popup"
+  onclick="window.open('{{x.url}}','popup','width=900,height=1000'); return false;" class="btn btn-block" style="background: #DC7633; color: white;"><i class="fa fa-eye"></i>Original</button>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <button data-toggle="modal" data-text="{{x.texto}}" data-pk="{{x.pk}}" data-target="#modal_analisis_concesion" class="btn btn-block" style="background: #34495E; color: white;"><i class="fa fa-eye"></i>Generado</button>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <button id="generar_vertice" name="generar_vertice" data-pk="{{x.pk}}" type="button" class="btn btn-block generar_vertice" style="background: #000000; color: white;">Extraer Vertices</button>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td colspan="5">
+                                    <ul class="pagination pull-right"></ul>
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal_analisis_concesion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+              <button type="button" id="cerrar_modal_minuta" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h1 class="text-center" id="titulo-modal">Datos Generados</h1>
+        </div>
+        <div class="modal-body">
+            <div class="row announcementInfoText">
+                <div class="col-md-12 copyToClipboard">
+                    <div id="text-div" class="well">
+
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="row step1">
+                <input id="pkChange" name="pkChange" type="text" hidden=""></input>
+                <div class="form-group">
+                    <div class="col-md-2">
+                        <label for="BOLETIN" class="control-label">BOLETIN: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="BOLETIN" name="BOLETIN" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2">
+                        <label for="F_BOLETIN" class="control-label">F_BOLETIN: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="F_BOLETIN" name="F_BOLETIN" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2">
+                        <label for="TIPO_CONCE" class="control-label">TIPO_CONCE: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="TIPO_CONCE" name="TIPO_CONCE" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2">
+                        <label for="CONCESION" class="control-label">CONCESION: </label>
+                    </div>
+                    <dvi class="col-md-10">
+                        <input required id="CONCESION" name="CONCESION" type="text" class="form-control">
+                    </dvi>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2">
+                        <label for="CONCESIONA" class="control-label">CONCESIONA: </label>
+                    </div>
+                    <dvi class="col-md-10">
+                        <input required id="CONCESIONA" name="CONCESIONA" type="text" class="form-control">
+                    </dvi>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2">
+                        <label for="REPRESENTA" class="control-label">REPRESENTA: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="REPRESENTA" name="REPRESENTA" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2">
+                        <label for="DIRECCION" class="control-label">DIRECCIÓN: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="DIRECCION" name="DIRECCION" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2">
+                        <label for="ROLMINERO" class="control-label">ROLMINERO: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="ROLMINERO" name="ROLMINERO" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2">
+                        <label for="F_SENTENC1" class="control-label">F_SENTENC1: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="F_SENTENC1" name="F_SENTENC1" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2">
+                        <label for="F_SENTENC2" class="control-label">F_SENTENC2: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="F_SENTENC2" name="F_SENTENC2" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2">
+                        <label for="F_PUBEXT" class="control-label">F_PUBEXT: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="F_PUBEXT" name="F_PUBEXT" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2">
+                        <label for="F_INSCMIN" class="control-label">F_INSCMIN: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="F_INSCMIN" name="F_INSCMIN" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2">
+                        <label for="FOJAS" class="control-label">FOJAS: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="FOJAS" name="FOJAS" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2">
+                        <label for="NUMERO" class="control-label">NUMERO: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="NUMERO" name="NUMERO" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2">
+                        <label for="YEAR" class="control-label">YEAR: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="YEAR" name="YEAR" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2">
+                        <label for="CIUDAD" class="control-label">CIUDAD: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="CIUDAD" name="CIUDAD" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2">
+                        <label for="JUZGADO" class="control-label">JUZGADO: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="JUZGADO" name="JUZGADO" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2">
+                        <label for="ROLJUZ" class="control-label">ROLJUZ: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="ROLJUZ" name="ROLJUZ" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2">
+                        <label for="IND_METAL" class="control-label">IND_METAL: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="IND_METAL" name="IND_METAL" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2">
+                        <label for="REGION" class="control-label">REGION: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="REGION" name="REGION" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2">
+                        <label for="PROVINCIA" class="control-label">PROVINCIA: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="PROVINCIA" name="PROVINCIA" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2">
+                        <label for="COMUNA" class="control-label">COMUNA: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="COMUNA" name="COMUNA" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2">
+                        <label for="LUGAR" class="control-label">LUGAR: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="LUGAR" name="LUGAR" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2">
+                        <label for="TIPO_UTM" class="control-label">TIPO_UTM: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="TIPO_UTM" name="TIPO_UTM" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2">
+                        <label for="NORTEPI" class="control-label">NORTEPI: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="NORTEPI" name="NORTEPI" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2">
+                        <label for="ESTEPI" class="control-label">ESTEPI: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="ESTEPI" name="ESTEPI" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2">
+                        <label for="VERTICES" class="control-label">VERTICES: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="VERTICES" name="VERTICES" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2">
+                        <label for="HA_PERT" class="control-label">HA_PERT: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="HA_PERT" name="HA_PERT" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2">
+                        <label for="HECTAREAS" class="control-label">HECTAREAS: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="HECTAREAS" name="HECTAREAS" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2">
+                        <label for="OBSER" class="control-label">OBSER: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="OBSER" name="OBSER" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2">
+                        <label for="DATUM" class="control-label">DATUM: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="DATUM" name="DATUM" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2">
+                        <label for="F_PRESTRIB" class="control-label">F_PRESTRIB: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="F_PRESTRIB" name="F_PRESTRIB" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2">
+                        <label for="ARCHIVO" class="control-label">ARCHIVO: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="ARCHIVO" name="ARCHIVO" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2">
+                        <label for="CORTE" class="control-label">CORTE: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="CORTE" name="CORTE" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2">
+                        <label for="HUSO" class="control-label">HUSO: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="HUSO" name="HUSO" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2">
+                        <label for="EDITOR" class="control-label">EDITOR: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="EDITOR" name="EDITOR" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2">
+                        <label for="CVE" class="control-label">CVE: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="CVE" name="CVE" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2">
+                        <label for="TIPO_TRAMITE" class="control-label">TIPO_TRAMITE: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="TIPO_TRAMITE" name="TIPO_TRAMITE" type="text" class="form-control">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+           <div class="col-md-12">
+                <div class="col-md-6 step1">
+                    <button id="cierra" data-dismiss="modal" class="btn btn-danger btn-block"><i class="fa fa-times"></i> Cerrar</button>
+                </div>
+                <div class="col-md-6 step1">
+                    <button id="saveChange" name="saveChange" type="button" class="btn btn-block btn-primary">Guardar Cambios</button>
+                </div>
+           </div>
+        </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+
+{% block javascript %}
+<script src="{% static 'js/plugins/footable/footable.all.min.js' %}"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(".generar_vertice").on("click",function(){
+            button = $(this);
+            pk = button.data("pk")
+            data = {
+                pk: pk,
+                csrfmiddlewaretoken: '{{csrf_token}}'
+            }
+            $.post("{% url 'ingresar_vertices' %}",data,function(response){
+                if(response.ok==-1){
+                    swal({title: "Oh-oh!", text: "Ya se han generado estos vertices anteriormente", type: "error"});    
+                }else{
+                    swal({title: "LISTO!", text: "Se han generado "+response.ok+" vertices", type: "success"});
+                }
+            });
+        });
+        $(".footable").footable();
+        $('#modal_analisis_concesion').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var text = button.data('text'); // Extract info from data-* attributes
+            var pk = button.data('pk'); // Extract info from data-* attributes
+            $("#text-div").html(text);
+            data = {
+                pk : pk,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            }
+            $.post("{% url 'get_datos' %}",data,function(response){
+                console.log(response.f_boletin);
+                $("#pkChange").val(pk);
+                $("#BOLETIN").val(response.boletin);
+                $("#F_BOLETIN").val(response.f_boletin);
+                $("#TIPO_CONCE").val(response.tipo_conce);
+                $("#CONCESION").val(response.concesion);
+                $("#CONCESIONa").val(response.concesiona);
+                $("#REPRESENTA").val(response.representa);
+                $("#DIRECCION").val(response.direccion);
+                $("#ROLMINERO").val(response.rolminero);
+                $("#F_SENTENC1").val(response.f_sentenc1);
+                $("#F_SENTENC2").val(response.f_sentenc2);
+                $("#F_PUBEXT").val(response.f_pubext);
+                $("#F_INSCMIN").val(response.f_inscmin);
+                $("#FOJAS").val(response.fojas);
+                $("#NUMERO").val(response.numero);
+                $("#YEAR").val(response.year);
+                $("#CIUDAD").val(response.ciudad);
+                $("#JUZGADO").val(response.juzgado);
+                $("#ROLJUZ").val(response.roljuz);
+                $("#IND_METAL").val(response.ind_metal);
+                $("#REGION").val(response.region);
+                $("#PROVINCIA").val(response.provincia);
+                $("#COMUNA").val(response.comuna);
+                $("#LUGAR").val(response.lugar);
+                $("#TIPO_UTM").val(response.tipo_utm);
+                $("#NORTEPI").val(response.nortepi);
+                $("#ESTEPI").val(response.estepi);
+                $("#VERTICES").val(response.vertices);
+                $("#HA_PERT").val(response.ha_pert);
+                $("#HECTAREAS").val(response.hectareas);
+                $("#OBSER").val(response.obser);
+                $("#DATUM").val(response.datum);
+                $("#F_PRESTRIB").val(response.f_prestrib);
+                $("#ARCHIVO").val(response.archivo);
+                $("#CORTE").val(response.corte);
+                $("#HUSO").val(response.huso);
+                $("#EDITOR").val(response.editor);
+                $("#CVE").val(response.cve);
+                $("#TIPO_TRAMITE").val(response.tipo_tramite);
+            });
+            $("#saveChange").on("click",function(){
+                var pk = $("#pkChange").val();
+                var BOLETIN = $("#BOLETIN").val();
+                var F_BOLETIN = $("#F_BOLETIN").val();
+                var CONCESION = $("#CONCESION").val();
+                var CONCESIONA = $("#CONCESIONA").val();
+                var REPRESENTA = $("#REPRESENTA").val();
+                var REGION = $("#REGION").val();
+                var PROVINCIA = $("#PROVINCIA").val();
+                var COMUNA = $("#COMUNA").val();
+                var DIRECCION = $("#DIRECCION").val();
+                var TIPO_UTM = $("#TIPO_UTM").val();
+                var NORTEPI = $("#NORTEPI").val();
+                var ESTEPI = $("#ESTEPI").val();
+                var HUSO = $("#HUSO").val();
+                var FECHA_SENTENCIA1 = $("#FECHA_SENTENCIA1").val();
+                var FECHA_SENTENCIA2 = $("#FECHA_SENTENCIA2").val();
+                var EDITOR = $("#EDITOR").val();
+                var HA_PERT = $("#HA_PERT").val();
+                var JUZGADO = $("#JUZGADO").val();
+                var ROLJUZ = $("#ROLJUZ").val();
+                var F_PUBEXT = $("#F_PUBEXT").val();
+                var F_INSCMIN = $("#F_INSCMIN").val();
+                var VERTICES = $("#VERTICES").val();
+                var DATUM = $("#DATUM").val();
+                var NUMERO = $("#NUMERO").val();
+                var FOJAS = $("#FOJAS").val();
+                var YEAR = $("#YEAR").val();
+                var CIUDAD = $("#CIUDAD").val();
+                var CARTAIGM = $("#CARTAIGM").val();
+                var OBSER = $("#OBSER").val();
+                var PED_ASOC = $("#PED_ASOC").val();
+                var FECHAPED = $("#FECHAPED").val();
+                var ROL_MINERO = $("#ROL_MINERO").val();
+                var TIPOCOORD = $("#TIPOCOORD").val();
+                var NORTE = $("#NORTE").val();
+                var MTSN = $("#MTSN").val();
+                var SUR = $("#SUR").val();
+                var MTSS = $("#MTSS").val();
+                var ESTE = $("#ESTE").val();
+                var MTSE = $("#MTSE").val();
+                var OESTE = $("#OESTE").val();
+                var MTSO = $("#MTSO").val();
+                var TIPO_CONCE = $("#TIPO_CONCE").val();
+                var CVE = $("#CVE").val();
+                var data = {
+                    pk: pk,
+                    BOLETIN: BOLETIN,
+                    F_BOLETIN: F_BOLETIN,
+                    CONCESION: CONCESION,
+                    CONCESIONA: CONCESIONA,
+                    REPRESENTA: REPRESENTA,
+                    REGION: REGION,
+                    PROVINCIA: PROVINCIA,
+                    COMUNA: COMUNA,
+                    DIRECCION: DIRECCION,
+                    TIPO_UTM: TIPO_UTM,
+                    NORTEPI: NORTEPI,
+                    ESTEPI: ESTEPI,
+                    HUSO: HUSO,
+                    FECHA_SENTENCIA1: FECHA_SENTENCIA1,
+                    FECHA_SENTENCIA2: FECHA_SENTENCIA2,
+                    EDITOR: EDITOR,
+                    HA_PERT: HA_PERT,
+                    JUZGADO: JUZGADO,
+                    ROLJUZ: ROLJUZ,
+                    F_PUBEXT: F_PUBEXT,
+                    F_INSCMIN: F_INSCMIN,
+                    VERTICES: VERTICES,
+                    DATUM: DATUM,
+                    NUMERO: NUMERO,
+                    FOJAS: FOJAS,
+                    YEAR: YEAR,
+                    CIUDAD: CIUDAD,
+                    CARTAIGM: CARTAIGM,
+                    OBSER: OBSER,
+                    PED_ASOC: PED_ASOC,
+                    FECHAPED: FECHAPED,
+                    ROL_MINERO: ROL_MINERO,
+                    TIPOCOORD: TIPOCOORD,
+                    NORTE: NORTE,
+                    MTSN: MTSN,
+                    SUR: SUR,
+                    MTSS: MTSS,
+                    ESTE: ESTE,
+                    MTSE: MTSE,
+                    OESTE: OESTE,
+                    MTSO: MTSO,
+                    TIPO_CONCE: TIPO_CONCE,
+                    CVE: CVE,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                }
+                $.post("{% url 'actualizar_datos' %}",data,function(){
+                    $('#modal_analisis').modal('hide');
+                    $('body').removeClass('modal-open');
+                    $('.modal-backdrop').remove();
+                    //swal({title: "LISTO!", text: "Ha modificado la solicitud", type: "success"});
+                })
+            });
+        });
+    })
+</script>
+{% endblock javascript %}

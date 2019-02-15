@@ -1,0 +1,31 @@
+{% load static %}
+
+<ul class="nav metismenu" id="side-menu">
+    <li class="nav-header">
+        <div class="dropdown profile-element">
+                <span>
+                    <a href="#">
+                        <img class="center-block img-responsive" src="{% static 'img/dataresearch-logo.png' %}" style="width: 150px;" />
+                    </a>
+                </span>
+                <br>
+                <h4 class="text-center" style="color:#FFF;">CIADE - Gestión de Tutorías</h4>
+        </div>
+        <div class="logo-element">
+            CUBE+
+        </div>
+    </li>
+    <li id="index">
+        <a href="{% url 'index' %}"><i class="fa fa-download"></i> <span class="nav-label">Descarga de Datos</span></a>
+    </li>
+    <li id="Historic_Data">
+        <a href="{% url 'Historic_Data' %}"><i class="fa fa-list"></i> <span class="nav-label">Histórico de Datos</span></a>
+    </li>
+    <li id="Historic_Data">
+        <a href="{% url 'excel_vertices' %}"><i class="fa fa-list"></i> <span class="nav-label">Reporte de Vertices</span></a>
+    </li>
+    <li id="Historic_Data">
+        <a href="{% url 'excel_registros' %}"><i class="fa fa-list"></i> <span class="nav-label">Reporte de Registros</span></a>
+    </li>
+
+    

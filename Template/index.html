@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load static %}
+{% block stylesheet %}
+
+{% endblock stylesheet %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="ibox">
+            <div class="ibox-title">
+                <h5 style="font-size:20px">Cargar Boletín de Mineria</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form action="{% url 'descargar_boletin' %}" method="post">
+                           {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-10">
+                                    <div class="form-group">
+                                        <label for="archivo" class="control-label">Url Boletín:</label>
+                                        <input class="form-control" id="archivo" name="archivo" type="text">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <lable class="control-label">.</lable>
+                                        <button class="btn btn-block btn-primary">Descargar Data</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+
+{% block javascript %}
+
+{% endblock javascript %}
