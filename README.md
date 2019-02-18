@@ -40,3 +40,6 @@
 ### Stop server using
 * `` deactivate ``
 * or ``Ctrl + C``
+
+## How to use it
+- Working In Progress...
