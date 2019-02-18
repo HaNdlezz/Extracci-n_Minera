@@ -34,6 +34,7 @@
 * ``honcho run python manage.py createsuperuser``
 
 ### Run project development mode
+* while into ``/prev`` container folder path: ``source bin/activate``
 * ``honcho run python manage.py runserver``
 * You can see it, by default: ``http://localhost:8000``
 
