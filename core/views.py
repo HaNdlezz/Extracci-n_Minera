@@ -134,9 +134,9 @@ def Historic_Data(request):
     return render(request, template_name, data)
 
 def extraerConcesiones(concesion):
-    if "PEDIMENTOS" in concesion.tipo_tramite:
+    if "EXPLORACION" in concesion.tipo_tramite:
         concesion.tipo_conce = "PED"
-    if "MANIFESTACIONES" in concesion.tipo_tramite:
+    if "EXPLOTACION" in concesion.tipo_tramite:
         concesion.tipo_conce = "MAN"
     patron = re.compile("Huso\s\d\d|HUSO\s\d\d|huso\s\d\d")
     if patron.search(concesion.texto):
@@ -212,7 +212,7 @@ def Obtener_Datos_General(request):
         else:
             x.COORE_APRO = "No se detecta estepi"
         x.save()
-        if x.tipo_tramite=="MANIFESTACIONES MINERAS" or x.tipo_tramite=="PEDIMENTOS MINEROS":
+        if x.tipo_tramite=="EXTRACTOS DE SENTENCIA DE EXPLORACION" or x.tipo_tramite=="EXTRACTOS DE SENTENCIA DE EXPLOTACION":
             extraerConcesiones(x)
     return HttpResponseRedirect(reverse_lazy('Historic_Data'))
 
@@ -257,9 +257,24 @@ def get_datos(request):
     response["EDITOR"] = registro.editor
     response["CVE"] = registro.cve
     response["TIPO_TRAMITE"] = registro.tipo_tramite
-    response["CVE"] = registro.cve
-    print registro.tipo_tramite
-    print response
+    response["N_SCARASUP"] = registro.n_scarasup
+    response["E_OCARASUP"] = registro.e_ocarasup
+    response["F_PRESENTA"] = registro.f_presenta
+    response["F_RESOLUCI"] = registro.f_resoluci
+    response["F_INSCRIBE"] = registro.f_inscribe
+    response["CARTAIGM"] = registro.cartaigm
+    response["PED_ASOC"] = registro.ped_asoc
+    response["FECHAPED"] = registro.fechaped
+    response["ROLPED"] = registro.rolped
+    response["TIPOCOORD"] = registro.tipocoord
+    response["NORTE"] = registro.norte
+    response["MTSN"] = registro.mtsn
+    response["SUR"] = registro.sur
+    response["MTSS"] = registro.mtss
+    response["ESTE"] = registro.este
+    response["MTSE"] = registro.mtse
+    response["OESTE"] = registro.oeste
+    response["MTSO"] = registro.mtso
     return HttpResponse(
         json.dumps(response),
         content_type="application/json"
@@ -269,36 +284,51 @@ def actualizar_datos(request):
     registro = Registro_Mineria.objects.get(pk=request.POST["pk"])
     registro.boletin = request.POST["BOLETIN"]
     registro.f_boletin = request.POST["F_BOLETIN"]
+    registro.tipo_conce = request.POST["TIPO_CONCE"]
     registro.concesion = request.POST["CONCESION"]
     registro.concesiona = request.POST["CONCESIONA"]
     registro.representa = request.POST["REPRESENTA"]
+    registro.direccion = request.POST["DIRECCION"]
+    registro.rolminero = request.POST["ROLMINERO"]
+    registro.f_sentenc1 = request.POST["F_SENTENC1"]
+    registro.f_sentenc2 = request.POST["F_SENTENC2"]
+    registro.f_pubext = request.POST["F_PUBEXT"]
+    registro.f_inscmin = request.POST["F_INSCMIN"]
+    registro.fojas = request.POST["FOJAS"]
+    registro.numero = request.POST["NUMERO"]
+    registro.year = request.POST["YEAR"]
+    registro.ciudad = request.POST["CIUDAD"]
+    registro.juzgado = request.POST["JUZGADO"]
+    registro.roljuz = request.POST["ROLJUZ"]
+    registro.ind_metal = request.POST["IND_METAL"]
     registro.region = request.POST["REGION"]
     registro.provincia = request.POST["PROVINCIA"]
     registro.comuna = request.POST["COMUNA"]
-    registro.direccion = request.POST["DIRECCION"]
+    registro.lugar = request.POST["LUGAR"]
     registro.tipo_utm = request.POST["TIPO_UTM"]
     registro.nortepi = request.POST["NORTEPI"]
     registro.estepi = request.POST["ESTEPI"]
-    registro.huso = request.POST["HUSO"]
-    registro.fecha_sentencia1 = request.POST["FECHA_SENTENCIA1"]
-    registro.fecha_sentencia2 = request.POST["FECHA_SENTENCIA2"]
-    registro.editor = request.POST["EDITOR"]
-    registro.ha_pert = request.POST["HA_PERT"]
-    registro.juzgado = request.POST["JUZGADO"]
-    registro.roljuz = request.POST["ROLJUZ"]
-    registro.f_pubext = request.POST["F_PUBEXT"]
-    registro.f_inscmin = request.POST["F_INSCMIN"]
     registro.vertices = request.POST["VERTICES"]
-    registro.datum = request.POST["DATUM"]
-    registro.numero = request.POST["NUMERO"]
-    registro.fojas = request.POST["FOJAS"]
-    registro.year = request.POST["YEAR"]
-    registro.ciudad = request.POST["CIUDAD"]
-    registro.cartaigm = request.POST["CARTAIGM"]
+    registro.ha_pert = request.POST["HA_PERT"]
+    registro.hectareas = request.POST["HECTAREAS"]
     registro.obser = request.POST["OBSER"]
+    registro.datum = request.POST["DATUM"]
+    registro.f_prestrib = request.POST["F_PRESTRIB"]
+    registro.archivo = request.POST["ARCHIVO"]
+    registro.corte = request.POST["CORTE"]
+    registro.huso = request.POST["HUSO"]
+    registro.editor = request.POST["EDITOR"]
+    registro.cve = request.POST["CVE"]
+    registro.tipo_tramite = request.POST["TIPO_TRAMITE"]
+    registro.n_scarasup = request.POST["N_SCARASUP"]
+    registro.e_ocarasup = request.POST["E_OCARASUP"]
+    registro.f_presenta = request.POST["F_PRESENTA"]
+    registro.f_resoluci = request.POST["F_RESOLUCI"]
+    registro.f_inscribe = request.POST["F_INSCRIBE"]
+    registro.cartaigm = request.POST["CARTAIGM"]
     registro.ped_asoc = request.POST["PED_ASOC"]
     registro.fechaped = request.POST["FECHAPED"]
-    registro.rol_minero = request.POST["ROL_MINERO"]
+    registro.rolped = request.POST["ROLPED"]
     registro.tipocoord = request.POST["TIPOCOORD"]
     registro.norte = request.POST["NORTE"]
     registro.mtsn = request.POST["MTSN"]
@@ -308,8 +338,6 @@ def actualizar_datos(request):
     registro.mtse = request.POST["MTSE"]
     registro.oeste = request.POST["OESTE"]
     registro.mtso = request.POST["MTSO"]
-    registro.tipo_conce = request.POST["TIPO_CONCE"]
-    registro.cve = request.POST["CVE"]
     registro.save()
     response = {}
     return HttpResponse(
@@ -417,9 +445,9 @@ def excel_registros(request):
         worksheet.write(0, 4, 'CONCESIONA')
         worksheet.write(0, 5, 'REPRESENTA')
         worksheet.write(0, 6, 'DIRECCION')
-        worksheet.write(0, 7, 'ROL_MINERO')
-        worksheet.write(0, 8, 'FECHA_SENTENCIA1')
-        worksheet.write(0, 9, 'FECHA_SENTENCIA2')
+        worksheet.write(0, 7, 'ROLMINERO')
+        worksheet.write(0, 8, 'F_SENTENC1')
+        worksheet.write(0, 9, 'F_SENTENC2')
         worksheet.write(0, 10, 'F_PUBEXT')
         worksheet.write(0, 11, 'F_INSCMIN')
         worksheet.write(0, 12, 'FOJAS')
@@ -428,71 +456,72 @@ def excel_registros(request):
         worksheet.write(0, 15, 'CIUDAD')
         worksheet.write(0, 16, 'JUZGADO')
         worksheet.write(0, 17, 'ROLJUZ')
-        worksheet.write(0, 18, 'REGION')
-        worksheet.write(0, 19, 'PROVINCIA')
-        worksheet.write(0, 20, 'COMUNA')
-        worksheet.write(0, 21, 'LUGAR')
-        worksheet.write(0, 22, 'TIPO_UTM')
-        worksheet.write(0, 23, 'NORTEPI')
-        worksheet.write(0, 24, 'ESTEPI')
-        worksheet.write(0, 25, 'VERTICES')
-        worksheet.write(0, 26, 'HA_PERT')
-        worksheet.write(0, 27, 'HECTAREAS')
-        worksheet.write(0, 28, 'OBSER')
-        worksheet.write(0, 29, 'DATUM')
-        worksheet.write(0, 30, 'F_PRESTRIB')
-        worksheet.write(0, 31, 'ARCHIVO')
-        worksheet.write(0, 32, 'HUSO')
-        worksheet.write(0, 33, 'EDITOR')
+        worksheet.write(0, 18, 'IND_METAL')
+        worksheet.write(0, 19, 'REGION')
+        worksheet.write(0, 20, 'PROVINCIA')
+        worksheet.write(0, 21, 'COMUNA')
+        worksheet.write(0, 22, 'LUGAR')
+        worksheet.write(0, 23, 'TIPO_UTM')
+        worksheet.write(0, 24, 'NORTEPI')
+        worksheet.write(0, 25, 'ESTEPI')
+        worksheet.write(0, 26, 'VERTICES')
+        worksheet.write(0, 27, 'HA_PERT')
+        worksheet.write(0, 28, 'HECTAREAS')
+        worksheet.write(0, 29, 'OBSER')
+        worksheet.write(0, 30, 'DATUM')
+        worksheet.write(0, 31, 'F_PRESTRIB')
+        worksheet.write(0, 32, 'ARCHIVO')
+        worksheet.write(0, 33, 'CORTE')
+        worksheet.write(0, 34, 'HUSO')
+        worksheet.write(0, 35, 'EDITOR')
         cont2=1
         cont = 1
         for x in Registro_Mineria.objects.all():
-            try:
+            if True:
                 nulo = len(str(x.concesion))
-            except:
+            else:
                 nulo = len(str(unidecode.unidecode(x.concesion)))
-            if  nulo> 4 and str(x.region)=="2":
-                try:
-                    fechaFormato = str(x.f_boletin).split("/")
-                    fechaFormato =fechaFormato[2]+"/"+fechaFormato[1]+"/"+fechaFormato[0]
-                    worksheet.write(cont, 0, x.boletin)
-                    worksheet.write(cont, 1, fechaFormato)
-                    worksheet.write(cont, 2, x.tipo_conce)
-                    worksheet.write(cont, 3, x.concesion)
-                    worksheet.write(cont, 4, x.concesiona)
-                    worksheet.write(cont, 5, x.representa)
-                    worksheet.write(cont, 6, x.direccion)
-                    worksheet.write(cont, 7, x.rol_minero)
-                    worksheet.write(cont, 8, x.fecha_sentencia1)
-                    worksheet.write(cont, 9, x.fecha_sentencia2)
-                    worksheet.write(cont, 10, x.f_pubext)
-                    worksheet.write(cont, 11, x.f_inscmin)
-                    worksheet.write(cont, 12, x.fojas)
-                    worksheet.write(cont, 13, x.numero)
-                    worksheet.write(cont, 14, x.year)
-                    worksheet.write(cont, 15, x.ciudad)
-                    worksheet.write(cont, 16, x.juzgado)
-                    worksheet.write(cont, 17, x.roljuz)
-                    worksheet.write(cont, 18, x.region)
-                    worksheet.write(cont, 19, x.provincia)
-                    worksheet.write(cont, 20, x.comuna)
-                    worksheet.write(cont, 21, "")
-                    worksheet.write(cont, 22, x.tipo_utm)
-                    worksheet.write(cont, 23, x.nortepi)
-                    worksheet.write(cont, 24, x.estepi)
-                    worksheet.write(cont, 25, x.vertices)
-                    worksheet.write(cont, 26, "")
-                    worksheet.write(cont, 27, x.ha_pert)
-                    worksheet.write(cont, 28, x.obser)
-                    worksheet.write(cont, 29, x.datum)
-                    worksheet.write(cont, 30, "")
-                    worksheet.write(cont, 31, "")
-                    worksheet.write(cont, 32, x.huso)
-                    worksheet.write(cont, 33, x.editor)
-                    cont += 1
-                except:
-                    print cont2
-                cont2+=1
+                #try:
+            if x.tipo_tramite == "EXTRACTOS DE SENTENCIA DE EXPLORACION" or x.tipo_tramite == "EXTRACTOS DE SENTENCIA DE EXPLOTACION":
+                fechaFormato = str(x.f_boletin).split("/")
+                fechaFormato =fechaFormato[2]+"/"+fechaFormato[1]+"/"+fechaFormato[0]
+                worksheet.write(cont, 0, x.boletin)
+                worksheet.write(cont, 1, fechaFormato)
+                worksheet.write(cont, 2, x.tipo_conce)
+                worksheet.write(cont, 3, x.concesion)
+                worksheet.write(cont, 4, x.concesiona)
+                worksheet.write(cont, 5, x.representa)
+                worksheet.write(cont, 6, x.direccion)
+                worksheet.write(cont, 7, x.rolminero)
+                worksheet.write(cont, 8, x.f_sentenc1)
+                worksheet.write(cont, 9, x.f_sentenc2)
+                worksheet.write(cont, 10, x.f_pubext)
+                worksheet.write(cont, 11, x.f_inscmin)
+                worksheet.write(cont, 12, x.fojas)
+                worksheet.write(cont, 13, x.numero)
+                worksheet.write(cont, 14, x.year)
+                worksheet.write(cont, 15, x.ciudad)
+                worksheet.write(cont, 16, x.juzgado)
+                worksheet.write(cont, 17, x.roljuz)
+                worksheet.write(cont, 18, x.ind_metal)
+                worksheet.write(cont, 19, x.region)
+                worksheet.write(cont, 20, x.provincia)
+                worksheet.write(cont, 21, x.comuna)
+                worksheet.write(cont, 22, x.lugar)
+                worksheet.write(cont, 23, x.tipo_utm)
+                worksheet.write(cont, 24, x.nortepi)
+                worksheet.write(cont, 25, x.estepi)
+                worksheet.write(cont, 26, x.vertices)
+                worksheet.write(cont, 27, x.ha_pert)
+                worksheet.write(cont, 28, x.hectareas)
+                worksheet.write(cont, 29, x.obser)
+                worksheet.write(cont, 30, x.datum)
+                worksheet.write(cont, 31, x.f_prestrib)
+                worksheet.write(cont, 32, x.archivo)
+                worksheet.write(cont, 33, x.corte)
+                worksheet.write(cont, 34, x.huso)
+                worksheet.write(cont, 35, x.editor)
+                cont += 1
         workbook.close()
         return render(request, template_name, data)
     return render(request, template_name, data)

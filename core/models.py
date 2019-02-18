@@ -10,6 +10,7 @@ class Diario(models.Model):
 	fecha = models.CharField(max_length=50)
 
 class Registro_Mineria(models.Model):
+    #concesiones
     diario = models.ForeignKey(Diario)
     boletin = models.CharField(max_length=200,null=True,blank=True)
     f_boletin = models.CharField(max_length=200,null=True,blank=True)
@@ -51,6 +52,26 @@ class Registro_Mineria(models.Model):
     cve = models.CharField(max_length=200)
     texto = models.TextField(max_length=100000,null=True,blank=True)
     url = models.CharField(max_length=254,null=True,blank=True)
+    #pedimentos
+    n_scarasup = models.CharField(max_length=254,null=True,blank=True)
+    e_ocarasup = models.CharField(max_length=254,null=True,blank=True)
+    f_presenta = models.CharField(max_length=254,null=True,blank=True)
+    f_resoluci = models.CharField(max_length=254,null=True,blank=True)
+    f_inscribe = models.CharField(max_length=254,null=True,blank=True)
+    cartaigm = models.CharField(max_length=254,null=True,blank=True)
+    #manifestacion
+    ped_asoc = models.CharField(max_length=254,null=True,blank=True)
+    fechaped = models.CharField(max_length=254,null=True,blank=True)
+    rolped = models.CharField(max_length=254,null=True,blank=True)
+    tipocoord = models.CharField(max_length=254,null=True,blank=True)
+    norte = models.CharField(max_length=254,null=True,blank=True)
+    mtsn = models.CharField(max_length=254,null=True,blank=True)
+    sur = models.CharField(max_length=254,null=True,blank=True)
+    mtss = models.CharField(max_length=254,null=True,blank=True)
+    este = models.CharField(max_length=254,null=True,blank=True)
+    mtse = models.CharField(max_length=254,null=True,blank=True)
+    oeste = models.CharField(max_length=254,null=True,blank=True)
+    mtso = models.CharField(max_length=254,null=True,blank=True)
     def __str__(self):
         return self.tipo_tramite + " - " + self.cve
 

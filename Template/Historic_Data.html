@@ -88,8 +88,11 @@
                                             <div class="col-md-4">
                                                 <button data-toggle="modal" data-text="{{x.texto}}" data-pk="{{x.pk}}" data-target="#modal_analisis_concesion" class="btn btn-block" style="background: #34495E; color: white;"><i class="fa fa-eye"></i>Generado</button>
                                             </div>
+                                            {% if x.tipo_tramite == "EXTRACTOS DE SENTENCIA DE EXPLORACION" or x.tipo_tramite == "EXTRACTOS DE SENTENCIA DE EXPLOTACION" %}
                                             <div class="col-md-4">
                                                 <button id="generar_vertice" name="generar_vertice" data-pk="{{x.pk}}" type="button" class="btn btn-block generar_vertice" style="background: #000000; color: white;">Extraer Vertices</button>
+                                            </div>
+                                            {% endif %}
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -127,7 +130,7 @@
             <hr>
             <div class="row step1">
                 <input id="pkChange" name="pkChange" type="text" hidden=""></input>
-                <div class="form-group">
+                <div class="form-group" id="BOLETIN_FORM">
                     <div class="col-md-2">
                         <label for="BOLETIN" class="control-label">BOLETIN: </label>
                     </div>
@@ -135,7 +138,7 @@
                         <input required id="BOLETIN" name="BOLETIN" type="text" class="form-control">
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="F_BOLETIN_FORM">
                     <div class="col-md-2">
                         <label for="F_BOLETIN" class="control-label">F_BOLETIN: </label>
                     </div>
@@ -143,7 +146,7 @@
                         <input required id="F_BOLETIN" name="F_BOLETIN" type="text" class="form-control">
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="TIPO_CONCE_FORM">
                     <div class="col-md-2">
                         <label for="TIPO_CONCE" class="control-label">TIPO_CONCE: </label>
                     </div>
@@ -151,7 +154,7 @@
                         <input required id="TIPO_CONCE" name="TIPO_CONCE" type="text" class="form-control">
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="CONCESION_FORM">
                     <div class="col-md-2">
                         <label for="CONCESION" class="control-label">CONCESION: </label>
                     </div>
@@ -159,7 +162,7 @@
                         <input required id="CONCESION" name="CONCESION" type="text" class="form-control">
                     </dvi>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="CONCESIONA_FORM">
                     <div class="col-md-2">
                         <label for="CONCESIONA" class="control-label">CONCESIONA: </label>
                     </div>
@@ -167,7 +170,7 @@
                         <input required id="CONCESIONA" name="CONCESIONA" type="text" class="form-control">
                     </dvi>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="REPRESENTA_FORM">
                     <div class="col-md-2">
                         <label for="REPRESENTA" class="control-label">REPRESENTA: </label>
                     </div>
@@ -175,7 +178,7 @@
                         <input required id="REPRESENTA" name="REPRESENTA" type="text" class="form-control">
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="DIRECCION_FORM">
                     <div class="col-md-2">
                         <label for="DIRECCION" class="control-label">DIRECCIÓN: </label>
                     </div>
@@ -183,7 +186,7 @@
                         <input required id="DIRECCION" name="DIRECCION" type="text" class="form-control">
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="ROLMINERO_FORM">
                     <div class="col-md-2">
                         <label for="ROLMINERO" class="control-label">ROLMINERO: </label>
                     </div>
@@ -191,7 +194,7 @@
                         <input required id="ROLMINERO" name="ROLMINERO" type="text" class="form-control">
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="F_SENTENC1_FORM">
                     <div class="col-md-2">
                         <label for="F_SENTENC1" class="control-label">F_SENTENC1: </label>
                     </div>
@@ -199,7 +202,7 @@
                         <input required id="F_SENTENC1" name="F_SENTENC1" type="text" class="form-control">
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="F_SENTENC2_FORM">
                     <div class="col-md-2">
                         <label for="F_SENTENC2" class="control-label">F_SENTENC2: </label>
                     </div>
@@ -207,7 +210,7 @@
                         <input required id="F_SENTENC2" name="F_SENTENC2" type="text" class="form-control">
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="F_PUBEXT_FORM">
                     <div class="col-md-2">
                         <label for="F_PUBEXT" class="control-label">F_PUBEXT: </label>
                     </div>
@@ -215,7 +218,7 @@
                         <input required id="F_PUBEXT" name="F_PUBEXT" type="text" class="form-control">
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="F_INSCMIN_FORM">
                     <div class="col-md-2">
                         <label for="F_INSCMIN" class="control-label">F_INSCMIN: </label>
                     </div>
@@ -223,7 +226,7 @@
                         <input required id="F_INSCMIN" name="F_INSCMIN" type="text" class="form-control">
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="FOJAS_FORM">
                     <div class="col-md-2">
                         <label for="FOJAS" class="control-label">FOJAS: </label>
                     </div>
@@ -231,7 +234,7 @@
                         <input required id="FOJAS" name="FOJAS" type="text" class="form-control">
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="NUMERO_FORM">
                     <div class="col-md-2">
                         <label for="NUMERO" class="control-label">NUMERO: </label>
                     </div>
@@ -239,7 +242,7 @@
                         <input required id="NUMERO" name="NUMERO" type="text" class="form-control">
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="YEAR_FORM">
                     <div class="col-md-2">
                         <label for="YEAR" class="control-label">YEAR: </label>
                     </div>
@@ -247,7 +250,7 @@
                         <input required id="YEAR" name="YEAR" type="text" class="form-control">
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="CIUDAD_FORM">
                     <div class="col-md-2">
                         <label for="CIUDAD" class="control-label">CIUDAD: </label>
                     </div>
@@ -255,7 +258,7 @@
                         <input required id="CIUDAD" name="CIUDAD" type="text" class="form-control">
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="JUZGADO_FORM">
                     <div class="col-md-2">
                         <label for="JUZGADO" class="control-label">JUZGADO: </label>
                     </div>
@@ -263,7 +266,7 @@
                         <input required id="JUZGADO" name="JUZGADO" type="text" class="form-control">
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="ROLJUZ_FORM">
                     <div class="col-md-2">
                         <label for="ROLJUZ" class="control-label">ROLJUZ: </label>
                     </div>
@@ -271,7 +274,7 @@
                         <input required id="ROLJUZ" name="ROLJUZ" type="text" class="form-control">
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="IND_METAL_FORM">
                     <div class="col-md-2">
                         <label for="IND_METAL" class="control-label">IND_METAL: </label>
                     </div>
@@ -279,7 +282,7 @@
                         <input required id="IND_METAL" name="IND_METAL" type="text" class="form-control">
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="REGION_FORM">
                     <div class="col-md-2">
                         <label for="REGION" class="control-label">REGION: </label>
                     </div>
@@ -287,7 +290,7 @@
                         <input required id="REGION" name="REGION" type="text" class="form-control">
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="PROVINCIA_FORM">
                     <div class="col-md-2">
                         <label for="PROVINCIA" class="control-label">PROVINCIA: </label>
                     </div>
@@ -295,7 +298,7 @@
                         <input required id="PROVINCIA" name="PROVINCIA" type="text" class="form-control">
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="COMUNA_FORM">
                     <div class="col-md-2">
                         <label for="COMUNA" class="control-label">COMUNA: </label>
                     </div>
@@ -303,7 +306,7 @@
                         <input required id="COMUNA" name="COMUNA" type="text" class="form-control">
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="LUGAR_FORM">
                     <div class="col-md-2">
                         <label for="LUGAR" class="control-label">LUGAR: </label>
                     </div>
@@ -311,7 +314,7 @@
                         <input required id="LUGAR" name="LUGAR" type="text" class="form-control">
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="TIPO_UTM_FORM">
                     <div class="col-md-2">
                         <label for="TIPO_UTM" class="control-label">TIPO_UTM: </label>
                     </div>
@@ -319,7 +322,7 @@
                         <input required id="TIPO_UTM" name="TIPO_UTM" type="text" class="form-control">
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="NORTEPI_FORM">
                     <div class="col-md-2">
                         <label for="NORTEPI" class="control-label">NORTEPI: </label>
                     </div>
@@ -327,7 +330,7 @@
                         <input required id="NORTEPI" name="NORTEPI" type="text" class="form-control">
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="ESTEPI_FORM">
                     <div class="col-md-2">
                         <label for="ESTEPI" class="control-label">ESTEPI: </label>
                     </div>
@@ -335,7 +338,7 @@
                         <input required id="ESTEPI" name="ESTEPI" type="text" class="form-control">
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="VERTICES_FORM">
                     <div class="col-md-2">
                         <label for="VERTICES" class="control-label">VERTICES: </label>
                     </div>
@@ -343,7 +346,7 @@
                         <input required id="VERTICES" name="VERTICES" type="text" class="form-control">
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="HA_PERT_FORM">
                     <div class="col-md-2">
                         <label for="HA_PERT" class="control-label">HA_PERT: </label>
                     </div>
@@ -351,7 +354,7 @@
                         <input required id="HA_PERT" name="HA_PERT" type="text" class="form-control">
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="HECTAREAS_FORM">
                     <div class="col-md-2">
                         <label for="HECTAREAS" class="control-label">HECTAREAS: </label>
                     </div>
@@ -359,7 +362,7 @@
                         <input required id="HECTAREAS" name="HECTAREAS" type="text" class="form-control">
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="OBSER_FORM">
                     <div class="col-md-2">
                         <label for="OBSER" class="control-label">OBSER: </label>
                     </div>
@@ -367,7 +370,7 @@
                         <input required id="OBSER" name="OBSER" type="text" class="form-control">
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="DATUM_FORM">
                     <div class="col-md-2">
                         <label for="DATUM" class="control-label">DATUM: </label>
                     </div>
@@ -375,7 +378,7 @@
                         <input required id="DATUM" name="DATUM" type="text" class="form-control">
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="F_PRESTRIB_FORM">
                     <div class="col-md-2">
                         <label for="F_PRESTRIB" class="control-label">F_PRESTRIB: </label>
                     </div>
@@ -383,7 +386,7 @@
                         <input required id="F_PRESTRIB" name="F_PRESTRIB" type="text" class="form-control">
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="ARCHIVO_FORM">
                     <div class="col-md-2">
                         <label for="ARCHIVO" class="control-label">ARCHIVO: </label>
                     </div>
@@ -391,7 +394,7 @@
                         <input required id="ARCHIVO" name="ARCHIVO" type="text" class="form-control">
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="CORTE_FORM">
                     <div class="col-md-2">
                         <label for="CORTE" class="control-label">CORTE: </label>
                     </div>
@@ -399,7 +402,7 @@
                         <input required id="CORTE" name="CORTE" type="text" class="form-control">
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="HUSO_FORM">
                     <div class="col-md-2">
                         <label for="HUSO" class="control-label">HUSO: </label>
                     </div>
@@ -407,7 +410,7 @@
                         <input required id="HUSO" name="HUSO" type="text" class="form-control">
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="EDITOR_FORM">
                     <div class="col-md-2">
                         <label for="EDITOR" class="control-label">EDITOR: </label>
                     </div>
@@ -415,7 +418,7 @@
                         <input required id="EDITOR" name="EDITOR" type="text" class="form-control">
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="CVE_FORM">
                     <div class="col-md-2">
                         <label for="CVE" class="control-label">CVE: </label>
                     </div>
@@ -423,12 +426,156 @@
                         <input required id="CVE" name="CVE" type="text" class="form-control">
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" style="display: none;">
                     <div class="col-md-2">
                         <label for="TIPO_TRAMITE" class="control-label">TIPO_TRAMITE: </label>
                     </div>
                     <div class="col-md-10">
                         <input required id="TIPO_TRAMITE" name="TIPO_TRAMITE" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group" id="N_SCARASUP_FORM">
+                    <div class="col-md-2">
+                        <label for="N_SCARASUP" class="control-label">N_SCARASUP: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="N_SCARASUP" name="N_SCARASUP" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group" id="E_OCARASUP_FORM">
+                    <div class="col-md-2">
+                        <label for="E_OCARASUP" class="control-label">E_OCARASUP: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="E_OCARASUP" name="E_OCARASUP" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group" id="F_PRESENTA_FORM">
+                    <div class="col-md-2">
+                        <label for="F_PRESENTA" class="control-label">F_PRESENTA: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="F_PRESENTA" name="F_PRESENTA" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group" id="F_RESOLUCI_FORM">
+                    <div class="col-md-2">
+                        <label for="F_RESOLUCI" class="control-label">F_RESOLUCI: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="F_RESOLUCI" name="F_RESOLUCI" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group" id="F_INSCRIBE_FORM">
+                    <div class="col-md-2">
+                        <label for="F_INSCRIBE" class="control-label">F_INSCRIBE: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="F_INSCRIBE" name="F_INSCRIBE" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group" id="CARTAIGM_FORM">
+                    <div class="col-md-2">
+                        <label for="CARTAIGM" class="control-label">CARTAIGM: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="CARTAIGM" name="CARTAIGM" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group" id="PED_ASOC_FORM">
+                    <div class="col-md-2">
+                        <label for="PED_ASOC" class="control-label">PED_ASOC: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="PED_ASOC" name="PED_ASOC" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group" id="FECHAPED_FORM">
+                    <div class="col-md-2">
+                        <label for="FECHAPED" class="control-label">FECHAPED: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="FECHAPED" name="FECHAPED" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group" id="ROLPED_FORM">
+                    <div class="col-md-2">
+                        <label for="ROLPED" class="control-label">ROLPED: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="ROLPED" name="ROLPED" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group" id="TIPOCOORD_FORM">
+                    <div class="col-md-2">
+                        <label for="TIPOCOORD" class="control-label">TIPOCOORD: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="TIPOCOORD" name="TIPOCOORD" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group" id="NORTE_FORM">
+                    <div class="col-md-2">
+                        <label for="NORTE" class="control-label">NORTE: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="NORTE" name="NORTE" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group" id="MTSN_FORM">
+                    <div class="col-md-2">
+                        <label for="MTSN" class="control-label">MTSN: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="MTSN" name="MTSN" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group" id="SUR_FORM">
+                    <div class="col-md-2">
+                        <label for="SUR" class="control-label">SUR: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="SUR" name="SUR" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group" id="MTSS_FORM">
+                    <div class="col-md-2">
+                        <label for="MTSS" class="control-label">MTSS: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="MTSS" name="MTSS" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group" id="ESTE_FORM">
+                    <div class="col-md-2">
+                        <label for="ESTE" class="control-label">ESTE: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="ESTE" name="ESTE" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group" id="MTSE_FORM">
+                    <div class="col-md-2">
+                        <label for="MTSE" class="control-label">MTSE: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="MTSE" name="MTSE" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group" id="OESTE_FORM">
+                    <div class="col-md-2">
+                        <label for="OESTE" class="control-label">OESTE: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="OESTE" name="OESTE" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group" id="MTSO_FORM">
+                    <div class="col-md-2">
+                        <label for="MTSO" class="control-label">MTSO: </label>
+                    </div>
+                    <div class="col-md-10">
+                        <input required id="MTSO" name="MTSO" type="text" class="form-control">
                     </div>
                 </div>
             </div>
@@ -453,6 +600,65 @@
 <script src="{% static 'js/plugins/footable/footable.all.min.js' %}"></script>
 <script type="text/javascript">
     $(document).ready(function(){
+        $("#cierra").on("click", function(){
+            console.log("as")
+            $("#BOLETIN_FORM").show();
+            $("#F_BOLETIN_FORM").show();
+            $("#TIPO_CONCE_FORM").show();
+            $("#CONCESION_FORM").show();
+            $("#CONCESIONA_FORM").show();
+            $("#REPRESENTA_FORM").show();
+            $("#DIRECCION_FORM").show();
+            $("#ROLMINERO_FORM").show();
+            $("#F_SENTENC1_FORM").show();
+            $("#F_SENTENC2_FORM").show();
+            $("#F_PUBEXT_FORM").show();
+            $("#F_INSCMIN_FORM").show();
+            $("#FOJAS_FORM").show();
+            $("#NUMERO_FORM").show();
+            $("#YEAR_FORM").show();
+            $("#CIUDAD_FORM").show();
+            $("#JUZGADO_FORM").show();
+            $("#ROLJUZ_FORM").show();
+            $("#IND_METAL_FORM").show();
+            $("#REGION_FORM").show();
+            $("#PROVINCIA_FORM").show();
+            $("#COMUNA_FORM").show();
+            $("#LUGAR_FORM").show();
+            $("#TIPO_UTM_FORM").show();
+            $("#NORTEPI_FORM").show();
+            $("#ESTEPI_FORM").show();
+            $("#VERTICES_FORM").show();
+            $("#HA_PERT_FORM").show();
+            $("#HECTAREAS_FORM").show();
+            $("#OBSER_FORM").show();
+            $("#DATUM_FORM").show();
+            $("#F_PRESTRIB_FORM").show();
+            $("#ARCHIVO_FORM").show();
+            $("#CORTE_FORM").show();
+            $("#HUSO_FORM").show();
+            $("#EDITOR_FORM").show();
+            $("#CVE_FORM").show();
+            $("#TIPO_TRAMITE_FORM").show();
+            $("#N_SCARASUP_FORM").show();
+            $("#E_OCARASUP_FORM").show();
+            $("#F_PRESENTA_FORM").show();
+            $("#F_RESOLUCI_FORM").show();
+            $("#F_INSCRIBE_FORM").show();
+            $("#CARTAIGM_FORM").show();
+            $("#PED_ASOC_FORM").show();
+            $("#FECHAPED_FORM").show();
+            $("#ROLPED_FORM").show();
+            $("#TIPOCOORD_FORM").show();
+            $("#NORTE_FORM").show();
+            $("#MTSN_FORM").show();
+            $("#SUR_FORM").show();
+            $("#MTSS_FORM").show();
+            $("#ESTE_FORM").show();
+            $("#MTSE_FORM").show();
+            $("#OESTE_FORM").show();
+            $("#MTSO_FORM").show();
+        })
         $(".generar_vertice").on("click",function(){
             button = $(this);
             pk = button.data("pk")
@@ -479,145 +685,238 @@
                 csrfmiddlewaretoken: '{{ csrf_token }}'
             }
             $.post("{% url 'get_datos' %}",data,function(response){
-                console.log(response.f_boletin);
                 $("#pkChange").val(pk);
-                $("#BOLETIN").val(response.boletin);
-                $("#F_BOLETIN").val(response.f_boletin);
-                $("#TIPO_CONCE").val(response.tipo_conce);
-                $("#CONCESION").val(response.concesion);
-                $("#CONCESIONa").val(response.concesiona);
-                $("#REPRESENTA").val(response.representa);
-                $("#DIRECCION").val(response.direccion);
-                $("#ROLMINERO").val(response.rolminero);
-                $("#F_SENTENC1").val(response.f_sentenc1);
-                $("#F_SENTENC2").val(response.f_sentenc2);
-                $("#F_PUBEXT").val(response.f_pubext);
-                $("#F_INSCMIN").val(response.f_inscmin);
-                $("#FOJAS").val(response.fojas);
-                $("#NUMERO").val(response.numero);
-                $("#YEAR").val(response.year);
-                $("#CIUDAD").val(response.ciudad);
-                $("#JUZGADO").val(response.juzgado);
-                $("#ROLJUZ").val(response.roljuz);
-                $("#IND_METAL").val(response.ind_metal);
-                $("#REGION").val(response.region);
-                $("#PROVINCIA").val(response.provincia);
-                $("#COMUNA").val(response.comuna);
-                $("#LUGAR").val(response.lugar);
-                $("#TIPO_UTM").val(response.tipo_utm);
-                $("#NORTEPI").val(response.nortepi);
-                $("#ESTEPI").val(response.estepi);
-                $("#VERTICES").val(response.vertices);
-                $("#HA_PERT").val(response.ha_pert);
-                $("#HECTAREAS").val(response.hectareas);
-                $("#OBSER").val(response.obser);
-                $("#DATUM").val(response.datum);
-                $("#F_PRESTRIB").val(response.f_prestrib);
-                $("#ARCHIVO").val(response.archivo);
-                $("#CORTE").val(response.corte);
-                $("#HUSO").val(response.huso);
-                $("#EDITOR").val(response.editor);
-                $("#CVE").val(response.cve);
-                $("#TIPO_TRAMITE").val(response.tipo_tramite);
+                $("#BOLETIN").val(response.BOLETIN);
+                $("#F_BOLETIN").val(response.F_BOLETIN);
+                $("#TIPO_CONCE").val(response.TIPO_CONCE);
+                $("#CONCESION").val(response.CONCESION);
+                $("#CONCESIONA").val(response.CONCESIONA);
+                $("#REPRESENTA").val(response.REPRESENTA);
+                $("#DIRECCION").val(response.DIRECCION);
+                $("#ROLMINERO").val(response.ROLMINERO);
+                $("#F_SENTENC1").val(response.F_SENTENC1);
+                $("#F_SENTENC2").val(response.F_SENTENC2);
+                $("#F_PUBEXT").val(response.F_PUBEXT);
+                $("#F_INSCMIN").val(response.F_INSCMIN);
+                $("#FOJAS").val(response.FOJAS);
+                $("#NUMERO").val(response.NUMERO);
+                $("#YEAR").val(response.YEAR);
+                $("#CIUDAD").val(response.CIUDAD);
+                $("#JUZGADO").val(response.JUZGADO);
+                $("#ROLJUZ").val(response.ROLJUZ);
+                $("#IND_METAL").val(response.IND_METAL);
+                $("#REGION").val(response.REGION);
+                $("#PROVINCIA").val(response.PROVINCIA);
+                $("#COMUNA").val(response.COMUNA);
+                $("#LUGAR").val(response.LUGAR);
+                $("#TIPO_UTM").val(response.TIPO_UTM);
+                $("#NORTEPI").val(response.NORTEPI);
+                $("#ESTEPI").val(response.ESTEPI);
+                $("#VERTICES").val(response.VERTICES);
+                $("#HA_PERT").val(response.HA_PERT);
+                $("#HECTAREAS").val(response.HECTAREAS);
+                $("#OBSER").val(response.OBSER);
+                $("#DATUM").val(response.DATUM);
+                $("#F_PRESTRIB").val(response.F_PRESTRIB);
+                $("#ARCHIVO").val(response.ARCHIVO);
+                $("#CORTE").val(response.CORTE);
+                $("#HUSO").val(response.HUSO);
+                $("#EDITOR").val(response.EDITOR);
+                $("#CVE").val(response.CVE);
+                $("#TIPO_TRAMITE").val(response.TIPO_TRAMITE);
+                $("#N_SCARASUP").val(response.N_SCARASUP);
+                $("#E_OCARASUP").val(response.E_OCARASUP);
+                $("#F_PRESENTA").val(response.F_PRESENTA);
+                $("#F_RESOLUCI").val(response.F_RESOLUCI);
+                $("#F_INSCRIBE").val(response.F_INSCRIBE);
+                $("#CARTAIGM").val(response.CARTAIGM);
+                $("#PED_ASOC").val(response.PED_ASOC);
+                $("#FECHAPED").val(response.FECHAPED);
+                $("#ROLPED").val(response.ROLPED);
+                $("#TIPOCOORD").val(response.TIPOCOORD);
+                $("#NORTE").val(response.NORTE);
+                $("#MTSN").val(response.MTSN);
+                $("#SUR").val(response.SUR);
+                $("#MTSS").val(response.MTSS);
+                $("#ESTE").val(response.ESTE);
+                $("#MTSE").val(response.MTSE);
+                $("#OESTE").val(response.OESTE);
+                $("#MTSO").val(response.MTSO);
+                if (response.TIPO_TRAMITE.includes("EXTRACTOS DE SENTENCIA DE EXPLORACION") || response.TIPO_TRAMITE.includes("EXTRACTOS DE SENTENCIA DE EXPLOTACION")){
+                    $("#N_SCARASUP_FORM").hide();
+                    $("#E_OCARASUP_FORM").hide();
+                    $("#F_PRESENTA_FORM").hide();
+                    $("#F_RESOLUCI_FORM").hide();
+                    $("#F_INSCRIBE_FORM").hide();
+                    $("#CARTAIGM_FORM").hide();
+                    $("#PED_ASOC_FORM").hide();
+                    $("#FECHAPED_FORM").hide();
+                    $("#ROLPED_FORM").hide();
+                    $("#TIPOCOORD_FORM").hide();
+                    $("#NORTE_FORM").hide();
+                    $("#MTSN_FORM").hide();
+                    $("#SUR_FORM").hide();
+                    $("#MTSS_FORM").hide();
+                    $("#ESTE_FORM").hide();
+                    $("#MTSE_FORM").hide();
+                    $("#OESTE_FORM").hide();
+                    $("#MTSO_FORM").hide();
+                }
+                if (response.TIPO_TRAMITE.includes("PEDIMENTOS MINEROS")){
+                    $("#TIPO_CONCE_FORM").hide();
+                    $("#ROLMINERO_FORM").hide();
+                    $("#F_SENTENC1_FORM").hide();
+                    $("#F_SENTENC2_FORM").hide();
+                    $("#F_PUBEXT_FORM").hide();
+                    $("#F_INSCMIN_FORM").hide();
+                    $("#VERTICES_FORM").hide();
+                    $("#PED_ASOC_FORM").hide();
+                    $("#FECHAPED_FORM").hide();
+                    $("#ROLPED_FORM").hide();
+                    $("#TIPOCOORD_FORM").hide();
+                    $("#NORTE_FORM").hide();
+                    $("#MTSN_FORM").hide();
+                    $("#SUR_FORM").hide();
+                    $("#MTSS_FORM").hide();
+                    $("#ESTE_FORM").hide();
+                    $("#MTSE_FORM").hide();
+                    $("#OESTE_FORM").hide();
+                    $("#MTSO_FORM").hide();
+                }
+                if (response.TIPO_TRAMITE.includes("MANIFESTACIONES MINERAS")){
+                    $("#TIPO_CONCE_FORM").hide();
+                    $("#ROLMINERO_FORM").hide();
+                    $("#F_SENTENC1_FORM").hide();
+                    $("#F_SENTENC2_FORM").hide();
+                    $("#F_PUBEXT_FORM").hide();
+                    $("#F_INSCMIN_FORM").hide();
+                    $("#IND_METAL_FORM").hide();
+                    $("#VERTICES_FORM").hide();
+                }
             });
             $("#saveChange").on("click",function(){
-                var pk = $("#pkChange").val();
-                var BOLETIN = $("#BOLETIN").val();
-                var F_BOLETIN = $("#F_BOLETIN").val();
-                var CONCESION = $("#CONCESION").val();
-                var CONCESIONA = $("#CONCESIONA").val();
-                var REPRESENTA = $("#REPRESENTA").val();
-                var REGION = $("#REGION").val();
-                var PROVINCIA = $("#PROVINCIA").val();
-                var COMUNA = $("#COMUNA").val();
-                var DIRECCION = $("#DIRECCION").val();
-                var TIPO_UTM = $("#TIPO_UTM").val();
-                var NORTEPI = $("#NORTEPI").val();
-                var ESTEPI = $("#ESTEPI").val();
-                var HUSO = $("#HUSO").val();
-                var FECHA_SENTENCIA1 = $("#FECHA_SENTENCIA1").val();
-                var FECHA_SENTENCIA2 = $("#FECHA_SENTENCIA2").val();
-                var EDITOR = $("#EDITOR").val();
-                var HA_PERT = $("#HA_PERT").val();
-                var JUZGADO = $("#JUZGADO").val();
-                var ROLJUZ = $("#ROLJUZ").val();
-                var F_PUBEXT = $("#F_PUBEXT").val();
-                var F_INSCMIN = $("#F_INSCMIN").val();
-                var VERTICES = $("#VERTICES").val();
-                var DATUM = $("#DATUM").val();
-                var NUMERO = $("#NUMERO").val();
-                var FOJAS = $("#FOJAS").val();
-                var YEAR = $("#YEAR").val();
-                var CIUDAD = $("#CIUDAD").val();
-                var CARTAIGM = $("#CARTAIGM").val();
-                var OBSER = $("#OBSER").val();
-                var PED_ASOC = $("#PED_ASOC").val();
-                var FECHAPED = $("#FECHAPED").val();
-                var ROL_MINERO = $("#ROL_MINERO").val();
-                var TIPOCOORD = $("#TIPOCOORD").val();
-                var NORTE = $("#NORTE").val();
-                var MTSN = $("#MTSN").val();
-                var SUR = $("#SUR").val();
-                var MTSS = $("#MTSS").val();
-                var ESTE = $("#ESTE").val();
-                var MTSE = $("#MTSE").val();
-                var OESTE = $("#OESTE").val();
-                var MTSO = $("#MTSO").val();
-                var TIPO_CONCE = $("#TIPO_CONCE").val();
-                var CVE = $("#CVE").val();
                 var data = {
-                    pk: pk,
-                    BOLETIN: BOLETIN,
-                    F_BOLETIN: F_BOLETIN,
-                    CONCESION: CONCESION,
-                    CONCESIONA: CONCESIONA,
-                    REPRESENTA: REPRESENTA,
-                    REGION: REGION,
-                    PROVINCIA: PROVINCIA,
-                    COMUNA: COMUNA,
-                    DIRECCION: DIRECCION,
-                    TIPO_UTM: TIPO_UTM,
-                    NORTEPI: NORTEPI,
-                    ESTEPI: ESTEPI,
-                    HUSO: HUSO,
-                    FECHA_SENTENCIA1: FECHA_SENTENCIA1,
-                    FECHA_SENTENCIA2: FECHA_SENTENCIA2,
-                    EDITOR: EDITOR,
-                    HA_PERT: HA_PERT,
-                    JUZGADO: JUZGADO,
-                    ROLJUZ: ROLJUZ,
-                    F_PUBEXT: F_PUBEXT,
-                    F_INSCMIN: F_INSCMIN,
-                    VERTICES: VERTICES,
-                    DATUM: DATUM,
-                    NUMERO: NUMERO,
-                    FOJAS: FOJAS,
-                    YEAR: YEAR,
-                    CIUDAD: CIUDAD,
-                    CARTAIGM: CARTAIGM,
-                    OBSER: OBSER,
-                    PED_ASOC: PED_ASOC,
-                    FECHAPED: FECHAPED,
-                    ROL_MINERO: ROL_MINERO,
-                    TIPOCOORD: TIPOCOORD,
-                    NORTE: NORTE,
-                    MTSN: MTSN,
-                    SUR: SUR,
-                    MTSS: MTSS,
-                    ESTE: ESTE,
-                    MTSE: MTSE,
-                    OESTE: OESTE,
-                    MTSO: MTSO,
-                    TIPO_CONCE: TIPO_CONCE,
-                    CVE: CVE,
+                    pk: $("#pkChange").val(),
+                    BOLETIN: $("#BOLETIN").val(),
+                    F_BOLETIN: $("#F_BOLETIN").val(),
+                    TIPO_CONCE: $("#TIPO_CONCE").val(),
+                    CONCESION: $("#CONCESION").val(),
+                    CONCESIONA: $("#CONCESIONA").val(),
+                    REPRESENTA: $("#REPRESENTA").val(),
+                    DIRECCION: $("#DIRECCION").val(),
+                    ROLMINERO: $("#ROLMINERO").val(),
+                    F_SENTENC1: $("#F_SENTENC1").val(),
+                    F_SENTENC2: $("#F_SENTENC2").val(),
+                    F_PUBEXT: $("#F_PUBEXT").val(),
+                    F_INSCMIN: $("#F_INSCMIN").val(),
+                    FOJAS: $("#FOJAS").val(),
+                    NUMERO: $("#NUMERO").val(),
+                    YEAR: $("#YEAR").val(),
+                    CIUDAD: $("#CIUDAD").val(),
+                    JUZGADO: $("#JUZGADO").val(),
+                    ROLJUZ: $("#ROLJUZ").val(),
+                    IND_METAL: $("#IND_METAL").val(),
+                    REGION: $("#REGION").val(),
+                    PROVINCIA: $("#PROVINCIA").val(),
+                    COMUNA: $("#COMUNA").val(),
+                    LUGAR: $("#LUGAR").val(),
+                    TIPO_UTM: $("#TIPO_UTM").val(),
+                    NORTEPI: $("#NORTEPI").val(),
+                    ESTEPI: $("#ESTEPI").val(),
+                    VERTICES: $("#VERTICES").val(),
+                    HA_PERT: $("#HA_PERT").val(),
+                    HECTAREAS: $("#HECTAREAS").val(),
+                    OBSER: $("#OBSER").val(),
+                    DATUM: $("#DATUM").val(),
+                    F_PRESTRIB: $("#F_PRESTRIB").val(),
+                    ARCHIVO: $("#ARCHIVO").val(),
+                    CORTE: $("#CORTE").val(),
+                    HUSO: $("#HUSO").val(),
+                    EDITOR: $("#EDITOR").val(),
+                    CVE: $("#CVE").val(),
+                    TIPO_TRAMITE: $("#TIPO_TRAMITE").val(),
+                    N_SCARASUP: $("#N_SCARASUP").val(),
+                    E_OCARASUP: $("#E_OCARASUP").val(),
+                    F_PRESENTA: $("#F_PRESENTA").val(),
+                    F_RESOLUCI: $("#F_RESOLUCI").val(),
+                    F_INSCRIBE: $("#F_INSCRIBE").val(),
+                    CARTAIGM: $("#CARTAIGM").val(),
+                    PED_ASOC: $("#PED_ASOC").val(),
+                    FECHAPED: $("#FECHAPED").val(),
+                    ROLPED: $("#ROLPED").val(),
+                    TIPOCOORD: $("#TIPOCOORD").val(),
+                    NORTE: $("#NORTE").val(),
+                    MTSN: $("#MTSN").val(),
+                    SUR: $("#SUR").val(),
+                    MTSS: $("#MTSS").val(),
+                    ESTE: $("#ESTE").val(),
+                    MTSE: $("#MTSE").val(),
+                    OESTE: $("#OESTE").val(),
+                    MTSO: $("#MTSO").val(),
                     csrfmiddlewaretoken: '{{ csrf_token }}'
                 }
                 $.post("{% url 'actualizar_datos' %}",data,function(){
-                    $('#modal_analisis').modal('hide');
+                    $('#modal_analisis_concesion').modal('hide');
                     $('body').removeClass('modal-open');
                     $('.modal-backdrop').remove();
-                    //swal({title: "LISTO!", text: "Ha modificado la solicitud", type: "success"});
+                    swal({title: "LISTO!", text: "Ha modificado la solicitud", type: "success"});
                 })
+                $("#BOLETIN_FORM").show();
+                $("#F_BOLETIN_FORM").show();
+                $("#TIPO_CONCE_FORM").show();
+                $("#CONCESION_FORM").show();
+                $("#CONCESIONA_FORM").show();
+                $("#REPRESENTA_FORM").show();
+                $("#DIRECCION_FORM").show();
+                $("#ROLMINERO_FORM").show();
+                $("#F_SENTENC1_FORM").show();
+                $("#F_SENTENC2_FORM").show();
+                $("#F_PUBEXT_FORM").show();
+                $("#F_INSCMIN_FORM").show();
+                $("#FOJAS_FORM").show();
+                $("#NUMERO_FORM").show();
+                $("#YEAR_FORM").show();
+                $("#CIUDAD_FORM").show();
+                $("#JUZGADO_FORM").show();
+                $("#ROLJUZ_FORM").show();
+                $("#IND_METAL_FORM").show();
+                $("#REGION_FORM").show();
+                $("#PROVINCIA_FORM").show();
+                $("#COMUNA_FORM").show();
+                $("#LUGAR_FORM").show();
+                $("#TIPO_UTM_FORM").show();
+                $("#NORTEPI_FORM").show();
+                $("#ESTEPI_FORM").show();
+                $("#VERTICES_FORM").show();
+                $("#HA_PERT_FORM").show();
+                $("#HECTAREAS_FORM").show();
+                $("#OBSER_FORM").show();
+                $("#DATUM_FORM").show();
+                $("#F_PRESTRIB_FORM").show();
+                $("#ARCHIVO_FORM").show();
+                $("#CORTE_FORM").show();
+                $("#HUSO_FORM").show();
+                $("#EDITOR_FORM").show();
+                $("#CVE_FORM").show();
+                $("#TIPO_TRAMITE_FORM").show();
+                $("#N_SCARASUP_FORM").show();
+                $("#E_OCARASUP_FORM").show();
+                $("#F_PRESENTA_FORM").show();
+                $("#F_RESOLUCI_FORM").show();
+                $("#F_INSCRIBE_FORM").show();
+                $("#CARTAIGM_FORM").show();
+                $("#PED_ASOC_FORM").show();
+                $("#FECHAPED_FORM").show();
+                $("#ROLPED_FORM").show();
+                $("#TIPOCOORD_FORM").show();
+                $("#NORTE_FORM").show();
+                $("#MTSN_FORM").show();
+                $("#SUR_FORM").show();
+                $("#MTSS_FORM").show();
+                $("#ESTE_FORM").show();
+                $("#MTSE_FORM").show();
+                $("#OESTE_FORM").show();
+                $("#MTSO_FORM").show();
             });
         });
     })
