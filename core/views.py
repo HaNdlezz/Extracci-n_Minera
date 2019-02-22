@@ -77,8 +77,10 @@ def index(request):
 
 @login_required(login_url='/')
 def descargar_boletin(request):
+    template_name = 'index.html'
+    cve_downloaded = 0
     response = {}
-    tipos = ["PEDIMENTOS MINEROS","MANIFESTACIONES MINERAS","SOLICITUDES DE MENSURA","EXTRACTOS ARTICULO 83","CITACIONES A JUNTAS Y ASAMBLEA", "EXTRACTOS DE SENTENCIA DE EXPLORACION","EXTRACTOS DE SENTENCIA DE EXPLOTACION","PRORROGAS CONCESION DE EXPLORACION","RENUNCIAS DE CONCESION MINERA","ACUERDOS JUNTA DE ACCIONISTAS","NOMINA CONCESIONES PARA REMATE","NOMINA BENEFICIADOS PATENTE REBAJADA","NOMINA DE CONCESIONES ART. 90","VIGENCIA INSCRIPCION ACTAS DE MENSURA","OTRAS PUBLICACIONES","EXTRACTOS DE SENTENCIA DE EXPLORACION"]
+    tipos = ["PEDIMENTOS MINEROS","MANIFESTACIONES MINERAS","SOLICITUDES DE MENSURA","EXTRACTOS ARTICULO 83","CITACIONES A JUNTA Y ASAMBLEA", "EXTRACTOS DE SENTENCIA DE EXPLORACION","EXTRACTOS DE SENTENCIA DE EXPLOTACION","PRORROGAS CONCESION DE EXPLORACION","RENUNCIAS DE CONCESION MINERA","ACUERDOS JUNTA DE ACCIONISTAS","NOMINAS DE CONCESIONES MINERAS PARA REMATE","NOMINA BENEFICIADOS PATENTE REBAJADA","NOMINA DE CONCESIONES ART. 90","VIGENCIA INSCRIPCION ACTAS DE MENSURA","OTRAS PUBLICACIONES","EXTRACTOS DE SENTENCIA DE EXPLORACION"]
     print request.POST
     os.system('wget -U "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.6) Gecko/20070802 SeaMonkey/1.1.4" ' + request.POST["archivo"])
     name = request.POST["archivo"].split("/")[::-1]
@@ -105,6 +107,7 @@ def descargar_boletin(request):
                         url = "http://www.diariooficial.interior.gob.cl/publicaciones/"+ str(name[4]) +"/" +str(name[3]) +"/" + str(name[2]) + "/" + name[0].split(".pdf")[0] + "/07/" + str(x.split("CVE:")[0]) + ".pdf"
                         aux = Registro_Mineria.objects.create(diario=diario,tipo_tramite=tipo,url=url,cve=x.split("CVE:")[0],texto=getPDFContent2(str(x.split("CVE:")[0])+".pdf"))
                         aux.save()
+                        cve_downloaded+=1
                         os.system('rm ' + x.split("CVE:")[0]+".pdf")
                     except:
                         pass
@@ -117,7 +120,10 @@ def descargar_boletin(request):
 #            x = x.split("CVE:")[1].split(")")[0].replace(" ","")
 #            pedimentos_final.append(x)
     os.system('rm ' + name[0])
-    return HttpResponseRedirect(reverse_lazy('index'))
+    data = {}
+    data["total_cve"] = str(cve_downloaded)
+    data["numero_registro"] = "1"
+    return render(request, template_name, data)
 
 #    return HttpResponse(
 #        json.dumps(response),
@@ -135,9 +141,9 @@ def Historic_Data(request):
 
 def extraerConcesiones(concesion):
     if "EXPLORACION" in concesion.tipo_tramite:
-        concesion.tipo_conce = "PED"
+        concesion.tipo_conce = "PEDIMENTO"
     if "EXPLOTACION" in concesion.tipo_tramite:
-        concesion.tipo_conce = "MAN"
+        concesion.tipo_conce = "MANIFESTACION"
     patron = re.compile("Huso\s\d\d|HUSO\s\d\d|huso\s\d\d")
     if patron.search(concesion.texto):
         print patron.search(concesion.texto).group()
@@ -172,6 +178,15 @@ def extraerConcesiones(concesion):
     concesion.datum = datum 
     concesion.save()
     print concesion
+
+def extraerManifestaciones(manifestacion):
+    print manifestacion
+
+def extraerPedimentos(pedimento):
+    print pedimento
+
+def extraerMensuras(mensura):
+    print mensura
 
 def Obtener_Datos_General(request):
     codes = []
@@ -214,6 +229,12 @@ def Obtener_Datos_General(request):
         x.save()
         if x.tipo_tramite=="EXTRACTOS DE SENTENCIA DE EXPLORACION" or x.tipo_tramite=="EXTRACTOS DE SENTENCIA DE EXPLOTACION":
             extraerConcesiones(x)
+        if x.tipo_tramite=="PEDIMENTOS MINEROS":
+            extraerPedimentos(x)
+        if x.tipo_tramite=="MANIFESTACIONES MINERAS":
+            extraerManifestaciones(x)
+        if x.tipo_tramite=="SOLICITUDES DE MENSURA":
+            extraerMensuras(x)
     return HttpResponseRedirect(reverse_lazy('Historic_Data'))
 
 def get_datos(request):

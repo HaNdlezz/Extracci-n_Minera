@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% block stylesheet %}
-
+<link href="{% static 'css/plugins/sweetalert/sweetalert.css' %}" rel="stylesheet">
 {% endblock stylesheet %}
 
 {% block content %}
@@ -44,5 +44,10 @@
 
 
 {% block javascript %}
+{% if numero_registro == "1" %}
+    <script>
+        swal({title: "LISTO!", text: "Se descargaron {{total_cve}}", type: "success"});
+    </script>
+{% endif %}
 
 {% endblock javascript %}
