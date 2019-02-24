@@ -1,0 +1,1 @@
+$(".datepicker-input").datepicker({ language: 'es', format: "yyyy/mm/dd" });

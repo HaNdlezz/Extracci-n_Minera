@@ -1,10 +1,12 @@
 from django.shortcuts import render_to_response, render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse, reverse_lazy
+from django.conf import settings
 from core.models import *
+import pdb
 import datetime
 import requests
 from itertools import chain
@@ -455,6 +457,7 @@ def ingresar_vertices(request):
 def excel_registros(request):
     template_name = 'reporte_registros.html'
     data = {}
+    data["diario"] = Diario.objects.all()
     if request.POST:
         data = {}
         workbook = xlsxwriter.Workbook('Static/registros.xlsx')
@@ -620,3 +623,113 @@ def excel_vertices(request):
         data = {}
         return render(request, template_name, data)
     return render(request, template_name, data)
+
+
+
+#Function for create dbf
+def create_database_tst(request):
+    da = {}
+    db = dbf.Dbf("Static/test.dbf", new=True)
+    db.addField(
+        #Add headers to dbf file
+        ("BOLETIN", "C", 80),
+        ("F_BOLETIN", "C", 80),
+        ("TIPO_CONCE", "C", 80),
+        ("CONCESION", "C", 80),
+        ("CONCESIONA", "C", 80),
+        ("REPRESENTA", "C", 80),
+        ("DIRECCION", "C", 80),
+        ("ROLMINERO", "C", 80),
+        ("F_SENTENC1", "C", 80),
+        ("F_SENTENC2", "C", 80),
+        ("F_PUBEXT", "C", 80),
+        ("F_INSCMIN", "C", 80),
+        ("FOJAS", "C", 80),
+        ("NUMERO", "C", 80),
+        ("YEAR", "C", 80),
+        ("CIUDAD", "C", 80),
+        ("JUZGADO", "C", 80),
+        ("ROLJUZ", "C", 80),
+        ("IND_METAL", "C", 80),
+        ("REGION", "C", 80),
+        ("PROVINCIA", "C", 80),
+        ("COMUNA", "C", 80),
+        ("LUGAR", "C", 80),
+        ("TIPO_UTM", "C", 80),
+        ("NORTEPI", "C", 80),
+        ("ESTEPI", "C", 80),
+        ("VERTICES", "C", 80),
+        ("HA_PERT", "C", 80),
+        ("HECTAREAS", "C", 80),
+        ("OBSER", "C", 80),
+        ("DATUM", "C", 80),
+        ("F_PRESTRIB", "C", 80),
+        ("ARCHIVO", "C", 80),
+        ("CORTE", "C", 80),
+        ("HUSO", "C", 80),
+        ("EDITOR", "C", 80),
+    )
+    print db
+
+
+    ## fill DBF with some records
+    if int(request.POST["fecha"]) != 0:
+        diario = Diario.objects.get(pk=int(request.POST["fecha"]))#filter "diario" for date
+        solicitudes = diario.registro_mineria_set.all()#get register for specific "diario"
+    else:
+        solicitudes = Registro_Mineria.objects.all()#Get all register in case that the user wish generate a dbf with all register without care the date
+    for solicitud in solicitudes:
+        response = db.newRecord()
+        print solicitud.boletin
+        #the text after of solicitud. is the attributes
+        # response["FDIAR_APRO"] = solicitud.FDIAR_APRO#.strftime("%Y-%M-%D")
+        response["BOLETIN"] = solicitud.boletin
+        response["F_BOLETIN"] = solicitud.f_boletin
+        response["TIPO_CONCE"] = solicitud.tipo_conce
+        response["CONCESION"] = solicitud.concesion
+        response["CONCESIONA"] = solicitud.concesiona
+        response["REPRESENTA"] = solicitud.representa
+        response["DIRECCION"] = solicitud.direccion
+        response["ROLMINERO"] = solicitud.rolminero
+        response["F_SENTENC1"] = solicitud.f_sentenc1
+        response["F_SENTENC2"] = solicitud.f_sentenc2
+        response["F_PUBEXT"] = solicitud.f_pubext
+        response["F_INSCMIN"] = solicitud.f_inscmin
+        response["FOJAS"] = solicitud.fojas
+        response["NUMERO"] = solicitud.numero
+        response["YEAR"] = solicitud.year
+        response["CIUDAD"] = solicitud.ciudad
+        response["JUZGADO"] = solicitud.juzgado
+        response["ROLJUZ"] = solicitud.roljuz
+        response["IND_METAL"] = solicitud.ind_metal
+        response["REGION"] = solicitud.region
+        response["PROVINCIA"] = solicitud.provincia
+        response["COMUNA"] = solicitud.comuna
+        response["LUGAR"] = solicitud.lugar
+        response["TIPO_UTM"] = solicitud.tipo_utm
+        response["NORTEPI"] = solicitud.nortepi
+        response["ESTEPI"] = solicitud.estepi
+        response["VERTICES"] = solicitud.vertices
+        response["HA_PERT"] = solicitud.ha_pert
+        response["HECTAREAS"] = solicitud.hectareas
+        response["OBSER"] = solicitud.obser
+        response["DATUM"] = solicitud.datum
+        response["F_PRESTRIB"] = solicitud.f_prestrib
+        response["ARCHIVO"] = solicitud.archivo
+        response["CORTE"] = solicitud.corte
+        response["HUSO"] = solicitud.huso
+        response["EDITOR"] = solicitud.editor
+        response.store()
+    db.close()
+    # pdb.set_trace()
+    file_path = os.path.join(settings.BASE_DIR, 'Static/test.dbf')
+    if os.path.exists(file_path):
+        with open(file_path, 'rb') as fh:
+            response = HttpResponse(fh.read(), content_type="application/x-dbase")
+            response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
+            return response
+    raise Http404
+    # return HttpResponse(
+    #     json.dumps(da),
+    #     content_type="application/json"
+    #     )
