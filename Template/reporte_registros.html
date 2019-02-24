@@ -33,6 +33,51 @@
         </div>
     </div>
 </div>
+<div class="row">
+    <form action="{% url 'create_database_tst' %}" method="post">
+        {% csrf_token %}
+        <div class="col-md-12">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5 style="font-size:20px">Descargar Base de Datos</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+
+                        <!-- <div class="col-md-3">
+                            <div class="form-group" id="datePicker">
+                                <label for="nombre" class="control-label">Fecha:</label>
+                                <div class="input-group date col-lg-12">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </span>
+                                    <input type="text" class="form-control datepicker-input" readonly="true" value="02/01/2019" id="fecha" name="fecha">
+                                </div>
+                            </div>
+                        </div> -->
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="fecha" class="control-label">Fecha: </label>
+                                <select name="fecha" id="fecha" class="form-control">
+                                    {% for x in diario %}
+                                    <option value="{{x.pk}}">{{x.fecha}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button type="submit" class="btn btn-primary btn-block"><i class="fa fa-download"></i>
+                                Obtener Datos</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
 
 {% endblock content %}
 
