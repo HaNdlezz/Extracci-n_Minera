@@ -176,8 +176,42 @@ def extraerConcesiones(concesion):
         print ""
     patron = re.compile("La Canoa 1956|LA CANOA 1956|la canoa 1956")
     if patron.search(concesion.texto):
-        datum = patron.search(concesion.texto).group()
-    concesion.datum = datum 
+        datum = "PSAD56"
+    concesion.datum = datum
+    concesion.tipo_utm = "M"
+    patron = re.compile("[aA-zZ][-][0-9]{1,4}[-][0-9]{1,4}")
+    if patron.search(concesion.texto):
+        concesion.roljuz = patron.search(concesion.texto).group()
+        concesion.year = patron.search(concesion.texto).group().split("-")[-1]
+    patron = re.compile("[0-9]{1,2}\s[dD-eE]{2}\s[aA-zZ]{4,9}\s[dD-lL]{2,3}\s([aA-oO]{3}\s)?[0-9]{4}")
+    n_fechas = 5
+    fechas = []
+    aux_text = concesion.texto
+    while(n_fechas != 0):
+        if patron.search(aux_text):
+            fecha = patron.search(aux_text).group()
+            fechas.append(fecha)
+            aux_text = aux_text.replace(fecha, " ")
+        n_fechas-=1
+    fecha_equivalencia = {"enero":"01","febrero":"02","marzo":"03","abril":"04","mayo":"05","junio":"06","julio":"07","agosto":"08","septiembre":"09","octubre":"10","noviembre":"11","diciembre":"12"}
+    if len(fechas) >= 2:
+        date_target = fechas[1].split(" ")
+        dia=date_target[0]
+        mes=fecha_equivalencia[date_target[2].lower()]
+        anio=date_target[-1]
+        concesion.f_sentenc1 = anio+"/"+mes+"/"+dia
+    patron = re.compile("(fojas|FOJAS|Fojas)\s[0-9]{1,2}(.?)[0-9]{1,3}")
+    if patron.search(concesion.texto):
+        concesion.fojas = patron.search(concesion.texto).group().replace(".","").split(" ")[1]
+        aux_text = concesion.texto.split(patron.search(concesion.texto).group())[1]
+        if "vta" in aux_text or "Vta" in aux_text or "Vuelta" in aux_text or "vuelta" in aux_text or "VTA" in aux_text or "VUELTA" in aux_text:
+            concesion.fojas = concesion.fojas+" "+"VTA"
+        patron = re.compile("(numero|Numero|NUMERO|)\s[0-9]{1,2}(.?)[0-9]{1,3}")
+        if patron.search(aux_text):
+            concesion.numero = patron.search(aux_text).group().replace(".","").split(" ")[1]
+    patron = re.compile("[0-9]{1,2}(.?)[0-9]{1,3}\s(hectareas|Hectareas|HECTAREAS)")
+    if patron.search(concesion.texto):
+        concesion.hectareas = patron.search(concesion.texto).group().replace(".","").split(" ")[0]
     concesion.save()
     print concesion
 
@@ -423,7 +457,7 @@ def ingresar_vertices(request):
             estes.append(test)
 
     linderos = []
-    patron3 = re.compile("[VP]\d")
+    patron3 = re.compile("[VPL]\d")
     if patron3.search(buscar):
         linderos = patron3.findall(buscar)
     response = {}
@@ -447,6 +481,8 @@ def ingresar_vertices(request):
         except:
             print "Vertice no creado"
         response["ok"] = cont
+        registro.vertices = str(cont)
+        registro.save()
     else:
         response["ok"] = -1
     return HttpResponse(

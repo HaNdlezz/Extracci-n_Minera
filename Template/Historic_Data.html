@@ -88,7 +88,7 @@
                                             <div class="col-md-4">
                                                 <button data-toggle="modal" data-text="{{x.texto}}" data-pk="{{x.pk}}" data-target="#modal_analisis_concesion" class="btn btn-block" style="background: #34495E; color: white;"><i class="fa fa-eye"></i>Generado</button>
                                             </div>
-                                            {% if x.tipo_tramite == "EXTRACTOS DE SENTENCIA DE EXPLORACION" or x.tipo_tramite == "EXTRACTOS DE SENTENCIA DE EXPLOTACION" %}
+                                            {% if x.tipo_tramite == "EXTRACTOS DE SENTENCIA DE EXPLORACION" or x.tipo_tramite == "EXTRACTOS DE SENTENCIA DE EXPLOTACION" or x.tipo_tramite == "SOLICITUDES DE MENSURA" %}
                                             <div class="col-md-4">
                                                 <button id="generar_vertice" name="generar_vertice" data-pk="{{x.pk}}" type="button" class="btn btn-block generar_vertice" style="background: #000000; color: white;">Extraer Vertices</button>
                                             </div>
