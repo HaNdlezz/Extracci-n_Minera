@@ -856,9 +856,29 @@ def excel_vertices(request):
         return render(request, template_name, data)
     return render(request, template_name, data)
 
+def type_matches
+    return {
+        'Vertices Conceciones': ["EXTRACTOS DE SENTENCIA DE EXPLORACION","EXTRACTOS DE SENTENCIA DE EXPLOTACION"],
+        'Conceciones': ["EXTRACTOS DE SENTENCIA DE EXPLORACION","EXTRACTOS DE SENTENCIA DE EXPLOTACION"]
+        'Manifestaciones': "MANIFESTACIONES MINERAS"
+        'Pedimentos': "PEDIMENTOS MINEROS"
+        'Vertices Mensura': "SOLICITUDES DE MENSURA"
+        'Mensura': "SOLICITUDES DE MENSURA"
+    }
 
-
-
+def download(request)
+    if rquest.POST['type'] == 'Pedimentos':
+        download_pedi(request)
+    if rquest.POST['type'] == 'Vertices Conceciones':
+        download_conce(request) # TODO his own method filtering for those who have vertex
+    if rquest.POST['type'] == 'Conceciones':
+        download_conce(request)
+    if rquest.POST['type'] == 'Manifestaciones':
+        download_manifes(request)
+    if rquest.POST['type'] == 'Vertices Mensura':
+        download_mensu(request) # TODO his own method filtering for those who have vertex
+    if rquest.POST['type'] == 'Mensura':
+        download_mensu(request)
 
 
 #Function for create dbf of Pedimentos
@@ -1105,7 +1125,7 @@ def download_manifes(request):
 
 
 #Function for create dbf of Coneciones
-def download_manifes(request):
+def download_conce(request):
     da = {}
     file_name = "conce " + str(datetime.datetime.now()) + ".dbf"
     db = dbf.Dbf("Static/" + file_name, new=True)
@@ -1216,7 +1236,7 @@ def download_manifes(request):
 
 
 #Function for create dbf of Mensuras
-def download_manifes(request):
+def download_mensu(request):
     da = {}
     file_name = "mensu " + str(datetime.datetime.now()) + ".dbf"
     db = dbf.Dbf("Static/" + file_name, new=True)
