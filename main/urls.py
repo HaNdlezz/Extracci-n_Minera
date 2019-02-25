@@ -28,6 +28,6 @@ urlpatterns = [
     url(r'^ingresar_vertices/', views.ingresar_vertices, name="ingresar_vertices"),
     url(r'^excel_registros/', views.excel_registros, name="excel_registros"),
     url(r'^excel_vertices/', views.excel_vertices, name="excel_vertices"),
-    url(r'^create_database_tst/', views.create_database_tst, name="create_database_tst"),
+    url(r'^download_pedi/', views.download_pedi, name="download_pedi"),
     url(r'^$', views.login_user, name="login"),
 ]

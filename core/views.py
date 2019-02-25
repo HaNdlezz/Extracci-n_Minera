@@ -662,8 +662,8 @@ def excel_vertices(request):
 
 
 
-#Function for create dbf
-def create_database_tst(request):
+#Function for create dbf of Pedimentos
+def download_pedi(request):
     da = {}
     db = dbf.Dbf("Static/test.dbf", new=True)
     db.addField(
@@ -710,7 +710,7 @@ def create_database_tst(request):
 
     ## fill DBF with some records
     if int(request.POST["fecha"]) != 0:
-        diario = Diario.objects.get(pk=int(request.POST["fecha"]))#filter "diario" for date
+        diario = Diario.objects.get(pk=int(request.POST["fecha"]))#filter "diario" for date add: tipo_tramite for pedimentos
         solicitudes = diario.registro_mineria_set.all()#get register for specific "diario"
     else:
         solicitudes = Registro_Mineria.objects.all()#Get all register in case that the user wish generate a dbf with all register without care the date
@@ -765,7 +765,3 @@ def create_database_tst(request):
             response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
             return response
     raise Http404
-    # return HttpResponse(
-    #     json.dumps(da),
-    #     content_type="application/json"
-    #     )
