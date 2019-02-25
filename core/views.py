@@ -481,6 +481,30 @@ def get_datos(request):
     response["MTSE"] = registro.mtse
     response["OESTE"] = registro.oeste
     response["MTSO"] = registro.mtso
+    response["F_SOLICITA"] = registro.f_solicita
+    response["F_PRESMAN"] = registro.f_presman
+    response["F_MENSURA"] = registro.f_mensura
+    response["N1"] = registro.n1
+    response["HA1"] = registro.ha1
+    response["N_S1"] = registro.n_s1
+    response["E_O1"] = registro.e_o1
+    response["N2"] = registro.n2
+    response["HA2"] = registro.ha2
+    response["N_S2"] = registro.n_s2
+    response["E_O2"] = registro.e_o2
+    response["N3"] = registro.n3
+    response["HA3"] = registro.ha3
+    response["N_S3"] = registro.n_s3
+    response["E_O3"] = registro.e_o3
+    response["N4"] = registro.n4
+    response["HA4"] = registro.ha4
+    response["N_S4"] = registro.n_s4
+    response["E_O4"] = registro.e_o4
+    response["IND_VIGE"] = registro.ind_vige
+    response["RAZON"] = registro.razon
+    response["PERITO"] = registro.perito
+    response["OPOSICION"] = registro.oposicion
+    response["CPU"] = registro.cpu
     return HttpResponse(
         json.dumps(response),
         content_type="application/json"
@@ -544,6 +568,29 @@ def actualizar_datos(request):
     registro.mtse = request.POST["MTSE"]
     registro.oeste = request.POST["OESTE"]
     registro.mtso = request.POST["MTSO"]
+    registro.f_solicita = request.POST["F_SOLICITA"]
+    registro.f_presman = request.POST["F_PRESMAN"]
+    registro.f_mensura = request.POST["F_MENSURA"]
+    registro.n1 = request.POST["N1"]
+    registro.ha1 = request.POST["HA1"]
+    registro.n_s1 = request.POST["N_S1"]
+    registro.e_o1 = request.POST["E_O1"]
+    registro.n2 = request.POST["N2"]
+    registro.ha2 = request.POST["HA2"]
+    registro.n_s2 = request.POST["N_S2"]
+    registro.e_o2 = request.POST["E_O2"]
+    registro.n3 = request.POST["N3"]
+    registro.ha3 = request.POST["HA3"]
+    registro.n_s3 = request.POST["N_S3"]
+    registro.e_o3 = request.POST["E_O3"]
+    registro.n4 = request.POST["N4"]
+    registro.ha4 = request.POST["HA4"]
+    registro.n_s4 = request.POST["N_S4"]
+    registro.e_o4 = request.POST["E_O4"]
+    registro.ind_vige = request.POST["IND_VIGE"]
+    registro.razon = request.POST["RAZON"]
+    registro.perito = request.POST["PERITO"]
+    registro.oposicion = request.POST["OPOSCION"]
     registro.save()
     response = {}
     return HttpResponse(
