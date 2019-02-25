@@ -670,23 +670,10 @@ def create_database_tst(request):
         #Add headers to dbf file
         ("BOLETIN", "C", 80),
         ("F_BOLETIN", "C", 80),
-        ("TIPO_CONCE", "C", 80),
         ("CONCESION", "C", 80),
         ("CONCESIONA", "C", 80),
         ("REPRESENTA", "C", 80),
         ("DIRECCION", "C", 80),
-        ("ROLMINERO", "C", 80),
-        ("F_SENTENC1", "C", 80),
-        ("F_SENTENC2", "C", 80),
-        ("F_PUBEXT", "C", 80),
-        ("F_INSCMIN", "C", 80),
-        ("FOJAS", "C", 80),
-        ("NUMERO", "C", 80),
-        ("YEAR", "C", 80),
-        ("CIUDAD", "C", 80),
-        ("JUZGADO", "C", 80),
-        ("ROLJUZ", "C", 80),
-        ("IND_METAL", "C", 80),
         ("REGION", "C", 80),
         ("PROVINCIA", "C", 80),
         ("COMUNA", "C", 80),
@@ -694,16 +681,29 @@ def create_database_tst(request):
         ("TIPO_UTM", "C", 80),
         ("NORTEPI", "C", 80),
         ("ESTEPI", "C", 80),
-        ("VERTICES", "C", 80),
-        ("HA_PERT", "C", 80),
+        ("HUSO", "C", 80),
+        ("N_SCARASUP", "C", 80),
+        ("E_OCARASUP", "C", 80),
+        ("IND_METAL", "C", 80),
         ("HECTAREAS", "C", 80),
+        ("HA_PERT", "C", 80),
+        ("JUZGADO", "C", 80),
+        ("ROLJUZ", "C", 80),
+        ("F_PRESENTA", "C", 80),
+        ("F_RESOLUCI", "C", 80),
+        ("F_INSCRIBE", "C", 80),
+        ("FOJAS", "C", 80),
+        ("NUMERO", "C", 80),
+        ("YEAR", "C", 80),
+        ("CIUDAD", "C", 80),
+        ("CARTAIGM", "C", 80),
         ("OBSER", "C", 80),
         ("DATUM", "C", 80),
         ("F_PRESTRIB", "C", 80),
         ("ARCHIVO", "C", 80),
         ("CORTE", "C", 80),
-        ("HUSO", "C", 80),
         ("EDITOR", "C", 80),
+        ("CPU", "C", 80),
     )
     print db
 
@@ -719,42 +719,42 @@ def create_database_tst(request):
         print solicitud.boletin
         #the text after of solicitud. is the attributes
         # response["FDIAR_APRO"] = solicitud.FDIAR_APRO#.strftime("%Y-%M-%D")
-        response["BOLETIN"] = solicitud.boletin
-        response["F_BOLETIN"] = solicitud.f_boletin
-        response["TIPO_CONCE"] = solicitud.tipo_conce
-        response["CONCESION"] = solicitud.concesion
-        response["CONCESIONA"] = solicitud.concesiona
-        response["REPRESENTA"] = solicitud.representa
-        response["DIRECCION"] = solicitud.direccion
-        response["ROLMINERO"] = solicitud.rolminero
-        response["F_SENTENC1"] = solicitud.f_sentenc1
-        response["F_SENTENC2"] = solicitud.f_sentenc2
-        response["F_PUBEXT"] = solicitud.f_pubext
-        response["F_INSCMIN"] = solicitud.f_inscmin
-        response["FOJAS"] = solicitud.fojas
-        response["NUMERO"] = solicitud.numero
-        response["YEAR"] = solicitud.year
-        response["CIUDAD"] = solicitud.ciudad
-        response["JUZGADO"] = solicitud.juzgado
-        response["ROLJUZ"] = solicitud.roljuz
-        response["IND_METAL"] = solicitud.ind_metal
-        response["REGION"] = solicitud.region
-        response["PROVINCIA"] = solicitud.provincia
-        response["COMUNA"] = solicitud.comuna
-        response["LUGAR"] = solicitud.lugar
-        response["TIPO_UTM"] = solicitud.tipo_utm
-        response["NORTEPI"] = solicitud.nortepi
-        response["ESTEPI"] = solicitud.estepi
-        response["VERTICES"] = solicitud.vertices
-        response["HA_PERT"] = solicitud.ha_pert
-        response["HECTAREAS"] = solicitud.hectareas
-        response["OBSER"] = solicitud.obser
-        response["DATUM"] = solicitud.datum
-        response["F_PRESTRIB"] = solicitud.f_prestrib
-        response["ARCHIVO"] = solicitud.archivo
-        response["CORTE"] = solicitud.corte
-        response["HUSO"] = solicitud.huso
-        response["EDITOR"] = solicitud.editor
+        response["BOLETIN"] = solicitud.boletin or ''
+        response["F_BOLETIN"] = solicitud.f_boletin or ''
+        response["CONCESION"] = solicitud.concesion or ''
+        response["CONCESIONA"] = solicitud.concesiona or ''
+        response["REPRESENTA"] = solicitud.representa or ''
+        response["DIRECCION"] = solicitud.direccion or ''
+        response["REGION"] = solicitud.region or ''
+        response["PROVINCIA"] = solicitud.provincia or ''
+        response["COMUNA"] = solicitud.comuna or ''
+        response["LUGAR"] = solicitud.lugar or ''
+        response["TIPO_UTM"] = solicitud.tipo_utm or ''
+        response["NORTEPI"] = solicitud.nortepi or ''
+        response["ESTEPI"] = solicitud.estepi or ''
+        response["HUSO"] = solicitud.huso or ''
+        response["N_SCARASUP"] = solicitud.n_scarasup or ''
+        response["E_OCARASUP"] = solicitud.e_ocarasup or ''
+        response["IND_METAL"] = solicitud.ind_metal or ''
+        response["HECTAREAS"] = solicitud.hectareas or ''
+        response["HA_PERT"] = solicitud.ha_pert or ''
+        response["JUZGADO"] = solicitud.juzgado or ''
+        response["ROLJUZ"] = solicitud.roljuz or ''
+        response["F_PRESENTA"] = solicitud.f_presenta or ''
+        response["F_RESOLUCI"] = solicitud.f_resoluci or ''
+        response["F_INSCRIBE"] = solicitud.f_inscribe or ''
+        response["FOJAS"] = solicitud.fojas or ''
+        response["NUMERO"] = solicitud.numero or ''
+        response["YEAR"] = solicitud.year or ''
+        response["CIUDAD"] = solicitud.ciudad or ''
+        response["CARTAIGM"] = solicitud.cartaigm or ''
+        response["OBSER"] = solicitud.obser or ''
+        response["DATUM"] = solicitud.datum or ''
+        response["F_PRESTRIB"] = solicitud.f_prestrib or ''
+        response["ARCHIVO"] = solicitud.archivo or ''
+        response["CORTE"] = solicitud.corte or ''
+        response["EDITOR"] = solicitud.editor or ''
+        # response["CPU"] = solicitud.cpu or ''
         response.store()
     db.close()
     # pdb.set_trace()
