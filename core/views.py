@@ -665,7 +665,8 @@ def excel_vertices(request):
 #Function for create dbf of Pedimentos
 def download_pedi(request):
     da = {}
-    db = dbf.Dbf("Static/test.dbf", new=True)
+    file_name = "pedi " + str(datetime.datetime.now()) + ".dbf"
+    db = dbf.Dbf("Static/" + file_name, new=True)
     db.addField(
         #Add headers to dbf file
         ("BOLETIN", "C", 80),
@@ -720,7 +721,7 @@ def download_pedi(request):
         #the text after of solicitud. is the attributes
         # response["FDIAR_APRO"] = solicitud.FDIAR_APRO#.strftime("%Y-%M-%D")
         response["BOLETIN"] = solicitud.boletin or ''
-        response["F_BOLETIN"] = solicitud.f_boletin or ''
+        response["F_BOLETIN"] = datetime.datetime.strptime(solicitud.f_boletin, '%Y/%m/%d').strftime("%Y%m%d") or ''
         response["CONCESION"] = solicitud.concesion or ''
         response["CONCESIONA"] = solicitud.concesiona or ''
         response["REPRESENTA"] = solicitud.representa or ''
@@ -758,10 +759,139 @@ def download_pedi(request):
         response.store()
     db.close()
     # pdb.set_trace()
-    file_path = os.path.join(settings.BASE_DIR, 'Static/test.dbf')
+    file_path = os.path.join(settings.BASE_DIR, "Static/" + file_name)
     if os.path.exists(file_path):
         with open(file_path, 'rb') as fh:
             response = HttpResponse(fh.read(), content_type="application/x-dbase")
             response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
+            os.remove(file_path)
+            return response
+    raise Http404
+
+#Function for create dbf of Manifestaciones
+def download_manifes(request):
+    da = {}
+    file_name = "manifes " + str(datetime.datetime.now()) + ".dbf"
+    db = dbf.Dbf("Static/" + file_name, new=True)
+    db.addField(
+        #Add headers to dbf file
+        ("BOLETIN", "C", 80),
+        ("F_BOLETIN", "C", 80),
+        ("CONCESION", "C", 80),
+        ("CONCESIONA", "C", 80),
+        ("REPRESENTA", "C", 80),
+        ("DIRECCION", "C", 80),
+        ("REGION", "C", 80),
+        ("PROVINCIA", "C", 80),
+        ("COMUNA", "C", 80),
+        ("LUGAR", "C", 80),
+        ("TIPO_UTM", "C", 80),
+        ("NORTEPI", "C", 80),
+        ("ESTEPI", "C", 80),
+        ("HUSO", "C", 80),
+        ("N_SCARASUP", "C", 80),
+        ("E_OCARASUP", "C", 80),
+        ("HECTAREAS", "C", 80),
+        ("HA_PERT", "C", 80),
+        ("JUZGADO", "C", 80),
+        ("ROLJUZ", "C", 80),
+        ("F_PRESENTA", "C", 80),
+        ("F_RESOLUCI", "C", 80),
+        ("F_INSCRIBE", "C", 80),
+        ("FOJAS", "C", 80),
+        ("NUMERO", "C", 80),
+        ("YEAR", "C", 80),
+        ("CIUDAD", "C", 80),
+        ("CARTAIGM", "C", 80),
+        ("OBSER", "C", 80),
+        ("PED_ASOC", "C", 80),
+        ("FECHAPED", "C", 80),
+        ("ROLPED", "C", 80),
+        ("TIPOCOORD", "C", 80),
+        ("NORTE", "C", 80),
+        ("MTSN", "C", 80),
+        ("SUR", "C", 80),
+        ("MTSS", "C", 80),
+        ("ESTE", "C", 80),
+        ("MTSE", "C", 80),
+        ("OESTE", "C", 80),
+        ("MTSO", "C", 80),
+        ("F_PRESTRIB", "C", 80),
+        ("DATUM", "C", 80),
+        ("ARCHIVO", "C", 80),
+        ("CORTE", "C", 80),
+        ("EDITOR", "C", 80),
+        ("CPU", "C", 80),
+    )
+    print db
+
+
+    ## fill DBF with some records
+    if int(request.POST["fecha"]) != 0:
+        diario = Diario.objects.get(pk=int(request.POST["fecha"]))#filter "diario" for date add: tipo_tramite for pedimentos
+        solicitudes = diario.registro_mineria_set.all()#get register for specific "diario"
+    else:
+        solicitudes = Registro_Mineria.objects.all()#Get all register in case that the user wish generate a dbf with all register without care the date
+    for solicitud in solicitudes:
+        response = db.newRecord()
+        print solicitud.boletin
+        #the text after of solicitud. is the attributes
+        # response["FDIAR_APRO"] = solicitud.FDIAR_APRO#.strftime("%Y-%M-%D")
+        response["BOLETIN"] = solicitud.boletin or ''
+        response["F_BOLETIN"] = datetime.datetime.strptime(solicitud.f_boletin, '%Y/%m/%d').strftime("%Y%m%d") or ''
+        response["CONCESION"] = solicitud.concesion or ''
+        response["CONCESIONA"] = solicitud.concesiona or ''
+        response["REPRESENTA"] = solicitud.representa or ''
+        response["DIRECCION"] = solicitud.direccion or ''
+        response["REGION"] = solicitud.region or ''
+        response["PROVINCIA"] = solicitud.provincia or ''
+        response["COMUNA"] = solicitud.comuna or ''
+        response["LUGAR"] = solicitud.lugar or ''
+        response["TIPO_UTM"] = solicitud.tipo_utm or ''
+        response["NORTEPI"] = solicitud.nortepi or ''
+        response["ESTEPI"] = solicitud.estepi or ''
+        response["HUSO"] = solicitud.huso or ''
+        response["N_SCARASUP"] = solicitud.n_scarasup or ''
+        response["E_OCARASUP"] = solicitud.e_ocarasup or ''
+        response["HECTAREAS"] = solicitud.hectareas or ''
+        response["HA_PERT"] = solicitud.ha_pert or ''
+        response["JUZGADO"] = solicitud.juzgado or ''
+        response["ROLJUZ"] = solicitud.roljuz or ''
+        response["F_PRESENTA"] = solicitud.f_presenta or ''
+        response["F_RESOLUCI"] = solicitud.f_resoluci or ''
+        response["F_INSCRIBE"] = solicitud.f_inscribe or ''
+        response["FOJAS"] = solicitud.fojas or ''
+        response["NUMERO"] = solicitud.numero or ''
+        response["YEAR"] = solicitud.year or ''
+        response["CIUDAD"] = solicitud.ciudad or ''
+        response["CARTAIGM"] = solicitud.cartaigm or ''
+        response["OBSER"] = solicitud.obser or ''
+        response["PED_ASOC"] = solicitud.ped_asoc or ''
+        response["FECHAPED"] = solicitud.fechaped or ''
+        response["ROLPED"] = solicitud.rolped or ''
+        response["TIPOCOORD"] = solicitud.tipocoord or ''
+        response["NORTE"] = solicitud.norte or ''
+        response["MTSN"] = solicitud.mtsn or ''
+        response["SUR"] = solicitud.sur or ''
+        response["MTSS"] = solicitud.mtss or ''
+        response["ESTE"] = solicitud.este or ''
+        response["MTSE"] = solicitud.mtse or ''
+        response["OESTE"] = solicitud.oeste or ''
+        response["MTSO"] = solicitud.mtso or ''
+        response["F_PRESTRIB"] = solicitud.f_prestrib or ''
+        response["DATUM"] = solicitud.datum or ''
+        response["ARCHIVO"] = solicitud.archivo or ''
+        response["CORTE"] = solicitud.corte or ''
+        response["EDITOR"] = solicitud.editor or ''
+        # response["CPU"] = solicitud.cpu or ''
+        response.store()
+    db.close()
+    # pdb.set_trace()
+    file_path = os.path.join(settings.BASE_DIR, "Static/" + file_name)
+    if os.path.exists(file_path):
+        with open(file_path, 'rb') as fh:
+            response = HttpResponse(fh.read(), content_type="application/x-dbase")
+            response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
+            os.remove(file_path)
             return response
     raise Http404
