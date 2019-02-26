@@ -590,7 +590,7 @@ def actualizar_datos(request):
     registro.ind_vige = request.POST["IND_VIGE"]
     registro.razon = request.POST["RAZON"]
     registro.perito = request.POST["PERITO"]
-    registro.oposicion = request.POST["OPOSCION"]
+    registro.oposicion = request.POST["OPOSICION"]
     registro.save()
     response = {}
     return HttpResponse(
