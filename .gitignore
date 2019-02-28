@@ -1,3 +1,5 @@
 *.pyc
 .env
 *.pdf
+*.dbf
+Static/*.dbf
