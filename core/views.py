@@ -1195,17 +1195,17 @@ def download_conce(request):
             #the text after of solicitud. is the attributes
             # response["FDIAR_APRO"] = solicitud.FDIAR_APRO#.strftime("%Y-%M-%D")
             response["BOLETIN"] = solicitud.boletin or ''
-            response["F_BOLETIN"] = datetime.datetime.strptime(solicitud.f_boletin, '%Y/%m/%d').strftime("%Y%m%d") or ''
+            response["F_BOLETIN"] = '' if solicitud.f_boletin == None else (datetime.datetime.strptime(solicitud.f_boletin, '%Y/%m/%d').strftime('%Y%m%d') or '')
             response["TIPO_CONCE"] = solicitud.tipo_conce or ''
             response["CONCESION"] = solicitud.concesion or ''
             response["CONCESIONA"] = solicitud.concesiona or ''
             response["REPRESENTA"] = solicitud.representa or ''
             response["DIRECCION"] = solicitud.direccion or ''
             response["ROLMINERO"] = solicitud.rolminero or ''
-            response["F_SENTENC1"] = datetime.datetime.strptime(solicitud.f_boletin, '%Y/%m/%d').strftime("%Y%m%d") or ''
-            response["F_SENTENC2"] = datetime.datetime.strptime(solicitud.f_boletin, '%Y/%m/%d').strftime("%Y%m%d") or ''
-            response["F_PUBEXT"] =  datetime.datetime.strptime(solicitud.f_boletin, '%Y/%m/%d').strftime("%Y%m%d") or ''
-            response["F_INSCMIN"] = datetime.datetime.strptime(solicitud.f_boletin, '%Y/%m/%d').strftime("%Y%m%d") or ''
+            response["F_SENTENC1"] = '' if solicitud.f_sentenc1 == None else (datetime.datetime.strptime(solicitud.f_sentenc1, '%Y/%m/%d').strftime('%Y%m%d') or '')
+            response["F_SENTENC2"] = '' if solicitud.f_sentenc2 == None else (datetime.datetime.strptime(solicitud.f_sentenc2, '%Y/%m/%d').strftime('%Y%m%d') or '')
+            response["F_PUBEXT"] =  '' if solicitud.f_pubext == None else (datetime.datetime.strptime(solicitud.f_pubext, '%Y/%m/%d').strftime('%Y%m%d') or '')
+            response["F_INSCMIN"] = '' if solicitud.f_inscmin == None else (datetime.datetime.strptime(solicitud.f_inscmin, '%Y/%m/%d').strftime('%Y%m%d') or '')
             response["FOJAS"] = solicitud.fojas or ''
             response["NUMERO"] = solicitud.numero or ''
             response["YEAR"] = solicitud.year or ''
@@ -1461,29 +1461,14 @@ def download_ver_conce(request):
             #the text after of solicitud. is the attributes
             # response["FDIAR_APRO"] = solicitud.FDIAR_APRO#.strftime("%Y-%M-%D")
             response["BOLETIN"] = solicitud.boletin or ''
-            response["F_BOLETIN"] = datetime.datetime.strptime(solicitud.f_boletin, '%Y/%m/%d').strftime("%Y%m%d") or ''
-            response["TIPO_CONCE"] = solicitud.tipo_conce or ''
+            response["F_BOLETIN"] = solicitud.f_boletin or ''
             response["CONCESION"] = solicitud.concesion or ''
-            response["CONCESIONA"] = solicitud.concesiona or ''
-            response["REPRESENTA"] = solicitud.representa or ''
-            response["DIRECCION"] = solicitud.direccion or ''
-            response["ROLMINERO"] = solicitud.rolminero or ''
-            response["F_SENTENC1"] = datetime.datetime.strptime(solicitud.f_boletin, '%Y/%m/%d').strftime("%Y%m%d") or ''
-            response["F_SENTENC2"] = datetime.datetime.strptime(solicitud.f_boletin, '%Y/%m/%d').strftime("%Y%m%d") or ''
-            response["F_PUBEXT"] =  datetime.datetime.strptime(solicitud.f_boletin, '%Y/%m/%d').strftime("%Y%m%d") or ''
-            response["F_INSCMIN"] = datetime.datetime.strptime(solicitud.f_boletin, '%Y/%m/%d').strftime("%Y%m%d") or ''
-            response["FOJAS"] = solicitud.fojas or ''
-            response["NUMERO"] = solicitud.numero or ''
-            response["YEAR"] = solicitud.year or ''
-            response["CIUDAD"] = solicitud.ciudad or ''
-            response["JUZGADO"] = solicitud.juzgado or ''
-            response["ROLJUZ"] = solicitud.roljuz or ''
-            response["IND_METAL"] = solicitud.ind_metal or ''
             response["REGION"] = solicitud.region or ''
-            response["PROVINCIA"] = solicitud.provincia or ''
-            response["COMUNA"] = solicitud.comuna or ''
-            response["LUGAR"] = solicitud.lugar or ''
-            response["TIPO_UTM"] = solicitud.tipo_utm or ''
+            response["ROLJUZ"] = solicitud.roljuz or ''
+            response["IDENT_LIND"] = solicitud.ident_lind or ''
+            response["COORDNORTE"] = solicitud.coordnorte or ''
+            response["COORDESTE"] = solicitud.coordeste or ''
+            response["CPU"] = solicitud.cpu or ''
             nortepi = 0
             if solicitud.nortepi is not None:
                 nortepi = float(solicitud.nortepi)
