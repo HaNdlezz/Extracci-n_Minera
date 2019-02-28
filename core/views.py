@@ -1202,10 +1202,10 @@ def download_conce(request):
             response["REPRESENTA"] = solicitud.representa or ''
             response["DIRECCION"] = solicitud.direccion or ''
             response["ROLMINERO"] = solicitud.rolminero or ''
-            response["F_SENTENC1"] = '' if solicitud.f_sentenc1 == None else (datetime.datetime.strptime(solicitud.f_sentenc1, '%Y/%m/%d').strftime('%Y%m%d') or '')
-            response["F_SENTENC2"] = '' if solicitud.f_sentenc2 == None else (datetime.datetime.strptime(solicitud.f_sentenc2, '%Y/%m/%d').strftime('%Y%m%d') or '')
-            response["F_PUBEXT"] =  '' if solicitud.f_pubext == None else (datetime.datetime.strptime(solicitud.f_pubext, '%Y/%m/%d').strftime('%Y%m%d') or '')
-            response["F_INSCMIN"] = '' if solicitud.f_inscmin == None else (datetime.datetime.strptime(solicitud.f_inscmin, '%Y/%m/%d').strftime('%Y%m%d') or '')
+            response["F_SENTENC1"] = '' if solicitud.f_sentenc1 is None or len(solicitud.f_sentenc1)==0 else (datetime.datetime.strptime(solicitud.f_sentenc1, '%Y/%m/%d').strftime('%Y%m%d')) or ''
+            response["F_SENTENC2"] = '' if solicitud.f_sentenc2 is None or len(solicitud.f_sentenc2)==0 else (datetime.datetime.strptime(solicitud.f_sentenc2, '%Y/%m/%d').strftime('%Y%m%d')) or ''
+            response["F_PUBEXT"] =  '' if solicitud.f_pubext is None or len(solicitud.f_pubext)==0 else (datetime.datetime.strptime(solicitud.f_pubext, '%Y/%m/%d').strftime('%Y%m%d')) or ''
+            response["F_INSCMIN"] = '' if solicitud.f_inscmin is None or len(solicitud.f_inscmin)==0 else (datetime.datetime.strptime(solicitud.f_inscmin, '%Y/%m/%d').strftime('%Y%m%d')) or ''
             response["FOJAS"] = solicitud.fojas or ''
             response["NUMERO"] = solicitud.numero or ''
             response["YEAR"] = solicitud.year or ''
@@ -1237,7 +1237,7 @@ def download_conce(request):
             response["HECTAREAS"] = hectareas or 0
             response["OBSER"] = solicitud.obser or ''
             response["DATUM"] = solicitud.datum or ''
-            response["F_PRESTRIB"] =  datetime.datetime.strptime(solicitud.f_boletin, '%Y/%m/%d').strftime("%Y%m%d") or ''
+            response["F_PRESTRIB"] =  '' if solicitud.f_prestrib is None or len(solicitud.f_prestrib)==0 else (datetime.datetime.strptime(solicitud.f_prestrib, '%Y/%m/%d').strftime('%Y%m%d')) or ''
             response["ARCHIVO"] = solicitud.archivo or ''
             response["CORTE"] = solicitud.corte or ''
             huso = 0
@@ -1254,7 +1254,7 @@ def download_conce(request):
         with open(file_path, 'rb') as fh:
             response = HttpResponse(fh.read(), content_type="application/x-dbase")
             response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
-            #os.remove(file_path)
+            os.remove(file_path)
             return response
     raise Http404
 
