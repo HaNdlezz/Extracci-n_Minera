@@ -34,7 +34,7 @@
     </div>
 </div>
 <div class="row">
-    <form action="{% url 'download_pedi' %}" method="post">
+    <form action="{% url 'download' %}" method="post">
         {% csrf_token %}
         <div class="col-md-12">
             <div class="ibox">
@@ -56,13 +56,26 @@
                             </div>
                         </div> -->
 
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label for="fecha" class="control-label">Fecha: </label>
                                 <select name="fecha" id="fecha" class="form-control">
                                     {% for x in diario %}
                                     <option value="{{x.pk}}">{{x.fecha}}</option>
                                     {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="type" class="control-label">Tipo: </label>
+                                <select name="type" id="type" class="form-control">
+                                    <option value="concesiones">Concesiones</option>
+                                    <option value="pedimentos">Pedimentos</option>
+                                    <option value="manifestaciones">Manifestaciones</option>
+                                    <option value="mensuras">Solicitudes de Mensura</option>
+                                    <option value="ver_concesiones">Vértices de Concesiones</option>
+                                    <option value="ver_mensuras">Vértices de Solicitudes de Mensura</option>
                                 </select>
                             </div>
                         </div>

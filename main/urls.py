@@ -29,5 +29,6 @@ urlpatterns = [
     url(r'^excel_registros/', views.excel_registros, name="excel_registros"),
     url(r'^excel_vertices/', views.excel_vertices, name="excel_vertices"),
     url(r'^download_pedi/', views.download_pedi, name="download_pedi"),
+    url(r'^download/', views.download, name="download"),
     url(r'^$', views.login_user, name="login"),
 ]
