@@ -1407,97 +1407,42 @@ def download_mensu(request):
 #Function for create dbf of Vertices Coneciones
 def download_ver_conce(request):
     da = {}
-    file_name = "conce " + str(datetime.datetime.now()) + ".dbf"
+    file_name = "ver_con " + str(datetime.datetime.now()) + ".dbf"
     db = dbf.Dbf("Static/" + file_name, new=True)
     db.addField(
         #Add headers to dbf file
         ("BOLETIN", "C", 6),
         ("F_BOLETIN", "D",8),
-        ("TIPO_CONCE", "C", 13),
         ("CONCESION", "C", 60),
-        ("CONCESIONA", "C", 60),
-        ("REPRESENTA", "C", 60),
-        ("DIRECCION", "C", 100),
-        ("ROLMINERO", "C", 20),
-        ("F_SENTENC1", "D",8),
-        ("F_SENTENC2", "D",8),
-        ("F_PUBEXT", "D",8),
-        ("F_INSCMIN", "D",8),
-        ("FOJAS", "C", 10),
-        ("NUMERO", "C", 6),
-        ("YEAR", "C", 4),
-        ("CIUDAD", "C", 15),
-        ("JUZGADO", "C", 35),
-        ("ROLJUZ", "C", 15),
-        ("IND_METAL", "C", 1),
         ("REGION", "C", 2),
-        ("PROVINCIA", "C", 15),
-        ("COMUNA", "C", 20),
-        ("LUGAR", "C", 50),
-        ("TIPO_UTM", "C", 1),
-        ("NORTEPI", "N", 11),
-        ("ESTEPI", "N", 11),
-        ("VERTICES", "N", 2),
-        ("HA_PERT", "C", 6),
-        ("HECTAREAS", "N", 8),
-        ("OBSER", "C", 55),
-        ("DATUM", "C", 6),
-        ("F_PRESTRIB", "D"),
-        ("ARCHIVO", "C", 100),
-        ("CORTE", "C", 10),
-        ("HUSO", "N", 2),
-        ("EDITOR", "C", 11),
+        ("ROLJUZ", "C", 15),
+        ("IDENT_LIND", "C", 8),
+        ("COORDNORTE", "N", 11),
+        ("COORDESTE", "N", 11),
     )
 
     ## fill DBF with some records
-    if int(request.POST["fecha"]) != 0:
-        diario = Diario.objects.get(pk=int(request.POST["fecha"]))#filter "diario" for date add: tipo_tramite for pedimentos
-        solicitudes = diario.registro_mineria_set.all()#get register for specific "diario"
-    else:
-        solicitudes = Registro_Mineria.objects.all()#Get all register in case that the user wish generate a dbf with all register without care the date
+    solicitudes = Vertice.objects.all()#Get all register in case that the user wish generate a dbf with all register without care the date
     for solicitud in solicitudes:
-        if solicitud.tipo_tramite == "EXTRACTOS DE SENTENCIA DE EXPLORACION" or solicitud.tipo_tramite == "EXTRACTOS DE SENTENCIA DE EXPLOTACION":
-            response = db.newRecord()
-            #the text after of solicitud. is the attributes
-            # response["FDIAR_APRO"] = solicitud.FDIAR_APRO#.strftime("%Y-%M-%D")
-            response["BOLETIN"] = solicitud.boletin or ''
-            response["F_BOLETIN"] = solicitud.f_boletin or ''
-            response["CONCESION"] = solicitud.concesion or ''
-            response["REGION"] = solicitud.region or ''
-            response["ROLJUZ"] = solicitud.roljuz or ''
-            response["IDENT_LIND"] = solicitud.ident_lind or ''
-            response["COORDNORTE"] = solicitud.coordnorte or ''
-            response["COORDESTE"] = solicitud.coordeste or ''
-            response["CPU"] = solicitud.cpu or ''
-            nortepi = 0
-            if solicitud.nortepi is not None:
-                nortepi = float(solicitud.nortepi)
-            response["NORTEPI"] = nortepi or 0
-            estepi = 0
-            if solicitud.estepi is not None:
-                estepi = float(solicitud.estepi)
-            response["ESTEPI"] = estepi or 0
-            vertices = 0
-            if solicitud.vertices is not None:
-                vertices = float(solicitud.vertices)
-            response["VERTICES"] = vertices or 0
-            response["HA_PERT"] = solicitud.ha_pert or ''
-            hectareas = 0
-            if solicitud.hectareas is not None:
-                hectareas = float(solicitud.hectareas)
-            response["HECTAREAS"] = hectareas or 0
-            response["OBSER"] = solicitud.obser or ''
-            response["DATUM"] = solicitud.datum or ''
-            response["F_PRESTRIB"] =  datetime.datetime.strptime(solicitud.f_boletin, '%Y/%m/%d').strftime("%Y%m%d") or ''
-            response["ARCHIVO"] = solicitud.archivo or ''
-            response["CORTE"] = solicitud.corte or ''
-            huso = 0
-            if solicitud.huso != "No se detecta Huso" and solicitud.huso is not None:
-                huso = float(solicitud.huso)
-            response["HUSO"] = huso or 0
-            response["EDITOR"] = solicitud.editor or ''
-            # response["CPU"] = solicitud.cpu or ''
-            response.store()
+        response = db.newRecord()
+        #the text after of solicitud. is the attributes
+        # response["FDIAR_APRO"] = solicitud.FDIAR_APRO#.strftime("%Y-%M-%D")
+        response["BOLETIN"] = solicitud.boletin or ''
+        response["F_BOLETIN"] = '' if solicitud.f_boletin is None or len(solicitud.f_boletin)==0 else (datetime.datetime.strptime(solicitud.f_boletin, '%Y/%m/%d').strftime('%Y%m%d')) or ''
+        response["CONCESION"] = solicitud.concesion or ''
+        response["REGION"] = solicitud.region or ''
+        response["ROLJUZ"] = solicitud.roljuz or ''
+        response["IDENT_LIND"] = solicitud.ident_lind or 0
+        coordnorte = 0 
+        if solicitud.coordnorte is not None:
+            coordnorte = float(solicitud.coordnorte)
+        response["COORDNORTE"] = coordnorte or 0
+        coordeste = 0 
+        if solicitud.coordeste is not None:
+            coordeste = float(solicitud.coordeste)
+        response["COORDESTE"] = coordeste or 0
+        # response["CPU"] = solicitud.cpu or ''
+        response.store()
     db.close()
     # pdb.set_trace()
     file_path = os.path.join(settings.BASE_DIR, "Static/" + file_name)
