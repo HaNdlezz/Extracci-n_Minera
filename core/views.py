@@ -210,6 +210,14 @@ def extraerConcesiones(concesion):
     if patron.search(concesion.texto):
         concesion.hectareas = patron.search(concesion.texto).group().replace(".","").split(" ")[0]
     concesion.obser = "(CVE "+concesion.cve+")"
+    if concesion.vertices is None:
+        concesion.vertices = 0
+    if concesion.hectareas is None:
+        concesion.hectareas = 0
+    if concesion.nortepi is None:
+        concesion.nortepi = 0
+    if concesion.estepi is None:
+        concesion.estepi = 0
     concesion.save()
     print concesion
 
@@ -856,29 +864,33 @@ def excel_vertices(request):
         return render(request, template_name, data)
     return render(request, template_name, data)
 
-def type_matches
+def type_matches():
     return {
         'Vertices Conceciones': ["EXTRACTOS DE SENTENCIA DE EXPLORACION","EXTRACTOS DE SENTENCIA DE EXPLOTACION"],
-        'Conceciones': ["EXTRACTOS DE SENTENCIA DE EXPLORACION","EXTRACTOS DE SENTENCIA DE EXPLOTACION"]
-        'Manifestaciones': "MANIFESTACIONES MINERAS"
-        'Pedimentos': "PEDIMENTOS MINEROS"
-        'Vertices Mensura': "SOLICITUDES DE MENSURA"
+        'Conceciones': ["EXTRACTOS DE SENTENCIA DE EXPLORACION","EXTRACTOS DE SENTENCIA DE EXPLOTACION"],
+        'Manifestaciones': "MANIFESTACIONES MINERAS",
+        'Pedimentos': "PEDIMENTOS MINEROS",
+        'Vertices Mensura': "SOLICITUDES DE MENSURA",
         'Mensura': "SOLICITUDES DE MENSURA"
     }
 
-def download(request)
-    if rquest.POST['type'] == 'Pedimentos':
+def download(request):
+    template_name = 'reporte_registros.html'
+    data = {}
+    #tipo_reporte = type_matches(request.POST[""])
+    if request.POST['type'] == 'pedimentos':
         download_pedi(request)
-    if rquest.POST['type'] == 'Vertices Conceciones':
+    if request.POST['type'] == 'ver_concesiones':
         download_conce(request) # TODO his own method filtering for those who have vertex
-    if rquest.POST['type'] == 'Conceciones':
+    if request.POST['type'] == 'concesiones':
         download_conce(request)
-    if rquest.POST['type'] == 'Manifestaciones':
+    if request.POST['type'] == 'manifestaciones':
         download_manifes(request)
-    if rquest.POST['type'] == 'Vertices Mensura':
+    if request.POST['type'] == 'ver_mensuras':
         download_mensu(request) # TODO his own method filtering for those who have vertex
-    if rquest.POST['type'] == 'Mensura':
+    if request.POST['type'] == 'mensuras':
         download_mensu(request)
+    return render(request, template_name, data)
 
 
 #Function for create dbf of Pedimentos
@@ -1131,45 +1143,43 @@ def download_conce(request):
     db = dbf.Dbf("Static/" + file_name, new=True)
     db.addField(
         #Add headers to dbf file
-        ("BOLETIN", "C", 80),
-        ("F_BOLETIN", "C", 80),
-        ("TIPO_CONCE", "C", 80),
-        ("CONCESION", "C", 80),
-        ("CONCESIONA", "C", 80),
-        ("REPRESENTA", "C", 80),
-        ("DIRECCION", "C", 80),
-        ("ROLMINERO", "C", 80),
-        ("F_SENTENC1", "C", 80),
-        ("F_SENTENC2", "C", 80),
-        ("F_PUBEXT", "C", 80),
-        ("F_INSCMIN", "C", 80),
-        ("FOJAS", "C", 80),
-        ("NUMERO", "C", 80),
-        ("YEAR", "C", 80),
-        ("CIUDAD", "C", 80),
-        ("JUZGADO", "C", 80),
-        ("ROLJUZ", "C", 80),
-        ("IND_METAL", "C", 80),
-        ("REGION", "C", 80),
-        ("PROVINCIA", "C", 80),
-        ("COMUNA", "C", 80),
-        ("LUGAR", "C", 80),
-        ("TIPO_UTM", "C", 80),
-        ("NORTEPI", "C", 80),
-        ("ESTEPI", "C", 80),
-        ("VERTICES", "C", 80),
-        ("HA_PERT", "C", 80),
-        ("HECTAREAS", "C", 80),
-        ("OBSER", "C", 80),
-        ("DATUM", "C", 80),
-        ("F_PRESTRIB", "C", 80),
-        ("ARCHIVO", "C", 80),
-        ("CORTE", "C", 80),
-        ("HUSO", "C", 80),
-        ("EDITOR", "C", 80),
-        ("CPU", "C", 80),
+        ("BOLETIN", "C", 6),
+        ("F_BOLETIN", "D",8),
+        ("TIPO_CONCE", "C", 13),
+        ("CONCESION", "C", 60),
+        ("CONCESIONA", "C", 60),
+        ("REPRESENTA", "C", 60),
+        ("DIRECCION", "C", 100),
+        ("ROLMINERO", "C", 20),
+        ("F_SENTENC1", "D",8),
+        ("F_SENTENC2", "D",8),
+        ("F_PUBEXT", "D",8),
+        ("F_INSCMIN", "D",8),
+        ("FOJAS", "C", 10),
+        ("NUMERO", "C", 6),
+        ("YEAR", "C", 4),
+        ("CIUDAD", "C", 15),
+        ("JUZGADO", "C", 35),
+        ("ROLJUZ", "C", 15),
+        ("IND_METAL", "C", 1),
+        ("REGION", "C", 2),
+        ("PROVINCIA", "C", 15),
+        ("COMUNA", "C", 20),
+        ("LUGAR", "C", 50),
+        ("TIPO_UTM", "C", 1),
+        ("NORTEPI", "N", 11),
+        ("ESTEPI", "N", 11),
+        ("VERTICES", "N", 2),
+        ("HA_PERT", "C", 6),
+        ("HECTAREAS", "N", 8),
+        ("OBSER", "C", 55),
+        ("DATUM", "C", 6),
+        ("F_PRESTRIB", "D"),
+        ("ARCHIVO", "C", 100),
+        ("CORTE", "C", 10),
+        ("HUSO", "N", 2),
+        ("EDITOR", "C", 11),
     )
-    print db
 
     ## fill DBF with some records
     if int(request.POST["fecha"]) != 0:
@@ -1178,48 +1188,63 @@ def download_conce(request):
     else:
         solicitudes = Registro_Mineria.objects.all()#Get all register in case that the user wish generate a dbf with all register without care the date
     for solicitud in solicitudes:
-        response = db.newRecord()
-        print solicitud.boletin
-        #the text after of solicitud. is the attributes
-        # response["FDIAR_APRO"] = solicitud.FDIAR_APRO#.strftime("%Y-%M-%D")
-        response["BOLETIN"] = solicitud.boletin or ''
-        response["F_BOLETIN"] = datetime.datetime.strptime(solicitud.f_boletin, '%Y/%m/%d').strftime("%Y%m%d") or ''
-        response["TIPO_CONCE"] = solicitud.tipo_conce or ''
-        response["CONCESION"] = solicitud.concesion or ''
-        response["CONCESIONA"] = solicitud.concesiona or ''
-        response["REPRESENTA"] = solicitud.representa or ''
-        response["DIRECCION"] = solicitud.direccion or ''
-        response["ROLMINERO"] = solicitud.rolminero or ''
-        response["F_SENTENC1"] = solicitud.f_sentenc1 or ''
-        response["F_SENTENC2"] = solicitud.f_sentenc2 or ''
-        response["F_PUBEXT"] = solicitud.f_pubext or ''
-        response["F_INSCMIN"] = solicitud.f_inscmin or ''
-        response["FOJAS"] = solicitud.fojas or ''
-        response["NUMERO"] = solicitud.numero or ''
-        response["YEAR"] = solicitud.year or ''
-        response["CIUDAD"] = solicitud.ciudad or ''
-        response["JUZGADO"] = solicitud.juzgado or ''
-        response["ROLJUZ"] = solicitud.roljuz or ''
-        response["IND_METAL"] = solicitud.ind_metal or ''
-        response["REGION"] = solicitud.region or ''
-        response["PROVINCIA"] = solicitud.provincia or ''
-        response["COMUNA"] = solicitud.comuna or ''
-        response["LUGAR"] = solicitud.lugar or ''
-        response["TIPO_UTM"] = solicitud.tipo_utm or ''
-        response["NORTEPI"] = solicitud.nortepi or ''
-        response["ESTEPI"] = solicitud.estepi or ''
-        response["VERTICES"] = solicitud.vertices or ''
-        response["HA_PERT"] = solicitud.ha_pert or ''
-        response["HECTAREAS"] = solicitud.hectareas or ''
-        response["OBSER"] = solicitud.obser or ''
-        response["DATUM"] = solicitud.datum or ''
-        response["F_PRESTRIB"] = solicitud.f_prestrib or ''
-        response["ARCHIVO"] = solicitud.archivo or ''
-        response["CORTE"] = solicitud.corte or ''
-        response["HUSO"] = solicitud.huso or ''
-        response["EDITOR"] = solicitud.editor or ''
-        # response["CPU"] = solicitud.cpu or ''
-        response.store()
+        if solicitud.tipo_tramite == "EXTRACTOS DE SENTENCIA DE EXPLORACION" or solicitud.tipo_tramite == "EXTRACTOS DE SENTENCIA DE EXPLOTACION":
+            response = db.newRecord()
+            #the text after of solicitud. is the attributes
+            # response["FDIAR_APRO"] = solicitud.FDIAR_APRO#.strftime("%Y-%M-%D")
+            response["BOLETIN"] = solicitud.boletin or ''
+            response["F_BOLETIN"] = datetime.datetime.strptime(solicitud.f_boletin, '%Y/%m/%d').strftime("%Y%m%d") or ''
+            response["TIPO_CONCE"] = solicitud.tipo_conce or ''
+            response["CONCESION"] = solicitud.concesion or ''
+            response["CONCESIONA"] = solicitud.concesiona or ''
+            response["REPRESENTA"] = solicitud.representa or ''
+            response["DIRECCION"] = solicitud.direccion or ''
+            response["ROLMINERO"] = solicitud.rolminero or ''
+            response["F_SENTENC1"] = datetime.datetime.strptime(solicitud.f_boletin, '%Y/%m/%d').strftime("%Y%m%d") or ''
+            response["F_SENTENC2"] = datetime.datetime.strptime(solicitud.f_boletin, '%Y/%m/%d').strftime("%Y%m%d") or ''
+            response["F_PUBEXT"] =  datetime.datetime.strptime(solicitud.f_boletin, '%Y/%m/%d').strftime("%Y%m%d") or ''
+            response["F_INSCMIN"] = datetime.datetime.strptime(solicitud.f_boletin, '%Y/%m/%d').strftime("%Y%m%d") or ''
+            response["FOJAS"] = solicitud.fojas or ''
+            response["NUMERO"] = solicitud.numero or ''
+            response["YEAR"] = solicitud.year or ''
+            response["CIUDAD"] = solicitud.ciudad or ''
+            response["JUZGADO"] = solicitud.juzgado or ''
+            response["ROLJUZ"] = solicitud.roljuz or ''
+            response["IND_METAL"] = solicitud.ind_metal or ''
+            response["REGION"] = solicitud.region or ''
+            response["PROVINCIA"] = solicitud.provincia or ''
+            response["COMUNA"] = solicitud.comuna or ''
+            response["LUGAR"] = solicitud.lugar or ''
+            response["TIPO_UTM"] = solicitud.tipo_utm or ''
+            nortepi = 0
+            if solicitud.nortepi is not None:
+                nortepi = float(solicitud.nortepi)
+            response["NORTEPI"] = nortepi or 0
+            estepi = 0
+            if solicitud.estepi is not None:
+                estepi = float(solicitud.estepi)
+            response["ESTEPI"] = estepi or 0
+            vertices = 0
+            if solicitud.vertices is not None:
+                vertices = float(solicitud.vertices)
+            response["VERTICES"] = vertices or 0
+            response["HA_PERT"] = solicitud.ha_pert or ''
+            hectareas = 0
+            if solicitud.hectareas is not None:
+                hectareas = float(solicitud.hectareas)
+            response["HECTAREAS"] = hectareas or 0
+            response["OBSER"] = solicitud.obser or ''
+            response["DATUM"] = solicitud.datum or ''
+            response["F_PRESTRIB"] =  datetime.datetime.strptime(solicitud.f_boletin, '%Y/%m/%d').strftime("%Y%m%d") or ''
+            response["ARCHIVO"] = solicitud.archivo or ''
+            response["CORTE"] = solicitud.corte or ''
+            huso = 0
+            if solicitud.huso != "No se detecta Huso" and solicitud.huso is not None:
+                huso = float(solicitud.huso)
+            response["HUSO"] = huso or 0
+            response["EDITOR"] = solicitud.editor or ''
+            # response["CPU"] = solicitud.cpu or ''
+            response.store()
     db.close()
     # pdb.set_trace()
     file_path = os.path.join(settings.BASE_DIR, "Static/" + file_name)
@@ -1227,7 +1252,7 @@ def download_conce(request):
         with open(file_path, 'rb') as fh:
             response = HttpResponse(fh.read(), content_type="application/x-dbase")
             response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
-            os.remove(file_path)
+            #os.remove(file_path)
             return response
     raise Http404
 
