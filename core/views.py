@@ -920,44 +920,42 @@ def download_pedi(request):
     db = dbf.Dbf("Static/" + file_name, new=True)
     db.addField(
         #Add headers to dbf file
-        ("BOLETIN", "C", 80),
-        ("F_BOLETIN", "C", 80),
-        ("CONCESION", "C", 80),
-        ("CONCESIONA", "C", 80),
-        ("REPRESENTA", "C", 80),
-        ("DIRECCION", "C", 80),
-        ("REGION", "C", 80),
-        ("PROVINCIA", "C", 80),
-        ("COMUNA", "C", 80),
-        ("LUGAR", "C", 80),
-        ("TIPO_UTM", "C", 80),
-        ("NORTEPI", "C", 80),
-        ("ESTEPI", "C", 80),
-        ("HUSO", "C", 80),
-        ("N_SCARASUP", "C", 80),
-        ("E_OCARASUP", "C", 80),
-        ("IND_METAL", "C", 80),
-        ("HECTAREAS", "C", 80),
-        ("HA_PERT", "C", 80),
-        ("JUZGADO", "C", 80),
-        ("ROLJUZ", "C", 80),
-        ("F_PRESENTA", "C", 80),
-        ("F_RESOLUCI", "C", 80),
-        ("F_INSCRIBE", "C", 80),
-        ("FOJAS", "C", 80),
-        ("NUMERO", "C", 80),
-        ("YEAR", "C", 80),
-        ("CIUDAD", "C", 80),
-        ("CARTAIGM", "C", 80),
-        ("OBSER", "C", 80),
-        ("DATUM", "C", 80),
-        ("F_PRESTRIB", "C", 80),
-        ("ARCHIVO", "C", 80),
-        ("CORTE", "C", 80),
-        ("EDITOR", "C", 80),
-        ("CPU", "C", 80),
+        ("BOLETIN", "C", 6),
+        ("F_BOLETIN", "D", 8),
+        ("CONCESION", "C", 60),
+        ("CONCESIONA", "C", 60),
+        ("REPRESENTA", "C", 60),
+        ("DIRECCION", "C", 100),
+        ("REGION", "C", 2),
+        ("PROVINCIA", "C", 15),
+        ("COMUNA", "C", 20),
+        ("LUGAR", "C", 50),
+        ("TIPO_UTM", "C", 1),
+        ("NORTEPI", "N", 11),
+        ("ESTEPI", "N", 11),
+        ("HUSO", "N", 2),
+        ("N_SCARASUP", "N", 8),
+        ("E_OCARASUP", "N", 8),
+        ("IND_METAL", "C", 1),
+        ("HECTAREAS", "N", 8),
+        ("HA_PERT", "C", 6),
+        ("JUZGADO", "C", 35),
+        ("ROLJUZ", "C", 15),
+        ("F_PRESENTA", "D", 8),
+        ("F_RESOLUCI", "D", 8),
+        ("F_INSCRIBE", "D", 8),
+        ("FOJAS", "C", 10),
+        ("NUMERO", "C", 6),
+        ("YEAR", "C", 4),
+        ("CIUDAD", "C", 15),
+        ("CARTAIGM", "C", 6),
+        ("OBSER", "C", 55),
+        ("DATUM", "C", 6),
+        ("F_PRESTRIB", "D", 8),
+        ("ARCHIVO", "C", 100),
+        ("CORTE", "C", 10),
+        ("EDITOR", "C", 11),
     )
-    print db
 
 
     ## fill DBF with some records
@@ -967,47 +965,66 @@ def download_pedi(request):
     else:
         solicitudes = Registro_Mineria.objects.all()#Get all register in case that the user wish generate a dbf with all register without care the date
     for solicitud in solicitudes:
-        response = db.newRecord()
-        print solicitud.boletin
-        #the text after of solicitud. is the attributes
-        # response["FDIAR_APRO"] = solicitud.FDIAR_APRO#.strftime("%Y-%M-%D")
-        response["BOLETIN"] = solicitud.boletin or ''
-        response["F_BOLETIN"] = datetime.datetime.strptime(solicitud.f_boletin, '%Y/%m/%d').strftime("%Y%m%d") or ''
-        response["CONCESION"] = solicitud.concesion or ''
-        response["CONCESIONA"] = solicitud.concesiona or ''
-        response["REPRESENTA"] = solicitud.representa or ''
-        response["DIRECCION"] = solicitud.direccion or ''
-        response["REGION"] = solicitud.region or ''
-        response["PROVINCIA"] = solicitud.provincia or ''
-        response["COMUNA"] = solicitud.comuna or ''
-        response["LUGAR"] = solicitud.lugar or ''
-        response["TIPO_UTM"] = solicitud.tipo_utm or ''
-        response["NORTEPI"] = solicitud.nortepi or ''
-        response["ESTEPI"] = solicitud.estepi or ''
-        response["HUSO"] = solicitud.huso or ''
-        response["N_SCARASUP"] = solicitud.n_scarasup or ''
-        response["E_OCARASUP"] = solicitud.e_ocarasup or ''
-        response["IND_METAL"] = solicitud.ind_metal or ''
-        response["HECTAREAS"] = solicitud.hectareas or ''
-        response["HA_PERT"] = solicitud.ha_pert or ''
-        response["JUZGADO"] = solicitud.juzgado or ''
-        response["ROLJUZ"] = solicitud.roljuz or ''
-        response["F_PRESENTA"] = solicitud.f_presenta or ''
-        response["F_RESOLUCI"] = solicitud.f_resoluci or ''
-        response["F_INSCRIBE"] = solicitud.f_inscribe or ''
-        response["FOJAS"] = solicitud.fojas or ''
-        response["NUMERO"] = solicitud.numero or ''
-        response["YEAR"] = solicitud.year or ''
-        response["CIUDAD"] = solicitud.ciudad or ''
-        response["CARTAIGM"] = solicitud.cartaigm or ''
-        response["OBSER"] = solicitud.obser or ''
-        response["DATUM"] = solicitud.datum or ''
-        response["F_PRESTRIB"] = solicitud.f_prestrib or ''
-        response["ARCHIVO"] = solicitud.archivo or ''
-        response["CORTE"] = solicitud.corte or ''
-        response["EDITOR"] = solicitud.editor or ''
-        # response["CPU"] = solicitud.cpu or ''
-        response.store()
+        if solicitud.tipo_tramite == "PEDIMENTOS MINEROS":
+            response = db.newRecord()
+            print solicitud.boletin
+            #the text after of solicitud. is the attributes
+            # response["FDIAR_APRO"] = solicitud.FDIAR_APRO#.strftime("%Y-%M-%D")
+            response["BOLETIN"] = solicitud.boletin or ''
+            response["F_BOLETIN"] = '' if solicitud.f_boletin is None or len(solicitud.f_boletin)==0 else (datetime.datetime.strptime(solicitud.f_boletin, '%Y/%m/%d').strftime('%Y%m%d')) or ''
+            response["CONCESION"] = '' if solicitud.concesion is None else solicitud.concesion.encode('utf-8')
+            response["CONCESIONA"] = '' if solicitud.concesiona is None else solicitud.concesiona.encode('utf-8')
+            response["REPRESENTA"] = '' if solicitud.representa is None else solicitud.representa.encode('utf-8')
+            response["DIRECCION"] = '' if solicitud.direccion is None else solicitud.direccion.encode('utf-8')
+            response["REGION"] = solicitud.region or ''
+            response["PROVINCIA"] = '' if solicitud.provincia is None else solicitud.provincia.encode('utf-8')
+            response["COMUNA"] = '' if solicitud.comuna is None else solicitud.comuna.encode('utf-8')
+            response["LUGAR"] = '' if solicitud.lugar is None else solicitud.lugar.encode('utf-8')
+            response["TIPO_UTM"] = solicitud.tipo_utm or ''
+            nortepi = 0
+            if solicitud.nortepi is not None:
+                nortepi = float(solicitud.nortepi)
+            response["NORTEPI"] = nortepi or 0
+            estepi = 0
+            if solicitud.estepi is not None:
+                estepi = float(solicitud.estepi)
+            response["ESTEPI"] = estepi or 0
+            nortepi = 0
+            if solicitud.huso != "No se detecta Huso" and solicitud.huso is not None:
+                huso = float(solicitud.huso)
+            response["HUSO"] = huso or 0
+            n_scarasup = 0
+            if solicitud.n_scarasup is not None:
+                n_scarasup = float(solicitud.n_scarasup)
+            response["N_SCARASUP"] = n_scarasup or 0
+            e_ocarasup = 0
+            if solicitud.e_ocarasup is not None:
+                e_ocarasup = float(solicitud.e_ocarasup)
+            response["E_OCARASUP"] = e_ocarasup or 0
+            response["IND_METAL"] = '' if solicitud.ind_metal is None else solicitud.ind_metal.encode('utf-8')
+            hectareas = 0
+            if solicitud.hectareas is not None:
+                hectareas = float(solicitud.hectareas)
+            response["HECTAREAS"] = hectareas or 0
+            response["HA_PERT"] = '' if solicitud.ha_pert is None else solicitud.ha_pert.encode('utf-8')
+            response["JUZGADO"] = '' if solicitud.juzgado is None else solicitud.juzgado.encode('utf-8')
+            response["ROLJUZ"] = '' if solicitud.roljuz is None else solicitud.roljuz.encode('utf-8')
+            response["F_PRESENTA"] = '' if solicitud.f_presenta is None or len(solicitud.f_presenta)==0 else (datetime.datetime.strptime(solicitud.f_presenta, '%Y/%m/%d').strftime('%Y%m%d')) or ''
+            response["F_RESOLUCI"] = '' if solicitud.f_resoluci is None or len(solicitud.f_resoluci)==0 else (datetime.datetime.strptime(solicitud.f_resoluci, '%Y/%m/%d').strftime('%Y%m%d')) or ''
+            response["F_INSCRIBE"] = '' if solicitud.f_inscribe is None or len(solicitud.f_inscribe)==0 else (datetime.datetime.strptime(solicitud.f_inscribe, '%Y/%m/%d').strftime('%Y%m%d')) or ''
+            response["FOJAS"] = '' if solicitud.fojas is None else solicitud.fojas.encode('utf-8')
+            response["NUMERO"] = '' if solicitud.numero is None else solicitud.numero.encode('utf-8')
+            response["YEAR"] = '' if solicitud.year is None else solicitud.year.encode('utf-8')
+            response["CIUDAD"] = '' if solicitud.ciudad is None else solicitud.ciudad.encode('utf-8')
+            response["CARTAIGM"] = '' if solicitud.cartaigm is None else solicitud.cartaigm.encode('utf-8')
+            response["OBSER"] = '' if solicitud.obser is None else solicitud.obser.encode('utf-8')
+            response["DATUM"] = '' if solicitud.datum is None else solicitud.datum.encode('utf-8')
+            response["F_PRESTRIB"] = '' if solicitud.f_prestrib is None or len(solicitud.f_prestrib)==0 else (datetime.datetime.strptime(solicitud.f_prestrib, '%Y/%m/%d').strftime('%Y%m%d')) or ''
+            response["ARCHIVO"] = '' if solicitud.archivo is None else solicitud.archivo.encode('utf-8')
+            response["CORTE"] = '' if solicitud.corte is None else solicitud.corte.encode('utf-8')
+            response["EDITOR"] = '' if solicitud.editor is None else solicitud.editor.encode('utf-8')
+            # response["CPU"] = solicitud.cpu or ''
+            response.store()
     db.close()
     # pdb.set_trace()
     file_path = os.path.join(settings.BASE_DIR, "Static/" + file_name)
@@ -1079,7 +1096,6 @@ def download_manifes(request):
         ("EDITOR", "C", 11),
         #("CPU", "C", 80),
     )
-    print db
 
     ## fill DBF with some records
     if int(request.POST["fecha"]) != 0:
@@ -1088,79 +1104,76 @@ def download_manifes(request):
     else:
         solicitudes = Registro_Mineria.objects.all()#Get all register in case that the user wish generate a dbf with all register without care the date
     for solicitud in solicitudes:
-        response = db.newRecord()
-        print solicitud.boletin
-        #the text after of solicitud. is the attributes
-        # response["FDIAR_APRO"] = solicitud.FDIAR_APRO#.strftime("%Y-%M-%D")
-        response["BOLETIN"] = solicitud.boletin or ''
-        response["F_BOLETIN"] = '' if solicitud.f_boletin is None or len(solicitud.f_boletin)==0 else (datetime.datetime.strptime(solicitud.f_boletin, '%Y/%m/%d').strftime('%Y%m%d')) or ''
-        response["CONCESION"] = '' if solicitud.concesion is None else solicitud.concesion.encode('utf-8')
-        response["CONCESIONA"] = '' if solicitud.concesiona is None else solicitud.concesiona.encode('utf-8')
-        response["REPRESENTA"] = '' if solicitud.representa is None else solicitud.representa.encode('utf-8')
-        response["DIRECCION"] = '' if solicitud.direccion is None else solicitud.direccion.encode('utf-8')
-        response["REGION"] = solicitud.region or ''
-        response["PROVINCIA"] = '' if solicitud.provincia is None else solicitud.provincia.encode('utf-8')
-        response["COMUNA"] = '' if solicitud.comuna is None else solicitud.comuna.encode('utf-8')
-        response["LUGAR"] = '' if solicitud.comuna is None else solicitud.comuna.encode('utf-8')
-        response["TIPO_UTM"] = solicitud.tipo_utm or ''
-        nortepi = 0
-        if solicitud.nortepi is not None:
-            nortepi = float(solicitud.nortepi)
-        response["NORTEPI"] = nortepi or 0
-        estepi = 0
-        if solicitud.estepi is not None:
-            estepi = float(solicitud.estepi)
-        response["ESTEPI"] = estepi or 0
-        huso = 0
-        if solicitud.huso != "No se detecta Huso" and solicitud.huso is not None:
-            huso = float(solicitud.huso)
-        response["HUSO"] = huso or 0
-        n_scarasup = 0
-        #if solicitud.n_scarasup is not None:
-        try:
-            n_scarasup = float(solicitud.n_scarasup)
-        except ValueError,e:
-            print e, type(n_scarasup)
-        response["N_SCARASUP"] = n_scarasup or 0
-        e_ocarasup = 0
-        if solicitud.e_ocarasup is not None:
-            e_ocarasup = float(solicitud.e_ocarasup)
-        response["E_OCARASUP"] = e_ocarasup or 0
-        hectareas = 0
-        if solicitud.hectareas is not None:
-            nortepi = float(solicitud.hectareas)
-        response["HECTAREAS"] = hectareas or 0
-        response["HA_PERT"] = '' if solicitud.ha_pert is None else solicitud.ha_pert.encode('utf-8')
-        response["JUZGADO"] = '' if solicitud.juzgado is None else solicitud.juzgado.encode('utf-8')
-        response["ROLJUZ"] = '' if solicitud.roljuz is None else solicitud.roljuz.encode('utf-8')
-        response["F_PRESENTA"] = '' if solicitud.f_presenta is None or len(solicitud.f_presenta)==0 else (datetime.datetime.strptime(solicitud.f_presenta, '%Y/%m/%d').strftime('%Y%m%d')) or ''
-        response["F_RESOLUCI"] = '' if solicitud.f_resoluci is None or len(solicitud.f_resoluci)==0 else (datetime.datetime.strptime(solicitud.f_resoluci, '%Y/%m/%d').strftime('%Y%m%d')) or ''
-        response["F_INSCRIBE"] = '' if solicitud.f_resoluci is None or len(solicitud.f_resoluci)==0 else (datetime.datetime.strptime(solicitud.f_resoluci, '%Y/%m/%d').strftime('%Y%m%d')) or ''
-        response["FOJAS"] = '' if solicitud.fojas is None else solicitud.fojas.encode('utf-8')
-        response["NUMERO"] = '' if solicitud.numero is None else solicitud.numero.encode('utf-8')
-        response["YEAR"] = '' if solicitud.year is None else solicitud.year.encode('utf-8')
-        response["CIUDAD"] = '' if solicitud.ciudad is None else solicitud.ciudad.encode('utf-8')
-        response["CARTAIGM"] = '' if solicitud.cartaigm is None else solicitud.cartaigm.encode('utf-8')
-        response["OBSER"] = '' if solicitud.obser is None else solicitud.obser.encode('utf-8')
-        response["PED_ASOC"] = '' if solicitud.ped_asoc is None else solicitud.ped_asoc.encode('utf-8')
-        response["FECHAPED"] = '' if solicitud.fechaped is None or len(solicitud.fechaped)==0 else (datetime.datetime.strptime(solicitud.fechaped, '%Y/%m/%d').strftime('%Y%m%d')) or ''
-        response["ROLPED"] = '' if solicitud.rolped is None else solicitud.rolped.encode('utf-8')
-        response["TIPOCOORD"] = solicitud.tipocoord or ''
-        response["NORTE"] = '' if solicitud.norte is None else solicitud.norte.encode('utf-8')
-        response["MTSN"] = '' if solicitud.mtsn is None else solicitud.mtsn.encode('utf-8')
-        response["SUR"] = '' if solicitud.sur is None else solicitud.sur.encode('utf-8')
-        response["MTSS"] = '' if solicitud.mtss is None else solicitud.mtss.encode('utf-8')
-        response["ESTE"] = '' if solicitud.este is None else solicitud.este.encode('utf-8')
-        response["MTSE"] = '' if solicitud.mtse is None else solicitud.mtse.encode('utf-8')
-        response["OESTE"] = '' if solicitud.oeste is None else solicitud.oeste.encode('utf-8')
-        response["MTSO"] = '' if solicitud.mtso is None else solicitud.mtso.encode('utf-8')
-        response["F_PRESTRIB"] = '' if solicitud.f_prestrib is None or len(solicitud.f_prestrib)==0 else (datetime.datetime.strptime(solicitud.f_prestrib, '%Y/%m/%d').strftime('%Y%m%d')) or ''
-        response["DATUM"] = '' if solicitud.datum is None else solicitud.datum.encode('utf-8')
-        response["ARCHIVO"] = '' if solicitud.archivo is None else solicitud.archivo.encode('utf-8')
-        response["CORTE"] = '' if solicitud.corte is None else solicitud.corte.encode('utf-8')
-        response["EDITOR"] = '' if solicitud.editor is None else solicitud.editor.encode('utf-8')
-        # response["CPU"] = solicitud.cpu or ''
-        response.store()
+        if solicitud.tipo_tramite == "MANIFESTACIONES MINERAS":
+            response = db.newRecord()
+            #the text after of solicitud. is the attributes
+            # response["FDIAR_APRO"] = solicitud.FDIAR_APRO#.strftime("%Y-%M-%D")
+            response["BOLETIN"] = solicitud.boletin or ''
+            response["F_BOLETIN"] = '' if solicitud.f_boletin is None or len(solicitud.f_boletin)==0 else (datetime.datetime.strptime(solicitud.f_boletin, '%Y/%m/%d').strftime('%Y%m%d')) or ''
+            response["CONCESION"] = '' if solicitud.concesion is None else solicitud.concesion.encode('utf-8')
+            response["CONCESIONA"] = '' if solicitud.concesiona is None else solicitud.concesiona.encode('utf-8')
+            response["REPRESENTA"] = '' if solicitud.representa is None else solicitud.representa.encode('utf-8')
+            response["DIRECCION"] = '' if solicitud.direccion is None else solicitud.direccion.encode('utf-8')
+            response["REGION"] = solicitud.region or ''
+            response["PROVINCIA"] = '' if solicitud.provincia is None else solicitud.provincia.encode('utf-8')
+            response["COMUNA"] = '' if solicitud.comuna is None else solicitud.comuna.encode('utf-8')
+            response["LUGAR"] = '' if solicitud.comuna is None else solicitud.comuna.encode('utf-8')
+            response["TIPO_UTM"] = solicitud.tipo_utm or ''
+            nortepi = 0
+            if solicitud.nortepi is not None:
+                nortepi = float(solicitud.nortepi)
+            response["NORTEPI"] = nortepi or 0
+            estepi = 0
+            if solicitud.estepi is not None:
+                estepi = float(solicitud.estepi)
+            response["ESTEPI"] = estepi or 0
+            huso = 0
+            if solicitud.huso != "No se detecta Huso" and solicitud.huso is not None:
+                huso = float(solicitud.huso)
+            response["HUSO"] = huso or 0
+            n_scarasup = 0
+            if solicitud.n_scarasup is not None and len(solicitud.n_scarasup) > 0:
+                n_scarasup = float(solicitud.n_scarasup)
+            response["N_SCARASUP"] = n_scarasup or 0
+            e_ocarasup = 0
+            if solicitud.e_ocarasup is not None and len(solicitud.e_ocarasup) > 0:
+                e_ocarasup = float(solicitud.e_ocarasup)
+            response["E_OCARASUP"] = e_ocarasup or 0
+            hectareas = 0
+            if solicitud.hectareas is not None:
+                nortepi = float(solicitud.hectareas)
+            response["HECTAREAS"] = hectareas or 0
+            response["HA_PERT"] = '' if solicitud.ha_pert is None else solicitud.ha_pert.encode('utf-8')
+            response["JUZGADO"] = '' if solicitud.juzgado is None else solicitud.juzgado.encode('utf-8')
+            response["ROLJUZ"] = '' if solicitud.roljuz is None else solicitud.roljuz.encode('utf-8')
+            response["F_PRESENTA"] = '' if solicitud.f_presenta is None or len(solicitud.f_presenta)==0 else (datetime.datetime.strptime(solicitud.f_presenta, '%Y/%m/%d').strftime('%Y%m%d')) or ''
+            response["F_RESOLUCI"] = '' if solicitud.f_resoluci is None or len(solicitud.f_resoluci)==0 else (datetime.datetime.strptime(solicitud.f_resoluci, '%Y/%m/%d').strftime('%Y%m%d')) or ''
+            response["F_INSCRIBE"] = '' if solicitud.f_resoluci is None or len(solicitud.f_resoluci)==0 else (datetime.datetime.strptime(solicitud.f_resoluci, '%Y/%m/%d').strftime('%Y%m%d')) or ''
+            response["FOJAS"] = '' if solicitud.fojas is None else solicitud.fojas.encode('utf-8')
+            response["NUMERO"] = '' if solicitud.numero is None else solicitud.numero.encode('utf-8')
+            response["YEAR"] = '' if solicitud.year is None else solicitud.year.encode('utf-8')
+            response["CIUDAD"] = '' if solicitud.ciudad is None else solicitud.ciudad.encode('utf-8')
+            response["CARTAIGM"] = '' if solicitud.cartaigm is None else solicitud.cartaigm.encode('utf-8')
+            response["OBSER"] = '' if solicitud.obser is None else solicitud.obser.encode('utf-8')
+            response["PED_ASOC"] = '' if solicitud.ped_asoc is None else solicitud.ped_asoc.encode('utf-8')
+            response["FECHAPED"] = '' if solicitud.fechaped is None or len(solicitud.fechaped)==0 else (datetime.datetime.strptime(solicitud.fechaped, '%Y/%m/%d').strftime('%Y%m%d')) or ''
+            response["ROLPED"] = '' if solicitud.rolped is None else solicitud.rolped.encode('utf-8')
+            response["TIPOCOORD"] = solicitud.tipocoord or ''
+            response["NORTE"] = '' if solicitud.norte is None else solicitud.norte.encode('utf-8')
+            response["MTSN"] = '' if solicitud.mtsn is None else solicitud.mtsn.encode('utf-8')
+            response["SUR"] = '' if solicitud.sur is None else solicitud.sur.encode('utf-8')
+            response["MTSS"] = '' if solicitud.mtss is None else solicitud.mtss.encode('utf-8')
+            response["ESTE"] = '' if solicitud.este is None else solicitud.este.encode('utf-8')
+            response["MTSE"] = '' if solicitud.mtse is None else solicitud.mtse.encode('utf-8')
+            response["OESTE"] = '' if solicitud.oeste is None else solicitud.oeste.encode('utf-8')
+            response["MTSO"] = '' if solicitud.mtso is None else solicitud.mtso.encode('utf-8')
+            response["F_PRESTRIB"] = '' if solicitud.f_prestrib is None or len(solicitud.f_prestrib)==0 else (datetime.datetime.strptime(solicitud.f_prestrib, '%Y/%m/%d').strftime('%Y%m%d')) or ''
+            response["DATUM"] = '' if solicitud.datum is None else solicitud.datum.encode('utf-8')
+            response["ARCHIVO"] = '' if solicitud.archivo is None else solicitud.archivo.encode('utf-8')
+            response["CORTE"] = '' if solicitud.corte is None else solicitud.corte.encode('utf-8')
+            response["EDITOR"] = '' if solicitud.editor is None else solicitud.editor.encode('utf-8')
+            # response["CPU"] = solicitud.cpu or ''
+            response.store()
     db.close()
     # pdb.set_trace()
     file_path = os.path.join(settings.BASE_DIR, "Static/" + file_name)
@@ -1308,60 +1321,59 @@ def download_mensu(request):
     db = dbf.Dbf("Static/" + file_name, new=True)
     db.addField(
         #Add headers to dbf file
-        ("BOLETIN", "C", 80),
-        ("F_BOLETIN", "C", 80),
-        ("CONCESION", "C", 80),
-        ("CONCESIONA", "C", 80),
-        ("REPRESENTA", "C", 80),
-        ("DIRECCION", "C", 80),
-        ("JUZGADO", "C", 80),
-        ("ROLJUZ", "C", 80),
-        ("REGION", "C", 80),
-        ("PROVINCIA", "C", 80),
-        ("COMUNA", "C", 80),
-        ("LUGAR", "C", 80),
-        ("TIPO_UTM", "C", 80),
-        ("NORTEPI", "C", 80),
-        ("ESTEPI", "C", 80),
-        ("VERTICES", "C", 80),
-        ("N_SCARASUP", "C", 80),
-        ("E_OCARASUP", "C", 80),
-        ("HECTAREAS", "C", 80),
-        ("F_SOLICITA", "C", 80),
-        ("F_RESOLUC", "C", 80),
-        ("F_PRESMAN", "C", 80),
-        ("F_MENSURA", "C", 80),
-        ("N1", "C", 80),
-        ("HA1", "C", 80),
-        ("N_S1", "C", 80),
-        ("E_O1", "C", 80),
-        ("N2", "C", 80),
-        ("HA2", "C", 80),
-        ("N_S2", "C", 80),
-        ("E_O2", "C", 80),
-        ("N3", "C", 80),
-        ("HA3", "C", 80),
-        ("N_S3", "C", 80),
-        ("E_O3", "C", 80),
-        ("N4", "C", 80),
-        ("HA4", "C", 80),
-        ("N_S4", "C", 80),
-        ("E_O4", "C", 80),
-        ("HA_PERT", "C", 80),
-        ("IND_METAL", "C", 80),
-        ("IND_VIGE", "C", 80),
-        ("RAZON", "C", 80),
-        ("PERITO", "C", 80),
-        ("OPOSICION", "C", 80),
-        ("DATUM", "C", 80),
-        ("F_PRESTRIB", "C", 80),
-        ("ARCHIVO", "C", 80),
-        ("CORTE", "C", 80),
-        ("HUSO", "C", 80),
-        ("EDITOR", "C", 80),
-        ("CPU", "C", 80),
+        ("BOLETIN", "C", 6),
+        ("F_BOLETIN", "D", 8),
+        ("CONCESION", "C", 60),
+        ("CONCESIONA", "C", 60),
+        ("REPRESENTA", "C", 60),
+        ("DIRECCION", "C", 100),
+        ("JUZGADO", "C", 35),
+        ("ROLJUZ", "C", 15),
+        ("REGION", "C", 2),
+        ("PROVINCIA", "C", 15),
+        ("COMUNA", "C", 20),
+        ("LUGAR", "C", 50),
+        ("TIPO_UTM", "C", 1),
+        ("NORTEPI", "N", 11),
+        ("ESTEPI", "N", 11),
+        ("VERTICES", "N", 2),
+        ("N_SCARASUP", "N", 8),
+        ("E_OCARASUP", "N", 8),
+        ("HECTAREAS", "N", 8),
+        ("F_SOLICITA", "D", 8),
+        ("F_RESOLUC", "D", 8),
+        ("F_PRESMAN", "D", 8),
+        ("F_MENSURA", "D", 8),
+        ("N1", "C", 6),
+        ("HA1", "C", 8),
+        ("N_S1", "C", 8),
+        ("E_O1", "C", 8),
+        ("N2", "C", 4),
+        ("HA2", "C", 6),
+        ("N_S2", "C", 8),
+        ("E_O2", "C", 8),
+        ("N3", "C", 4),
+        ("HA3", "C", 6),
+        ("N_S3", "C", 8),
+        ("E_O3", "C", 8),
+        ("N4", "C", 4),
+        ("HA4", "C", 6),
+        ("N_S4", "C", 8),
+        ("E_O4", "C", 8),
+        ("HA_PERT", "C", 6),
+        ("IND_METAL", "C", 1),
+        ("IND_VIGE", "C", 1),
+        ("RAZON", "C", 1),
+        ("PERITO", "C", 34),
+        ("OPOSICION", "C", 50),
+        ("DATUM", "C", 6),
+        ("F_PRESTRIB", "D", 8),
+        ("ARCHIVO", "C", 100),
+        ("CORTE", "C", 10),
+        ("HUSO", "N", 2),
+        ("EDITOR", "C", 11),
+        #("CPU", "C", 80),
     )
-    print db
 
     ## fill DBF with some records
     if int(request.POST["fecha"]) != 0:
@@ -1370,63 +1382,84 @@ def download_mensu(request):
     else:
         solicitudes = Registro_Mineria.objects.all()#Get all register in case that the user wish generate a dbf with all register without care the date
     for solicitud in solicitudes:
-        response = db.newRecord()
-        print solicitud.boletin
-        #the text after of solicitud. is the attributes
-        # response["FDIAR_APRO"] = solicitud.FDIAR_APRO#.strftime("%Y-%M-%D")
-        response["BOLETIN"] = solicitud.boletin or ''
-        response["F_BOLETIN"] = datetime.datetime.strptime(solicitud.f_boletin, '%Y/%m/%d').strftime("%Y%m%d") or ''
-        response["CONCESION"] =  solicitud.concesion or ''
-        response["CONCESIONA"] =  solicitud.concesiona or ''
-        response["REPRESENTA"] =  solicitud.representa or ''
-        response["DIRECCION"] =  solicitud.direccion or ''
-        response["JUZGADO"] =  solicitud.juzgado or ''
-        response["ROLJUZ"] =  solicitud.roljuz or ''
-        response["REGION"] =  solicitud.region or ''
-        response["PROVINCIA"] =  solicitud.provincia or ''
-        response["COMUNA"] =  solicitud.comuna or ''
-        response["LUGAR"] =  solicitud.lugar or ''
-        response["TIPO_UTM"] =  solicitud.tipo_utm or ''
-        response["NORTEPI"] =  solicitud.nortepi or ''
-        response["ESTEPI"] =  solicitud.estepi or ''
-        response["VERTICES"] =  solicitud.vertices or ''
-        response["N_SCARASUP"] =  solicitud.n_scarasup or ''
-        response["E_OCARASUP"] =  solicitud.e_ocarasup or ''
-        response["HECTAREAS"] =  solicitud.hectareas or ''
-        response["F_SOLICITA"] =  solicitud.f_solicita or ''
-        response["F_RESOLUC"] =  solicitud.f_resoluc or ''
-        response["F_PRESMAN"] =  solicitud.f_presman or ''
-        response["F_MENSURA"] =  solicitud.f_mensura or ''
-        response["N1"] =  solicitud.n1 or ''
-        response["HA1"] =  solicitud.ha1 or ''
-        response["N_S1"] =  solicitud.n_s1 or ''
-        response["E_O1"] =  solicitud.e_o1 or ''
-        response["N2"] =  solicitud.n2 or ''
-        response["HA2"] =  solicitud.ha2 or ''
-        response["N_S2"] =  solicitud.n_s2 or ''
-        response["E_O2"] =  solicitud.e_o2 or ''
-        response["N3"] =  solicitud.n3 or ''
-        response["HA3"] =  solicitud.ha3 or ''
-        response["N_S3"] =  solicitud.n_s3 or ''
-        response["E_O3"] =  solicitud.e_o3 or ''
-        response["N4"] =  solicitud.n4 or ''
-        response["HA4"] =  solicitud.ha4 or ''
-        response["N_S4"] =  solicitud.n_s4 or ''
-        response["E_O4"] =  solicitud.e_o4 or ''
-        response["HA_PERT"] =  solicitud.ha_pert or ''
-        response["IND_METAL"] =  solicitud.ind_metal or ''
-        response["IND_VIGE"] =  solicitud.ind_vige or ''
-        response["RAZON"] =  solicitud.razon or ''
-        response["PERITO"] =  solicitud.perito or ''
-        response["OPOSICION"] =  solicitud.oposicion or ''
-        response["DATUM"] =  solicitud.datum or ''
-        response["F_PRESTRIB"] =  solicitud.f_prestrib or ''
-        response["ARCHIVO"] =  solicitud.archivo or ''
-        response["CORTE"] =  solicitud.corte or ''
-        response["HUSO"] =  solicitud.huso or ''
-        response["EDITOR"] =  solicitud.editor or ''
-        # response["CPU"] =  solicitud.cpu or ''
-        response.store()
+        if solicitud.tipo_tramite == "SOLICITUDES DE MENSURA":
+            response = db.newRecord()
+            #the text after of solicitud. is the attributes
+            # response["FDIAR_APRO"] = solicitud.FDIAR_APRO#.strftime("%Y-%M-%D")
+            response["BOLETIN"] = solicitud.boletin or ''
+            response["F_BOLETIN"] = '' if solicitud.f_boletin is None or len(solicitud.f_boletin)==0 else (datetime.datetime.strptime(solicitud.f_boletin, '%Y/%m/%d').strftime('%Y%m%d')) or ''
+            response["CONCESION"] =  '' if solicitud.concesion is None else solicitud.concesion.encode('utf-8')
+            response["CONCESIONA"] =  '' if solicitud.concesiona is None else solicitud.concesiona.encode('utf-8')
+            response["REPRESENTA"] =  '' if solicitud.representa is None else solicitud.representa.encode('utf-8')
+            response["DIRECCION"] =  '' if solicitud.direccion is None else solicitud.direccion.encode('utf-8')
+            response["JUZGADO"] =  '' if solicitud.juzgado is None else solicitud.juzgado.encode('utf-8')
+            response["ROLJUZ"] =  '' if solicitud.roljuz is None else solicitud.roljuz.encode('utf-8')
+            response["REGION"] =  solicitud.region or ''
+            response["PROVINCIA"] =  '' if solicitud.provincia is None else solicitud.provincia.encode('utf-8')
+            response["COMUNA"] =  '' if solicitud.comuna is None else solicitud.comuna.encode('utf-8')
+            response["LUGAR"] =  '' if solicitud.lugar is None else solicitud.lugar.encode('utf-8')
+            response["TIPO_UTM"] =  solicitud.tipo_utm or ''
+            nortepi = 0
+            if solicitud.nortepi is not None:
+                nortepi = float(solicitud.nortepi)
+            response["NORTEPI"] =  nortepi or 0
+            estepi = 0
+            if solicitud.estepi is not None:
+                estepi = float(solicitud.estepi)
+            response["ESTEPI"] =  estepi or 0
+            vertices = 0
+            if solicitud.vertices is not None:
+                vertices = float(solicitud.vertices)
+            response["VERTICES"] =  vertices or 0
+            n_scarasup = 0
+            if solicitud.n_scarasup is not None:
+                n_scarasup = float(solicitud.n_scarasup)
+            response["N_SCARASUP"] =  n_scarasup or 0
+            e_ocarasup = 0
+            if solicitud.e_ocarasup is not None:
+                e_ocarasup = float(solicitud.e_ocarasup)
+            response["E_OCARASUP"] =  e_ocarasup or 0
+            hectareas = 0
+            if solicitud.hectareas is not None:
+                hectareas = float(solicitud.hectareas)
+            response["HECTAREAS"] =  hectareas or 0
+            response["F_SOLICITA"] =  '' if solicitud.f_solicita is None or len(solicitud.f_solicita)==0 else (datetime.datetime.strptime(solicitud.f_solicita, '%Y/%m/%d').strftime('%Y%m%d')) or ''
+            response["F_RESOLUC"] =  '' if solicitud.f_resoluci is None or len(solicitud.f_resoluci)==0 else (datetime.datetime.strptime(solicitud.f_resoluci, '%Y/%m/%d').strftime('%Y%m%d')) or ''
+            response["F_PRESMAN"] =  '' if solicitud.f_presman is None or len(solicitud.f_presman)==0 else (datetime.datetime.strptime(solicitud.f_presman, '%Y/%m/%d').strftime('%Y%m%d')) or ''
+            response["F_MENSURA"] =  '' if solicitud.f_mensura is None or len(solicitud.f_mensura)==0 else (datetime.datetime.strptime(solicitud.f_mensura, '%Y/%m/%d').strftime('%Y%m%d')) or ''
+            response["N1"] =  '' if solicitud.n1 is None else solicitud.n1.encode('utf-8')
+            response["HA1"] =  '' if solicitud.ha1 is None else solicitud.ha1.encode('utf-8')
+            response["N_S1"] =  '' if solicitud.n_s1 is None else solicitud.n_s1.encode('utf-8')
+            response["E_O1"] =  '' if solicitud.e_o1 is None else solicitud.e_o1.encode('utf-8')
+            response["N2"] =  '' if solicitud.n2 is None else solicitud.n2.encode('utf-8')
+            response["HA2"] =  '' if solicitud.ha2 is None else solicitud.ha2.encode('utf-8')
+            response["N_S2"] =  '' if solicitud.n_s2 is None else solicitud.n_s2.encode('utf-8')
+            response["E_O2"] =  '' if solicitud.e_o2 is None else solicitud.e_o2.encode('utf-8')
+            response["N3"] =  '' if solicitud.n3 is None else solicitud.n3.encode('utf-8')
+            response["HA3"] =  '' if solicitud.ha3 is None else solicitud.ha3.encode('utf-8')
+            response["N_S3"] =  '' if solicitud.n_s3 is None else solicitud.n_s3.encode('utf-8')
+            response["E_O3"] =  '' if solicitud.e_o3 is None else solicitud.e_o3.encode('utf-8')
+            response["N4"] =  '' if solicitud.n4 is None else solicitud.n4.encode('utf-8')
+            response["HA4"] =  '' if solicitud.ha4 is None else solicitud.ha4.encode('utf-8')
+            response["N_S4"] =  '' if solicitud.n_s4 is None else solicitud.n_s4.encode('utf-8')
+            response["E_O4"] =  '' if solicitud.e_o4 is None else solicitud.e_o4.encode('utf-8')
+            response["HA_PERT"] =  '' if solicitud.ha_pert is None else solicitud.ha_pert.encode('utf-8')
+            response["IND_METAL"] =  '' if solicitud.ind_metal is None else solicitud.ind_metal.encode('utf-8')
+            response["IND_VIGE"] =  '' if solicitud.ind_vige is None else solicitud.ind_vige.encode('utf-8')
+            response["RAZON"] =  '' if solicitud.razon is None else solicitud.razon.encode('utf-8')
+            response["PERITO"] =  '' if solicitud.perito is None else solicitud.perito.encode('utf-8')
+            response["OPOSICION"] =  '' if solicitud.oposicion is None else solicitud.oposicion.encode('utf-8')
+            response["DATUM"] =  '' if solicitud.datum is None else solicitud.datum.encode('utf-8')
+            response["F_PRESTRIB"] =  '' if solicitud.f_prestrib is None or len(solicitud.f_prestrib)==0 else (datetime.datetime.strptime(solicitud.f_prestrib, '%Y/%m/%d').strftime('%Y%m%d')) or ''
+            response["ARCHIVO"] =  '' if solicitud.archivo is None else solicitud.archivo.encode('utf-8')
+            response["CORTE"] =  '' if solicitud.corte is None else solicitud.corte.encode('utf-8')
+            huso = 0
+            if solicitud.huso != "No se detecta Huso" and solicitud.huso is not None:
+                huso = float(solicitud.huso)
+            response["HUSO"] =  huso or 0
+            response["EDITOR"] =  '' if solicitud.editor is None else solicitud.editor.encode('utf-8')
+            # response["CPU"] =  solicitud.cpu or ''
+            response.store()
     db.close()
     # pdb.set_trace()
     file_path = os.path.join(settings.BASE_DIR, "Static/" + file_name)
@@ -1501,129 +1534,43 @@ def download_ver_conce(request):
 #Function for create dbf of Vertices Mensuras
 def download_ver_mensu(request):
     da = {}
-    file_name = "mensu " + str(datetime.datetime.now()) + ".dbf"
+    file_name = "ver_mensu " + str(datetime.datetime.now()) + ".dbf"
     db = dbf.Dbf("Static/" + file_name, new=True)
     db.addField(
         #Add headers to dbf file
-        ("BOLETIN", "C", 80),
-        ("F_BOLETIN", "C", 80),
-        ("CONCESION", "C", 80),
-        ("CONCESIONA", "C", 80),
-        ("REPRESENTA", "C", 80),
-        ("DIRECCION", "C", 80),
-        ("JUZGADO", "C", 80),
-        ("ROLJUZ", "C", 80),
-        ("REGION", "C", 80),
-        ("PROVINCIA", "C", 80),
-        ("COMUNA", "C", 80),
-        ("LUGAR", "C", 80),
-        ("TIPO_UTM", "C", 80),
-        ("NORTEPI", "C", 80),
-        ("ESTEPI", "C", 80),
-        ("VERTICES", "C", 80),
-        ("N_SCARASUP", "C", 80),
-        ("E_OCARASUP", "C", 80),
-        ("HECTAREAS", "C", 80),
-        ("F_SOLICITA", "C", 80),
-        ("F_RESOLUC", "C", 80),
-        ("F_PRESMAN", "C", 80),
-        ("F_MENSURA", "C", 80),
-        ("N1", "C", 80),
-        ("HA1", "C", 80),
-        ("N_S1", "C", 80),
-        ("E_O1", "C", 80),
-        ("N2", "C", 80),
-        ("HA2", "C", 80),
-        ("N_S2", "C", 80),
-        ("E_O2", "C", 80),
-        ("N3", "C", 80),
-        ("HA3", "C", 80),
-        ("N_S3", "C", 80),
-        ("E_O3", "C", 80),
-        ("N4", "C", 80),
-        ("HA4", "C", 80),
-        ("N_S4", "C", 80),
-        ("E_O4", "C", 80),
-        ("HA_PERT", "C", 80),
-        ("IND_METAL", "C", 80),
-        ("IND_VIGE", "C", 80),
-        ("RAZON", "C", 80),
-        ("PERITO", "C", 80),
-        ("OPOSICION", "C", 80),
-        ("DATUM", "C", 80),
-        ("F_PRESTRIB", "C", 80),
-        ("ARCHIVO", "C", 80),
-        ("CORTE", "C", 80),
-        ("HUSO", "C", 80),
-        ("EDITOR", "C", 80),
-        ("CPU", "C", 80),
+        ("BOLETIN", "C", 6),
+        ("F_BOLETIN", "D",8),
+        ("CONCESION", "C", 60),
+        ("REGION", "C", 2),
+        ("ROLJUZ", "C", 15),
+        ("IDENT_LIND", "C", 8),
+        ("COORDNORTE", "N", 11),
+        ("COORDESTE", "N", 11),
     )
-    print db
 
     ## fill DBF with some records
-    if int(request.POST["fecha"]) != 0:
-        diario = Diario.objects.get(pk=int(request.POST["fecha"]))#filter "diario" for date add: tipo_tramite for pedimentos
-        solicitudes = diario.registro_mineria_set.all()#get register for specific "diario"
-    else:
-        solicitudes = Registro_Mineria.objects.all()#Get all register in case that the user wish generate a dbf with all register without care the date
+    solicitudes = Vertice.objects.all()#Get all register in case that the user wish generate a dbf with all register without care the date
     for solicitud in solicitudes:
-        response = db.newRecord()
-        print solicitud.boletin
-        #the text after of solicitud. is the attributes
-        # response["FDIAR_APRO"] = solicitud.FDIAR_APRO#.strftime("%Y-%M-%D")
-        response["BOLETIN"] = solicitud.boletin or ''
-        response["F_BOLETIN"] = datetime.datetime.strptime(solicitud.f_boletin, '%Y/%m/%d').strftime("%Y%m%d") or ''
-        response["CONCESION"] =  solicitud.concesion or ''
-        response["CONCESIONA"] =  solicitud.concesiona or ''
-        response["REPRESENTA"] =  solicitud.representa or ''
-        response["DIRECCION"] =  solicitud.direccion or ''
-        response["JUZGADO"] =  solicitud.juzgado or ''
-        response["ROLJUZ"] =  solicitud.roljuz or ''
-        response["REGION"] =  solicitud.region or ''
-        response["PROVINCIA"] =  solicitud.provincia or ''
-        response["COMUNA"] =  solicitud.comuna or ''
-        response["LUGAR"] =  solicitud.lugar or ''
-        response["TIPO_UTM"] =  solicitud.tipo_utm or ''
-        response["NORTEPI"] =  solicitud.nortepi or ''
-        response["ESTEPI"] =  solicitud.estepi or ''
-        response["VERTICES"] =  solicitud.vertices or ''
-        response["N_SCARASUP"] =  solicitud.n_scarasup or ''
-        response["E_OCARASUP"] =  solicitud.e_ocarasup or ''
-        response["HECTAREAS"] =  solicitud.hectareas or ''
-        response["F_SOLICITA"] =  solicitud.f_solicita or ''
-        response["F_RESOLUC"] =  solicitud.f_resoluc or ''
-        response["F_PRESMAN"] =  solicitud.f_presman or ''
-        response["F_MENSURA"] =  solicitud.f_mensura or ''
-        response["N1"] =  solicitud.n1 or ''
-        response["HA1"] =  solicitud.ha1 or ''
-        response["N_S1"] =  solicitud.n_s1 or ''
-        response["E_O1"] =  solicitud.e_o1 or ''
-        response["N2"] =  solicitud.n2 or ''
-        response["HA2"] =  solicitud.ha2 or ''
-        response["N_S2"] =  solicitud.n_s2 or ''
-        response["E_O2"] =  solicitud.e_o2 or ''
-        response["N3"] =  solicitud.n3 or ''
-        response["HA3"] =  solicitud.ha3 or ''
-        response["N_S3"] =  solicitud.n_s3 or ''
-        response["E_O3"] =  solicitud.e_o3 or ''
-        response["N4"] =  solicitud.n4 or ''
-        response["HA4"] =  solicitud.ha4 or ''
-        response["N_S4"] =  solicitud.n_s4 or ''
-        response["E_O4"] =  solicitud.e_o4 or ''
-        response["HA_PERT"] =  solicitud.ha_pert or ''
-        response["IND_METAL"] =  solicitud.ind_metal or ''
-        response["IND_VIGE"] =  solicitud.ind_vige or ''
-        response["RAZON"] =  solicitud.razon or ''
-        response["PERITO"] =  solicitud.perito or ''
-        response["OPOSICION"] =  solicitud.oposicion or ''
-        response["DATUM"] =  solicitud.datum or ''
-        response["F_PRESTRIB"] =  solicitud.f_prestrib or ''
-        response["ARCHIVO"] =  solicitud.archivo or ''
-        response["CORTE"] =  solicitud.corte or ''
-        response["HUSO"] =  solicitud.huso or ''
-        response["EDITOR"] =  solicitud.editor or ''
-        # response["CPU"] =  solicitud.cpu or ''
-        response.store()
+        if solicitud.registro_mineria.tipo_tramite == "SOLICITUDES DE MENSURA":
+            response = db.newRecord()
+            #the text after of solicitud. is the attributes
+            # response["FDIAR_APRO"] = solicitud.FDIAR_APRO#.strftime("%Y-%M-%D")
+            response["BOLETIN"] = solicitud.boletin or ''
+            response["F_BOLETIN"] = '' if solicitud.f_boletin is None or len(solicitud.f_boletin)==0 else (datetime.datetime.strptime(solicitud.f_boletin, '%Y/%m/%d').strftime('%Y%m%d')) or ''
+            response["CONCESION"] = '' if solicitud.concesion is None else solicitud.concesion.encode('utf-8')
+            response["REGION"] = solicitud.region or ''
+            response["ROLJUZ"] = '' if solicitud.roljuz is None else solicitud.roljuz.encode('utf-8')
+            response["IDENT_LIND"] = solicitud.ident_lind or 0
+            coordnorte = 0 
+            if solicitud.coordnorte is not None:
+                coordnorte = float(solicitud.coordnorte)
+            response["COORDNORTE"] = coordnorte or 0
+            coordeste = 0 
+            if solicitud.coordeste is not None:
+                coordeste = float(solicitud.coordeste)
+            response["COORDESTE"] = coordeste or 0
+            # response["CPU"] = solicitud.cpu or ''
+            response.store()
     db.close()
     # pdb.set_trace()
     file_path = os.path.join(settings.BASE_DIR, "Static/" + file_name)
