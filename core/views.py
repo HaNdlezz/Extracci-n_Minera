@@ -2,6 +2,7 @@ from django.shortcuts import render_to_response, render, redirect, get_object_or
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse, Http404
+from background_task import background
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.conf import settings
@@ -24,6 +25,7 @@ import unidecode
 from dbfpy import dbf
 import wget
 from IPython import embed
+
 
 def getPDFContent(path):
     content = ""
@@ -77,15 +79,14 @@ def index(request):
     data = {}
     return render(request, template_name, data)
 
-@login_required(login_url='/')
-def descargar_boletin(request):
-    template_name = 'index.html'
+@background(schedule=5)
+def crear_pdf_de_boletin(request):
     cve_downloaded = 0
     response = {}
     tipos = ["PEDIMENTOS MINEROS","MANIFESTACIONES MINERAS","SOLICITUDES DE MENSURA","EXTRACTOS ARTICULO 83","CITACIONES A JUNTA Y ASAMBLEA", "EXTRACTOS DE SENTENCIA DE EXPLORACION","EXTRACTOS DE SENTENCIA DE EXPLOTACION","PRORROGAS CONCESION DE EXPLORACION","RENUNCIAS DE CONCESION MINERA","ACUERDOS JUNTA DE ACCIONISTAS","NOMINAS DE CONCESIONES MINERAS PARA REMATE","NOMINA BENEFICIADOS PATENTE REBAJADA","NOMINA DE CONCESIONES ART. 90","VIGENCIA INSCRIPCION ACTAS DE MENSURA","OTRAS PUBLICACIONES","EXTRACTOS DE SENTENCIA DE EXPLORACION"]
-    print request.POST
-    os.system('wget -U "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.6) Gecko/20070802 SeaMonkey/1.1.4" ' + request.POST["archivo"])
-    name = request.POST["archivo"].split("/")[::-1]
+    print request
+    os.system('wget -U "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.6) Gecko/20070802 SeaMonkey/1.1.4" ' + request["archivo"])
+    name = request["archivo"].split("/")[::-1]
     archivo=str(name[0])
     print "ARCHIVO",type(archivo)
     text = getPDFContent(archivo)
@@ -94,7 +95,7 @@ def descargar_boletin(request):
             text = text.replace(x,"SEPARADOR DE TIPOS DE MINERIA "+x+"TERMINO SEPARADOR")
     datos = text.split("SEPARADOR DE TIPOS DE MINERIA ")
     datos.pop(0)
-    codigo_diario = request.POST["archivo"].split("/")
+    codigo_diario = request["archivo"].split("/")
     format_fecha = codigo_diario[4] + "/" + codigo_diario[5] + "/" + codigo_diario[6]
     diario = Diario.objects.create(codigo=name[0].split(".pdf")[0],fecha=format_fecha)
     diario.save()
@@ -125,6 +126,13 @@ def descargar_boletin(request):
     data = {}
     data["total_cve"] = str(cve_downloaded)
     data["numero_registro"] = "1"
+
+@login_required(login_url='/')
+def descargar_boletin(request):
+    template_name = 'Historic_Data.html'
+    crear_pdf_de_boletin(request.POST)
+    data = {}
+    data["alert"] = "Se esta descargando la informacion del CVE"
     return render(request, template_name, data)
 
 #    return HttpResponse(
@@ -381,9 +389,11 @@ def extraerMensuras(mensura):
 
     print mensura
 
-def Obtener_Datos_General(request):
+@background(schedule=5)
+def scrap_data(request):
+    print "Running background proccess"
     codes = []
-    diario = Diario.objects.get(pk=int(request.POST["pk_diario_2"]))
+    diario = Diario.objects.get(pk=int(request["pk_diario_2"]))
     f_boletin = diario.fecha
     boletin = diario.codigo
     for x in diario.registro_mineria_set.all():
@@ -428,7 +438,15 @@ def Obtener_Datos_General(request):
             extraerManifestaciones(x)
         if x.tipo_tramite=="SOLICITUDES DE MENSURA":
             extraerMensuras(x)
-    return HttpResponseRedirect(reverse_lazy('Historic_Data'))
+    print "Run background proccess end"
+
+def Obtener_Datos_General(request):
+    print "Starting to loocking for data"
+    template_name = "Historic_Data.html"
+    scrap_data(request.POST)
+    data = {}
+    data["alert"] = "Se esta extrayendo la informacion de los CVE. Este proceso podria tardar un momento."
+    return render(request, template_name, data)
 
 def get_datos(request):
     response = {}
