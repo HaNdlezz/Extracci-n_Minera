@@ -1453,7 +1453,7 @@ def download_ver_conce(request):
             response["F_BOLETIN"] = '' if solicitud.f_boletin is None or len(solicitud.f_boletin)==0 else (datetime.datetime.strptime(solicitud.f_boletin, '%Y/%m/%d').strftime('%Y%m%d')) or ''
             response["CONCESION"] = '' if solicitud.concesion is None else solicitud.concesion.encode('utf-8')
             response["REGION"] = solicitud.region or ''
-            response["ROLJUZ"] = '' if solicitud.roljuz is None else solicitud.concesion.encode('utf-8')
+            response["ROLJUZ"] = '' if solicitud.roljuz is None else solicitud.roljuz.encode('utf-8')
             response["IDENT_LIND"] = solicitud.ident_lind or 0
             coordnorte = 0 
             if solicitud.coordnorte is not None:
