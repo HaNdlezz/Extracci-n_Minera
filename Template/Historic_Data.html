@@ -8,6 +8,12 @@
 {% endblock stylesheet %}
 
 {% block content %}
+
+{% if alert != None and alert != '' %}
+    <div class="row">
+        <p>{{alert}}</p>
+    </div>
+{% endif %}
 <div class="row">
     <form action="{% url 'Historic_Data' %}" method="post">
      {% csrf_token %}

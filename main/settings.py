@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'background_task',
     'django.contrib.staticfiles',
     'core'
 ]
@@ -132,3 +133,12 @@ STATICFILES_DIRS = [
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'Media')
+
+
+# Background Tasks Configurations
+
+MAX_ATTEMPTS=1 # Default is 25
+MAX_RUN_TIME=15000 # Seconds, default is 3600
+#BACKGROUND_TASK_RUN_ASYNC=True
+#BACKGROUND_TASK_ASYNC_THREADS=multiprocessing.cpu_count()
+#BACKGROUND_TASK_PRIORITY_ORDERING="ASC" # Choose betwen ASC or DESC
