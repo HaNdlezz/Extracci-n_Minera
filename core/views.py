@@ -989,7 +989,7 @@ def download_pedi(request):
             if solicitud.estepi is not None:
                 estepi = float(solicitud.estepi)
             response["ESTEPI"] = estepi or 0
-            nortepi = 0
+            huso = 0
             if solicitud.huso != "No se detecta Huso" and solicitud.huso is not None:
                 huso = float(solicitud.huso)
             response["HUSO"] = huso or 0
