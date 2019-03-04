@@ -681,7 +681,7 @@ def ingresar_vertices(request):
             estes.append(test)
 
     linderos = []
-    patron3 = re.compile("[VPL]\d")
+    patron3 = re.compile("[VPL]\s?\d")
     if patron3.search(buscar):
         linderos = patron3.findall(buscar)
     response = {}
@@ -1143,7 +1143,7 @@ def download_manifes(request):
             response["E_OCARASUP"] = e_ocarasup or 0
             hectareas = 0
             if solicitud.hectareas is not None:
-                nortepi = float(solicitud.hectareas)
+                hectareas = float(solicitud.hectareas)
             response["HECTAREAS"] = hectareas or 0
             response["HA_PERT"] = '' if solicitud.ha_pert is None else solicitud.ha_pert.decode('utf-8')
             response["JUZGADO"] = '' if solicitud.juzgado is None else solicitud.juzgado.decode('utf-8')
