@@ -144,3 +144,29 @@ MAX_RUN_TIME=15000 # Seconds, default is 3600
 #BACKGROUND_TASK_RUN_ASYNC=True
 #BACKGROUND_TASK_ASYNC_THREADS=multiprocessing.cpu_count()
 #BACKGROUND_TASK_PRIORITY_ORDERING="ASC" # Choose betwen ASC or DESC
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, "Logs/debug.log"),
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+    'loggers': {
+        'background_task': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
