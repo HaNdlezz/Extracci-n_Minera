@@ -144,11 +144,15 @@ def descargar_boletin(request):
 def Historic_Data(request):
     template_name = "Historic_Data.html"
     data = {}
-    data["diario"] = Diario.objects.all()
+    dailys = Diario.objects.all()
+    data["diario"] = dailys
+    # data["total_diarios"] = len(dailys)
     if request.POST:
         diario = Diario.objects.get(pk=request.POST["fecha"])
-        data["solicitudes"] = diario.registro_mineria_set.all()
+        solicitudes = diario.registro_mineria_set.all()
+        data["solicitudes"] = solicitudes
         data["fecha"] = diario.pk
+        data["total_diarios"] = len(solicitudes)
     return render(request, template_name, data)
 
 def extraerConcesiones(concesion):
