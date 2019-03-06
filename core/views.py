@@ -311,7 +311,7 @@ def extraerPedimentos(pedimento):
             aux_text = aux_text.replace(fecha, " ")
         n_fechas-=1
     fecha_equivalencia = {"enero":"01","febrero":"02","marzo":"03","abril":"04","mayo":"05","junio":"06","julio":"07","agosto":"08","septiembre":"09","octubre":"10","noviembre":"11","diciembre":"12"}
-    if len(fechas) >= 2:
+    if len(fechas) >= 3:
         date_target = fechas[2].split(" ")
         dia=date_target[0]
         mes=fecha_equivalencia[date_target[2].lower()]
