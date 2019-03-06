@@ -1504,7 +1504,7 @@ def download_ver_conce(request):
     diario = Diario.objects.get(pk=request.POST["fecha"])
     for solicitud in solicitudes:
         if solicitud.registro_mineria.tipo_tramite == "EXTRACTOS DE SENTENCIA DE EXPLORACION" or solicitud.registro_mineria.tipo_tramite == "EXTRACTOS DE SENTENCIA DE EXPLORACION":
-            if diario.fecha == soliicitud.f_boletin:
+            if diario.fecha == solicitud.f_boletin:
                 response = db.newRecord()
                 #the text after of solicitud. is the attributes
                 # response["FDIAR_APRO"] = solicitud.FDIAR_APRO#.strftime("%Y-%M-%D")
