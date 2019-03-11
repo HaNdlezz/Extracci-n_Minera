@@ -103,25 +103,19 @@ def crear_pdf_de_boletin(request):
     diario.save()
     for y in datos:
         tipo = y.split("TERMINO SEPARADOR")[0]
-        # aux_anterior = None
         for x in y.split("("):
 #            print x.split("TERMINO SEPARADOR")[0]
             if "CVE" in x:
                     try:
-                        temp_x = x
-                        x = temp_x.split("CVE:")[1].split(")")[0].replace(" ","")
+                        x = x.split("CVE:")[1].split(")")[0].replace(" ","")
                         os.system('wget -U "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.6) Gecko/20070802 SeaMonkey/1.1.4" ' + "http://www.diariooficial.interior.gob.cl/publicaciones/"+ str(name[4]) +"/" +str(name[3]) +"/" + str(name[2]) + "/" + name[0].split(".pdf")[0] + "/07/" + str(x.split("CVE:")[0]) + ".pdf")
                         url = "http://www.diariooficial.interior.gob.cl/publicaciones/"+ str(name[4]) +"/" +str(name[3]) +"/" + str(name[2]) + "/" + name[0].split(".pdf")[0] + "/07/" + str(x.split("CVE:")[0]) + ".pdf"
-                        concesion = temp_x.split(')')[1].split('/')[0]
-                        concesiona = temp_x.split(')')[1].split('/')[1]
-                        aux = Registro_Mineria.objects.create(diario=diario,tipo_tramite=tipo,url=url,cve=x.split("CVE:")[0],texto=getPDFContent2(str(x.split("CVE:")[0])+".pdf"),concesion=concesion,concesiona=concesiona)
+                        aux = Registro_Mineria.objects.create(diario=diario,tipo_tramite=tipo,url=url,cve=x.split("CVE:")[0],texto=getPDFContent2(str(x.split("CVE:")[0])+".pdf"))
                         aux.save()
                         cve_downloaded+=1
                         os.system('rm ' + x.split("CVE:")[0]+".pdf")
                     except:
-                        print 'Exception raised in line 122'
                         pass
-        # aux_anterior = None
 #    pedimentos = text.split("MANIFESTACIONES MINERAS")[0]
 #    text = text.split("MANIFESTACIONES MINERAS")[1]
 #    pedimentos = pedimentos.split("(")
@@ -299,7 +293,7 @@ def extraerPedimentos(pedimento):
         pedimento.huso = patron.search(pedimento.texto).group().split(" ")[-1]
     else:
         pedimento.huso = "No se detecta Huso"
-    patron = re.compile("[0-9]{1,2}(.?)[0-9]{1,3}\s(hectareas|Hectareas|HECTAREAS)")
+    patron = re.compile("[0-9]{1,2}(.?)[0-9]{1,3}\s(hectareas|Hectareas|HECTAREAS|Has|HAS|has)")
     if patron.search(pedimento.texto):
         pedimento.hectareas = patron.search(pedimento.texto).group().replace(".","").split(" ")[0]
     patron = re.compile("[aA-zZ][-][0-9]{1,4}[-][0-9]{1,4}")
@@ -357,6 +351,22 @@ def extraerPedimentos(pedimento):
     if patron.search(pedimento.texto):
         datum = "PSAD56"
     pedimento.datum = datum
+    patron = re.compile("[1-9]{1,2}\.?[0-9]{3}\s(metro|Metro|METRO|metros|Metros|METROS|m|M)")
+    aux_text = pedimento.texto
+    try_find = 2
+    lados = []
+    while try_find != 0:
+        if patron.search(aux_text):
+            lado = patron.search(aux_text).group().split(" ")[0].replace(".","")
+            lados.append(lado)
+            aux_text = aux_text.replace(patron.search(aux_text).group(), " ",1)
+        try_find-=1
+    if len(lados) == 2:
+        pedimento.n_scarasup = lados[0]
+        pedimento.e_ocarasup = lados[1]
+        if pedimento.hectareas is not None:
+            if (int(pedimento.n_scarasup)*int(pedimento.e_ocarasup))/10000 != int(pedimento.hectareas):
+                pedimento.obser+=",Hectareas no congruentes con lados"
     pedimento.save()
     print pedimento
 
@@ -441,6 +451,7 @@ def scrap_data(request):
             x.estepi = x.estepi.replace(",","").upper()
         else:
             x.COORE_APRO = "No se detecta estepi"
+        x.cpu = "0"
         x.save()
         if x.tipo_tramite=="EXTRACTOS DE SENTENCIA DE EXPLORACION" or x.tipo_tramite=="EXTRACTOS DE SENTENCIA DE EXPLOTACION":
             extraerConcesiones(x)
@@ -629,6 +640,7 @@ def actualizar_datos(request):
     registro.razon = request.POST["RAZON"]
     registro.perito = request.POST["PERITO"]
     registro.oposicion = request.POST["OPOSICION"]
+    registro.cpu = "1"
     registro.save()
     response = {}
     return HttpResponse(
