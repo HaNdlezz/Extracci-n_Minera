@@ -760,176 +760,6 @@ def ingresar_vertices(request):
         content_type="application/json"
         )
 
-def excel_registros(request):
-    template_name = 'reporte_registros.html'
-    data = {}
-    data["diario"] = Diario.objects.all()
-    if request.POST:
-        data = {}
-        workbook = xlsxwriter.Workbook('Static/registros.xlsx')
-        worksheet = workbook.add_worksheet()
-        worksheet.write(0, 0, 'BOLETIN')
-        worksheet.write(0, 1, 'F_BOLETIN')
-        worksheet.write(0, 2, 'TIPO_CONCE')
-        worksheet.write(0, 3, 'CONCESION')
-        worksheet.write(0, 4, 'CONCESIONA')
-        worksheet.write(0, 5, 'REPRESENTA')
-        worksheet.write(0, 6, 'DIRECCION')
-        worksheet.write(0, 7, 'ROLMINERO')
-        worksheet.write(0, 8, 'F_SENTENC1')
-        worksheet.write(0, 9, 'F_SENTENC2')
-        worksheet.write(0, 10, 'F_PUBEXT')
-        worksheet.write(0, 11, 'F_INSCMIN')
-        worksheet.write(0, 12, 'FOJAS')
-        worksheet.write(0, 13, 'NUMERO')
-        worksheet.write(0, 14, 'YEAR')
-        worksheet.write(0, 15, 'CIUDAD')
-        worksheet.write(0, 16, 'JUZGADO')
-        worksheet.write(0, 17, 'ROLJUZ')
-        worksheet.write(0, 18, 'IND_METAL')
-        worksheet.write(0, 19, 'REGION')
-        worksheet.write(0, 20, 'PROVINCIA')
-        worksheet.write(0, 21, 'COMUNA')
-        worksheet.write(0, 22, 'LUGAR')
-        worksheet.write(0, 23, 'TIPO_UTM')
-        worksheet.write(0, 24, 'NORTEPI')
-        worksheet.write(0, 25, 'ESTEPI')
-        worksheet.write(0, 26, 'VERTICES')
-        worksheet.write(0, 27, 'HA_PERT')
-        worksheet.write(0, 28, 'HECTAREAS')
-        worksheet.write(0, 29, 'OBSER')
-        worksheet.write(0, 30, 'DATUM')
-        worksheet.write(0, 31, 'F_PRESTRIB')
-        worksheet.write(0, 32, 'ARCHIVO')
-        worksheet.write(0, 33, 'CORTE')
-        worksheet.write(0, 34, 'HUSO')
-        worksheet.write(0, 35, 'EDITOR')
-        cont2=1
-        cont = 1
-        for x in Registro_Mineria.objects.all():
-            if True:
-                nulo = len(str(x.concesion))
-            else:
-                nulo = len(str(unidecode.unidecode(x.concesion)))
-                #try:
-            if x.tipo_tramite == "EXTRACTOS DE SENTENCIA DE EXPLORACION" or x.tipo_tramite == "EXTRACTOS DE SENTENCIA DE EXPLOTACION":
-                fechaFormato = str(x.f_boletin).split("/")
-                fechaFormato =fechaFormato[2]+"/"+fechaFormato[1]+"/"+fechaFormato[0]
-                worksheet.write(cont, 0, x.boletin)
-                worksheet.write(cont, 1, fechaFormato)
-                worksheet.write(cont, 2, x.tipo_conce)
-                worksheet.write(cont, 3, x.concesion)
-                worksheet.write(cont, 4, x.concesiona)
-                worksheet.write(cont, 5, x.representa)
-                worksheet.write(cont, 6, x.direccion)
-                worksheet.write(cont, 7, x.rolminero)
-                worksheet.write(cont, 8, x.f_sentenc1)
-                worksheet.write(cont, 9, x.f_sentenc2)
-                worksheet.write(cont, 10, x.f_pubext)
-                worksheet.write(cont, 11, x.f_inscmin)
-                worksheet.write(cont, 12, x.fojas)
-                worksheet.write(cont, 13, x.numero)
-                worksheet.write(cont, 14, x.year)
-                worksheet.write(cont, 15, x.ciudad)
-                worksheet.write(cont, 16, x.juzgado)
-                worksheet.write(cont, 17, x.roljuz)
-                worksheet.write(cont, 18, x.ind_metal)
-                worksheet.write(cont, 19, x.region)
-                worksheet.write(cont, 20, x.provincia)
-                worksheet.write(cont, 21, x.comuna)
-                worksheet.write(cont, 22, x.lugar)
-                worksheet.write(cont, 23, x.tipo_utm)
-                worksheet.write(cont, 24, x.nortepi)
-                worksheet.write(cont, 25, x.estepi)
-                worksheet.write(cont, 26, x.vertices)
-                worksheet.write(cont, 27, x.ha_pert)
-                worksheet.write(cont, 28, x.hectareas)
-                worksheet.write(cont, 29, x.obser)
-                worksheet.write(cont, 30, x.datum)
-                worksheet.write(cont, 31, x.f_prestrib)
-                worksheet.write(cont, 32, x.archivo)
-                worksheet.write(cont, 33, x.corte)
-                worksheet.write(cont, 34, x.huso)
-                worksheet.write(cont, 35, x.editor)
-                cont += 1
-        workbook.close()
-        return render(request, template_name, data)
-    return render(request, template_name, data)
-
-def excel_vertices(request):
-    template_name = 'reporte_vertices.html'
-    data = {}
-    if request.POST:
-        response = {}
-        # workbook = xlsxwriter.Workbook('Static/vertices.xlsx')
-        # worksheet = workbook.add_worksheet()
-        # worksheet.write(0, 0, 'BOLETIN')
-        # worksheet.write(0, 1, 'F_BOLETIN')
-        # worksheet.write(0, 2, 'CONCESION')
-        # worksheet.write(0, 3, 'REGION')
-        # worksheet.write(0, 4, 'ROLJUZ')
-        # worksheet.write(0, 5, 'IDENT_LIND')
-        # worksheet.write(0, 6, 'COORDNORTE')
-        # worksheet.write(0, 7, 'COORDESTE')
-        # cont = 1
-        # for x in Vertice.objects.all():
-        #     worksheet.write(cont, 0, x.boletin)
-        #     fechaFormato = str(x.f_boletin).split("/")
-        #     fechaFormato =fechaFormato[2]+"/"+fechaFormato[1]+"/"+fechaFormato[0]
-        #     worksheet.write(cont, 1, fechaFormato)
-        #     worksheet.write(cont, 2, x.concesion)
-        #     worksheet.write(cont, 3, x.region)
-        #     worksheet.write(cont, 4, x.roljuz)
-        #     worksheet.write(cont, 5, x.ident_lind)
-        #     worksheet.write(cont, 6, x.coordnorte)
-        #     worksheet.write(cont, 7, x.coordeste)
-        #     cont += 1
-        # workbook.close()
-        db = dbf.Dbf("Static/test.dbf", new=True)
-        db.addField(
-            ("BOLETIN", "C", 80),
-            ("F_BOLETIN", "C", 80),
-            ("CONCESION", "C", 80),
-            ("REGION", "C", 80),
-            ("ROLJUZ", "C", 80),
-            ("IDENT_LIND", "C", 80),
-            ("COORDNORTE", "C", 80),
-            ("COORDESTE", "C", 80),
-        )
-        cont = 0
-        for x in Vertice.objects.all():
-            rec = db.newRecord()
-            rec["BOLETIN"] = unidecode.unidecode(x.boletin)
-            fechaFormato = str(x.f_boletin).split("/")
-            fechaFormato = fechaFormato[2]+"/"+fechaFormato[1]+"/"+fechaFormato[0]
-            rec["F_BOLETIN"] = unidecode.unidecode(fechaFormato)
-            try:
-                rec["CONCESION"] = unidecode.unidecode(x.concesion)
-            except:
-                rec["CONCESION"] = ""
-            try:
-                rec["REGION"] = unidecode.unidecode(x.region)
-            except:
-                rec["REGION"] = ""
-            try:
-                rec["ROLJUZ"] = unidecode.unidecode(x.roljuz)
-            except:
-                rec["ROLJUZ"] = ""
-            try:
-                rec["IDENT_LIND"] = unidecode.unidecode(x.ident_lind)
-            except:
-                rec["IDENT_LIND"] = ""
-            try:
-                rec["COORDNORTE"] = unidecode.unidecode(x.coordnorte)
-            except:
-                rec["COORDNORTE"] = ""
-            rec.store()
-            cont += 1
-        db.close()
-        data = {}
-        return render(request, template_name, data)
-    return render(request, template_name, data)
-
 def type_matches():
     return {
         'Vertices Conceciones': ["EXTRACTOS DE SENTENCIA DE EXPLORACION","EXTRACTOS DE SENTENCIA DE EXPLOTACION"],
@@ -941,24 +771,26 @@ def type_matches():
     }
 
 def download(request):
-    # template_name = 'reporte_registros.html'
+    template_name = 'reporte_registros.html'
     data = {}
+    data["diario"] = Diario.objects.all()
     #tipo_reporte = type_matches(request.POST[""])
-
-    if request.POST['type'] == 'pedimentos':
-        response = download_pedi(request)
-    if request.POST['type'] == 'ver_concesiones':
-        response = download_ver_conce(request) # TODO his own method filtering for those who have vertex
-    if request.POST['type'] == 'concesiones':
-        response = download_conce(request)
-    if request.POST['type'] == 'manifestaciones':
-        response = download_manifes(request)
-    if request.POST['type'] == 'ver_mensuras':
-        response = download_ver_mensu(request) # TODO his own method filtering for those who have vertex
-    if request.POST['type'] == 'mensuras':
-        response = download_mensu(request)
-    return response
-    # return render(request, template_name, data)
+    if request.POST:
+        if request.POST['type'] == 'pedimentos':
+            response = download_pedi(request)
+        if request.POST['type'] == 'ver_concesiones':
+            response = download_ver_conce(request) # TODO his own method filtering for those who have vertex
+        if request.POST['type'] == 'concesiones':
+            response = download_conce(request)
+        if request.POST['type'] == 'manifestaciones':
+            response = download_manifes(request)
+        if request.POST['type'] == 'ver_mensuras':
+            response = download_ver_mensu(request) # TODO his own method filtering for those who have vertex
+        if request.POST['type'] == 'mensuras':
+            response = download_mensu(request)
+        return response
+    
+    return render(request, template_name, data)
 
 
 #Function for create dbf of Pedimentos
@@ -1042,11 +874,12 @@ def download_pedi(request):
                 huso = float(solicitud.huso)
             response["HUSO"] = huso or 0
             n_scarasup = 0
-            if solicitud.n_scarasup is not None:
+            print type(solicitud.n_scarasup)
+            if solicitud.n_scarasup is not None and len(solicitud.n_scarasup) > 0:
                 n_scarasup = float(solicitud.n_scarasup)
             response["N_SCARASUP"] = n_scarasup or 0
             e_ocarasup = 0
-            if solicitud.e_ocarasup is not None:
+            if solicitud.e_ocarasup is not None and len(solicitud.e_ocarasup) > 0:
                 e_ocarasup = float(solicitud.e_ocarasup)
             response["E_OCARASUP"] = e_ocarasup or 0
             response["IND_METAL"] = '' if solicitud.ind_metal is None else solicitud.ind_metal.encode('utf-8')
