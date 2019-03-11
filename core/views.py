@@ -90,7 +90,7 @@ def crear_pdf_de_boletin(request):
     os.system('wget -U "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.6) Gecko/20070802 SeaMonkey/1.1.4" ' + request["archivo"])
     name = request["archivo"].split("/")[::-1]
     archivo=str(name[0])
-    print "ARCHIVO",type(archivo)
+    # print "ARCHIVO",type(archivo)
     text = getPDFContent(archivo)
     for x in tipos:
         if x in text:
@@ -101,21 +101,45 @@ def crear_pdf_de_boletin(request):
     format_fecha = codigo_diario[4] + "/" + codigo_diario[5] + "/" + codigo_diario[6]
     diario = Diario.objects.create(codigo=name[0].split(".pdf")[0],fecha=format_fecha)
     diario.save()
+    concesion = ''
+    concesiona = ''
     for y in datos:
         tipo = y.split("TERMINO SEPARADOR")[0]
-        for x in y.split("("):
-#            print x.split("TERMINO SEPARADOR")[0]
-            if "CVE" in x:
-                    try:
-                        x = x.split("CVE:")[1].split(")")[0].replace(" ","")
-                        os.system('wget -U "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.6) Gecko/20070802 SeaMonkey/1.1.4" ' + "http://www.diariooficial.interior.gob.cl/publicaciones/"+ str(name[4]) +"/" +str(name[3]) +"/" + str(name[2]) + "/" + name[0].split(".pdf")[0] + "/07/" + str(x.split("CVE:")[0]) + ".pdf")
-                        url = "http://www.diariooficial.interior.gob.cl/publicaciones/"+ str(name[4]) +"/" +str(name[3]) +"/" + str(name[2]) + "/" + name[0].split(".pdf")[0] + "/07/" + str(x.split("CVE:")[0]) + ".pdf"
-                        aux = Registro_Mineria.objects.create(diario=diario,tipo_tramite=tipo,url=url,cve=x.split("CVE:")[0],texto=getPDFContent2(str(x.split("CVE:")[0])+".pdf"))
-                        aux.save()
-                        cve_downloaded+=1
-                        os.system('rm ' + x.split("CVE:")[0]+".pdf")
-                    except:
-                        pass
+        for x in y.split(")"):
+            if "CVE:" in x:
+                try:
+                    print "NEW CVE"
+                    temp_x = x
+                    if "Provincia de " in x:
+                        x = temp_x.split('Provincia de ')[1].split("(")[1].replace(" ","")
+                        cve = x.split("CVE:")[1]
+                        concesion = temp_x.split('Provincia de ')[1].split('(')[0].split('/')[0]
+                        concesiona = temp_x.split('Provincia de ')[1].split('(')[0].split('/')[1]
+                    else:
+                        if "sitio web www.diarioficial.cl" in x:
+                            x = temp_x.split('sitio web www.diarioficial.cl')[1].split("(")[1].replace(" ","")
+                            cve = x.split("CVE:")[1]
+                            concesion = temp_x.split('sitio web www.diarioficial.cl')[1].split('(')[0].split('/')[0]
+                            concesiona = temp_x.split('sitio web www.diarioficial.cl')[1].split('(')[0].split('/')[1]
+                        else:
+                            x = x.split("CVE:")[1].split("(")[0].replace(" ","")
+                            cve = x.split("CVE:")[0]
+                            concesion = temp_x.split('(')[0].split('/')[0]
+                            concesiona = temp_x.split('(')[0].split('/')[1]
+
+                    os.system('wget -U "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.6) Gecko/20070802 SeaMonkey/1.1.4" ' + "http://www.diariooficial.interior.gob.cl/publicaciones/"+ str(name[4]) +"/" +str(name[3]) +"/" + str(name[2]) + "/" + name[0].split(".pdf")[0] + "/07/" + str(cve) + ".pdf")
+                    url = "http://www.diariooficial.interior.gob.cl/publicaciones/"+ str(name[4]) +"/" +str(name[3]) +"/" + str(name[2]) + "/" + name[0].split(".pdf")[0] + "/07/" + str(cve) + ".pdf"
+                    aux = Registro_Mineria.objects.create(concesion=concesion,concesiona=concesiona,diario=diario,tipo_tramite=tipo,url=url,cve=cve,texto=getPDFContent2(str(cve)+".pdf"))
+                    aux.save()
+                    cve_downloaded+=1
+                    os.system('rm ' + cve+".pdf")
+
+                    print "END OF CVE SUCESSFULLY"
+                except:
+                    print "END OF CVE WITH ERROR: " + cve
+                    os.system('rm ' + cve+".pdf")
+                    pass
+        # aux_anterior = None
 #    pedimentos = text.split("MANIFESTACIONES MINERAS")[0]
 #    text = text.split("MANIFESTACIONES MINERAS")[1]
 #    pedimentos = pedimentos.split("(")

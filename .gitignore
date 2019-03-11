@@ -5,3 +5,6 @@
 Static/*.dbf
 .old*
 Logs/debug.log
+*.log
+Logs/*.log
+*/*.log
