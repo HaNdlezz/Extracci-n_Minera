@@ -91,12 +91,18 @@
                         <table data-page-size="20" data-filter=#filter class="table table-bordered footable">
                             <thead>
                                 <th class="text-center">Solicitud</th>
+                                <th class="text-center">¿Revisada?</th>
                                 <th class="text-center">Acciones</th>
                             </thead>
                             <tbody>
                                 {% for x in solicitudes %}
                                     <tr>
-                                        <td class="col-md-6 text-center" style="vertical-align:middle">{{x.tipo_tramite}} - {{x.cve}}</td>
+                                        <td class="col-md-4 text-center" style="vertical-align:middle">{{x.tipo_tramite}} - {{x.cve}}</td>
+                                        <td class="col-md-2 text-center" style="vertical-align:middle">
+                                        {% if x.cpu == "1" %}
+                                            <i class="fa fa-check"></i>
+                                        {% endif %}
+                                        </td>
                                         <td>
                                             <div class="col-md-4">
                                                 <button target="popup"
@@ -777,14 +783,6 @@
                     </div>
                     <div class="col-md-10">
                         <input required id="OPOSICION" name="OPOSICION" type="text" class="form-control">
-                    </div>
-                </div>
-                <div class="form-group" id="E_O4_FORM">
-                    <div class="col-md-2">
-                        <label for="E_O4" class="control-label">E_O4: </label>
-                    </div>
-                    <div class="col-md-10">
-                        <input required id="E_O4" name="E_O4" type="text" class="form-control">
                     </div>
                 </div>
             </div>

@@ -4,3 +4,4 @@
 *.dbf
 Static/*.dbf
 .old*
+Logs/debug.log
