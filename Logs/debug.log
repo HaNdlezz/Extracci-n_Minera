@@ -218,3 +218,517 @@ waiting for tasks
 waiting for tasks
 waiting for tasks
 waiting for tasks
+Running core.views.scrap_data
+Rescheduling core.views.scrap_data
+Traceback (most recent call last):
+  File "/home/michel/Documents/dev/mvps/pancho/extraction/local/lib/python2.7/site-packages/background_task/tasks.py", line 43, in bg_runner
+    func(*args, **kwargs)
+  File "/home/michel/Documents/dev/mvps/pancho/extraction/Extraccion_Minera/core/views.py", line 443, in scrap_data
+    extraerPedimentos(x)
+  File "/home/michel/Documents/dev/mvps/pancho/extraction/Extraccion_Minera/core/views.py", line 316, in extraerPedimentos
+    date_target = fechas[2].split(" ")
+IndexError: list index out of range
+Marking task core.views.scrap_data as failed
+Running core.views.scrap_data
+Rescheduling core.views.scrap_data
+Traceback (most recent call last):
+  File "/home/michel/Documents/dev/mvps/pancho/extraction/local/lib/python2.7/site-packages/background_task/tasks.py", line 43, in bg_runner
+    func(*args, **kwargs)
+  File "/home/michel/Documents/dev/mvps/pancho/extraction/Extraccion_Minera/core/views.py", line 443, in scrap_data
+    extraerPedimentos(x)
+  File "/home/michel/Documents/dev/mvps/pancho/extraction/Extraccion_Minera/core/views.py", line 316, in extraerPedimentos
+    date_target = fechas[2].split(" ")
+IndexError: list index out of range
+Marking task core.views.scrap_data as failed
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+Running core.views.crear_pdf_de_boletin
+Rescheduling core.views.crear_pdf_de_boletin
+Traceback (most recent call last):
+  File "/home/michel/Documents/dev/mvps/pancho/extraction/local/lib/python2.7/site-packages/background_task/tasks.py", line 43, in bg_runner
+    func(*args, **kwargs)
+  File "/home/michel/Documents/dev/mvps/pancho/extraction/Extraccion_Minera/core/views.py", line 103, in crear_pdf_de_boletin
+    diario.save()
+  File "/home/michel/Documents/dev/mvps/pancho/extraction/Extraccion_Minera/core/views.py", line 103, in crear_pdf_de_boletin
+    diario.save()
+  File "/usr/lib/python2.7/bdb.py", line 49, in trace_dispatch
+    return self.dispatch_line(frame)
+  File "/usr/lib/python2.7/bdb.py", line 68, in dispatch_line
+    if self.quitting: raise BdbQuit
+BdbQuit
+Marking task core.views.crear_pdf_de_boletin as failed
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+Running core.views.crear_pdf_de_boletin
+Rescheduling core.views.crear_pdf_de_boletin
+Traceback (most recent call last):
+  File "/home/michel/Documents/dev/mvps/pancho/extraction/local/lib/python2.7/site-packages/background_task/tasks.py", line 43, in bg_runner
+    func(*args, **kwargs)
+  File "/home/michel/Documents/dev/mvps/pancho/extraction/Extraccion_Minera/core/views.py", line 103, in crear_pdf_de_boletin
+    diario.save()
+  File "/home/michel/Documents/dev/mvps/pancho/extraction/Extraccion_Minera/core/views.py", line 103, in crear_pdf_de_boletin
+    diario.save()
+  File "/usr/lib/python2.7/bdb.py", line 49, in trace_dispatch
+    return self.dispatch_line(frame)
+  File "/usr/lib/python2.7/bdb.py", line 68, in dispatch_line
+    if self.quitting: raise BdbQuit
+BdbQuit
+Marking task core.views.crear_pdf_de_boletin as failed
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+Running core.views.crear_pdf_de_boletin
+Rescheduling core.views.crear_pdf_de_boletin
+Traceback (most recent call last):
+  File "/home/michel/Documents/dev/mvps/pancho/extraction/local/lib/python2.7/site-packages/background_task/tasks.py", line 43, in bg_runner
+    func(*args, **kwargs)
+  File "/home/michel/Documents/dev/mvps/pancho/extraction/Extraccion_Minera/core/views.py", line 103, in crear_pdf_de_boletin
+    diario.save()
+  File "/home/michel/Documents/dev/mvps/pancho/extraction/Extraccion_Minera/core/views.py", line 103, in crear_pdf_de_boletin
+    diario.save()
+  File "/usr/lib/python2.7/bdb.py", line 49, in trace_dispatch
+    return self.dispatch_line(frame)
+  File "/usr/lib/python2.7/bdb.py", line 68, in dispatch_line
+    if self.quitting: raise BdbQuit
+BdbQuit
+Marking task core.views.crear_pdf_de_boletin as failed
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+Running core.views.crear_pdf_de_boletin
+Rescheduling core.views.crear_pdf_de_boletin
+Traceback (most recent call last):
+  File "/home/michel/Documents/dev/mvps/pancho/extraction/local/lib/python2.7/site-packages/background_task/tasks.py", line 43, in bg_runner
+    func(*args, **kwargs)
+  File "/home/michel/Documents/dev/mvps/pancho/extraction/Extraccion_Minera/core/views.py", line 108, in crear_pdf_de_boletin
+    #            print x.split("TERMINO SEPARADOR")[0]
+  File "/home/michel/Documents/dev/mvps/pancho/extraction/Extraccion_Minera/core/views.py", line 108, in crear_pdf_de_boletin
+    #            print x.split("TERMINO SEPARADOR")[0]
+  File "/usr/lib/python2.7/bdb.py", line 49, in trace_dispatch
+    return self.dispatch_line(frame)
+  File "/usr/lib/python2.7/bdb.py", line 68, in dispatch_line
+    if self.quitting: raise BdbQuit
+BdbQuit
+Marking task core.views.crear_pdf_de_boletin as failed
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+Running core.views.crear_pdf_de_boletin
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+Running core.views.crear_pdf_de_boletin
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+Running core.views.crear_pdf_de_boletin
+Ran task and deleting core.views.crear_pdf_de_boletin
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+Running core.views.crear_pdf_de_boletin
+Rescheduling core.views.crear_pdf_de_boletin
+Traceback (most recent call last):
+  File "/home/michel/Documents/dev/mvps/pancho/extraction/local/lib/python2.7/site-packages/background_task/tasks.py", line 43, in bg_runner
+    func(*args, **kwargs)
+  File "/home/michel/Documents/dev/mvps/pancho/extraction/Extraccion_Minera/core/views.py", line 130, in crear_pdf_de_boletin
+    except e:
+NameError: global name 'e' is not defined
+Marking task core.views.crear_pdf_de_boletin as failed
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+Running core.views.crear_pdf_de_boletin
+Rescheduling core.views.crear_pdf_de_boletin
+Traceback (most recent call last):
+  File "/home/michel/Documents/dev/mvps/pancho/extraction/local/lib/python2.7/site-packages/background_task/tasks.py", line 43, in bg_runner
+    func(*args, **kwargs)
+  File "/home/michel/Documents/dev/mvps/pancho/extraction/Extraccion_Minera/core/views.py", line 130, in crear_pdf_de_boletin
+    except e:
+NameError: global name 'e' is not defined
+Marking task core.views.crear_pdf_de_boletin as failed
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+Running core.views.crear_pdf_de_boletin
+Rescheduling core.views.crear_pdf_de_boletin
+Traceback (most recent call last):
+  File "/home/michel/Documents/dev/mvps/pancho/extraction/local/lib/python2.7/site-packages/background_task/tasks.py", line 43, in bg_runner
+    func(*args, **kwargs)
+  File "/home/michel/Documents/dev/mvps/pancho/extraction/Extraccion_Minera/core/views.py", line 113, in crear_pdf_de_boletin
+    x = x.split("CVE:")[1].split(")")[0].replace(" ","")
+IndexError: list index out of range
+Marking task core.views.crear_pdf_de_boletin as failed
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+Running core.views.crear_pdf_de_boletin
+Rescheduling core.views.crear_pdf_de_boletin
+Traceback (most recent call last):
+  File "/home/michel/Documents/dev/mvps/pancho/extraction/local/lib/python2.7/site-packages/background_task/tasks.py", line 43, in bg_runner
+    func(*args, **kwargs)
+  File "/home/michel/Documents/dev/mvps/pancho/extraction/Extraccion_Minera/core/views.py", line 134, in crear_pdf_de_boletin
+    pdf.set_trace()
+NameError: global name 'pdf' is not defined
+Marking task core.views.crear_pdf_de_boletin as failed
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+Running core.views.crear_pdf_de_boletin
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+Running core.views.crear_pdf_de_boletin
+Rescheduling core.views.crear_pdf_de_boletin
+Traceback (most recent call last):
+  File "/home/michel/Documents/dev/mvps/pancho/extraction/local/lib/python2.7/site-packages/background_task/tasks.py", line 43, in bg_runner
+    func(*args, **kwargs)
+  File "/home/michel/Documents/dev/mvps/pancho/extraction/Extraccion_Minera/core/views.py", line 135, in crear_pdf_de_boletin
+    pass
+  File "/home/michel/Documents/dev/mvps/pancho/extraction/Extraccion_Minera/core/views.py", line 135, in crear_pdf_de_boletin
+    pass
+  File "/usr/lib/python2.7/bdb.py", line 49, in trace_dispatch
+    return self.dispatch_line(frame)
+  File "/usr/lib/python2.7/bdb.py", line 68, in dispatch_line
+    if self.quitting: raise BdbQuit
+BdbQuit
+Marking task core.views.crear_pdf_de_boletin as failed
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+Running core.views.crear_pdf_de_boletin
+Ran task and deleting core.views.crear_pdf_de_boletin
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+Running core.views.crear_pdf_de_boletin
+Ran task and deleting core.views.crear_pdf_de_boletin
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
+waiting for tasks
