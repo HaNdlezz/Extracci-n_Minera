@@ -493,6 +493,7 @@ def Obtener_Datos_General(request):
     scrap_data(request.POST)
     data = {}
     data["alert"] = "Se esta extrayendo la informacion de los CVE. Este proceso podria tardar un momento."
+    data["diario"] = Diario.objects.all()
     return render(request, template_name, data)
 
 def get_datos(request):
