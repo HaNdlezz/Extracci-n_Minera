@@ -8,3 +8,6 @@ Logs/debug.log
 *.log
 Logs/*.log
 */*.log
+*.pdf.*
+*.txt
+*.txt.*

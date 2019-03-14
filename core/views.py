@@ -32,13 +32,20 @@ from IPython import embed
 def getPDFContent(path):
     content = ""
     # Load PDF into pyPDF
-    pdf = pyPdf.PdfFileReader(file(path, "rb"))
-    # Iterate pages
-    for i in range(0, pdf.getNumPages()):
-        # Extract text from page and add to content
-        content += unidecode.unidecode(pdf.getPage(i).extractText()) + "\n"
+    # pdf = pyPdf.PdfFileReader(file(path, "rb"))
+    # # Iterate pages
+    # for i in range(0, pdf.getNumPages()):
+    #     # Extract text from page and add to content
+    #     # temp_cont = unidecode.unidecode(pdf.getPage(i).extractText()) + " \n"
+    #     # content += " ".join(temp_cont.replace(u"\xa0", u" ").strip().split())
+    #     for line in pdf.getPage(i).extractText().splitlines():
+    #         content += unidecode.unidecode(line) + " \n"
+    os.system("ruby pdf_reader.rb '" + path + "'")
+    temp_file = open(path.split('.')[0] + ".txt")
+    content = temp_file.read()
     # Collapse whitespace
-    text = content
+    pdb.set_trace()
+    text = content.decode('utf-8')
     text = text.split("Boletin Oficial de Mineria")[::-1][0]
     return text
 
@@ -49,7 +56,8 @@ def getPDFContent2(path):
     # Iterate pages
     for i in range(0, pdf.getNumPages()):
         # Extract text from page and add to content
-        content += unidecode.unidecode(pdf.getPage(i).extractText()) + "\n"
+        for line in pdf.getPage(i).extractText().splitlines():
+            content += unidecode.unidecode(line) + " \n"
     # Collapse whitespace
     text = content
     return text
@@ -92,15 +100,18 @@ def crear_pdf_de_boletin(request):
     archivo=str(name[0])
     # print "ARCHIVO",type(archivo)
     text = getPDFContent(archivo)
+    # pdb.set_trace()
     for x in tipos:
         if x in text:
             text = text.replace(x,"SEPARADOR DE TIPOS DE MINERIA "+x+"TERMINO SEPARADOR")
     datos = text.split("SEPARADOR DE TIPOS DE MINERIA ")
+    # pdb.set_trace()
     datos.pop(0)
     codigo_diario = request["archivo"].split("/")
     format_fecha = codigo_diario[4] + "/" + codigo_diario[5] + "/" + codigo_diario[6]
     diario = Diario.objects.create(codigo=name[0].split(".pdf")[0],fecha=format_fecha)
     diario.save()
+    region = '' # TODO: WORKING HERE
     concesion = ''
     concesiona = ''
     for y in datos:
@@ -129,15 +140,17 @@ def crear_pdf_de_boletin(request):
 
                     os.system('wget -U "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.6) Gecko/20070802 SeaMonkey/1.1.4" ' + "http://www.diariooficial.interior.gob.cl/publicaciones/"+ str(name[4]) +"/" +str(name[3]) +"/" + str(name[2]) + "/" + name[0].split(".pdf")[0] + "/07/" + str(cve) + ".pdf")
                     url = "http://www.diariooficial.interior.gob.cl/publicaciones/"+ str(name[4]) +"/" +str(name[3]) +"/" + str(name[2]) + "/" + name[0].split(".pdf")[0] + "/07/" + str(cve) + ".pdf"
-                    aux = Registro_Mineria.objects.create(concesion=concesion,concesiona=concesiona,diario=diario,tipo_tramite=tipo,url=url,cve=cve,texto=getPDFContent2(str(cve)+".pdf"))
+                    aux = Registro_Mineria.objects.create(concesion=concesion,concesiona=concesiona,diario=diario,tipo_tramite=tipo,url=url,cve=cve,texto=getPDFContent(str(cve)+".pdf"))
                     aux.save()
                     cve_downloaded+=1
                     os.system('rm ' + cve+".pdf")
+                    os.system('rm ' + cve+".txt")
 
                     print "END OF CVE SUCESSFULLY"
                 except:
                     print "END OF CVE WITH ERROR: " + cve
                     os.system('rm ' + cve+".pdf")
+                    os.system('rm ' + cve+".txt")
                     pass
         # aux_anterior = None
 #    pedimentos = text.split("MANIFESTACIONES MINERAS")[0]
@@ -149,6 +162,7 @@ def crear_pdf_de_boletin(request):
 #            x = x.split("CVE:")[1].split(")")[0].replace(" ","")
 #            pedimentos_final.append(x)
     os.system('rm ' + name[0])
+    os.system('rm ' + name[0].split('.')[0] +".txt")
     data = {}
     data["total_cve"] = str(cve_downloaded)
     data["numero_registro"] = "1"
@@ -1055,13 +1069,13 @@ def download(request):
         if request.POST['type'] == 'pedimentos':
             response = download_pedi(request)
         if request.POST['type'] == 'ver_concesiones':
-            response = download_ver_conce(request) # TODO his own method filtering for those who have vertex
+            response = download_ver_conce(request)
         if request.POST['type'] == 'concesiones':
             response = download_conce(request)
         if request.POST['type'] == 'manifestaciones':
             response = download_manifes(request)
         if request.POST['type'] == 'ver_mensuras':
-            response = download_ver_mensu(request) # TODO his own method filtering for those who have vertex
+            response = download_ver_mensu(request)
         if request.POST['type'] == 'mensuras':
             response = download_mensu(request)
         return response
