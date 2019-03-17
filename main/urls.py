@@ -26,7 +26,7 @@ urlpatterns = [
     url(r'^get_datos/', views.get_datos, name="get_datos"),
     url(r'^actualizar_datos/', views.actualizar_datos, name="actualizar_datos"),
     url(r'^ingresar_vertices/', views.ingresar_vertices, name="ingresar_vertices"),
-    url(r'^download_pedi/', views.download_pedi, name="download_pedi"),
-    url(r'^download/', views.download, name="download"),
+    # url(r'^download_pedi/', views.download_pedi, name="download_pedi"),
+    url(r'^download_tramite/', views.download_tramite, name="download_tramite"),
     url(r'^$', views.login_user, name="login"),
 ]
