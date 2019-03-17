@@ -11,7 +11,7 @@
 
 {% block content %}
 <div class="row">
-    <form action="{% url 'download' %}" method="post">
+    <form action="{% url 'download_tramite' %}" method="post">
         {% csrf_token %}
         <div class="col-md-12">
             <div class="ibox">
