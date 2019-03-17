@@ -1,9 +1,19 @@
 # -*- coding: utf-8 -*-
+from django.http import HttpResponseRedirect, HttpResponse, Http404
+from django.conf import settings
+from core.models import *
+import pdb
+import os
+import re
+import json
+import datetime
+import unidecode
 from core.utils import utils
 
 class extraction():
 
-    def extraerConcesiones(concesion):
+    @classmethod
+    def extraerConcesiones(cls, concesion):
         if "EXPLORACION" in concesion.tipo_tramite:
             concesion.tipo_conce = "PEDIMENTO"
         if "EXPLOTACION" in concesion.tipo_tramite:
@@ -83,7 +93,8 @@ class extraction():
         concesion.save()
         print concesion
 
-    def extraerManifestaciones(manifestacion):
+    @classmethod
+    def extraerManifestaciones(cls, manifestacion):
         manifestacion.tipo_utm = "M"
         patron = re.compile("Huso\s\d\d|HUSO\s\d\d|huso\s\d\d")
         if patron.search(manifestacion.texto):
@@ -134,7 +145,8 @@ class extraction():
         manifestacion.save()
         print manifestacion
 
-    def extraerPedimentos(pedimento):
+    @classmethod
+    def extraerPedimentos(cls, pedimento):
         pedimento.tipo_utm = "M"
         patron = re.compile("Huso\s\d\d|HUSO\s\d\d|huso\s\d\d")
         if patron.search(pedimento.texto):
@@ -215,7 +227,7 @@ class extraction():
             if pedimento.hectareas is not None:
                 if (int(pedimento.n_scarasup)*int(pedimento.e_ocarasup))/10000 != int(pedimento.hectareas):
                     pedimento.obser+=",Hectareas no congruentes con lados"
-        pedimento.juzgado = get_juzgado(pedimento.texto)
+        pedimento.juzgado = utils.get_juzgado(pedimento.texto)
         comuna_provincia_region = utils.get_comuna(pedimento.texto)
         pedimento.comuna = comuna_provincia_region[0] if len(comuna_provincia_region)>0 else ""
         pedimento.provincia = comuna_provincia_region[1][0] if len(comuna_provincia_region)>1 and len(comuna_provincia_region[1])>0 else ""
@@ -223,7 +235,8 @@ class extraction():
         pedimento.save()
         print pedimento
 
-    def extraerMensuras(mensura):
+    @classmethod
+    def extraerMensuras(cls, mensura):
         patron = re.compile("[aA-zZ][-][0-9]{1,4}[-][0-9]{1,4}")
         if patron.search(mensura.texto):
             mensura.roljuz = patron.search(mensura.texto).group()

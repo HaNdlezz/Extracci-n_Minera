@@ -2,6 +2,7 @@
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.conf import settings
 from core.models import *
+import pdb
 import os
 import datetime
 import unidecode
