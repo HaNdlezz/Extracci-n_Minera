@@ -73,7 +73,7 @@ class download():
                 response["CONCESIONA"] = '' if solicitud.concesiona is None else solicitud.concesiona.encode('utf-8')
                 response["REPRESENTA"] = '' if solicitud.representa is None else solicitud.representa.encode('utf-8')
                 response["DIRECCION"] = '' if solicitud.direccion is None else solicitud.direccion.encode('utf-8')
-                response["REGION"] = solicitud.region or ''
+                response["REGION"] = '' if solicitud.region is None else solicitud.region.encode('utf-8')
                 response["PROVINCIA"] = '' if solicitud.provincia is None else solicitud.provincia.encode('utf-8')
                 response["COMUNA"] = '' if solicitud.comuna is None else solicitud.comuna.encode('utf-8')
                 response["LUGAR"] = '' if solicitud.lugar is None else solicitud.lugar.encode('utf-8')

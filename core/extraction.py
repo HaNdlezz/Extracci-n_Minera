@@ -148,14 +148,12 @@ class extraction():
     @classmethod
     def extraerPedimentos(cls, pedimento):
         pedimento.tipo_utm = "M"
-        patron = re.compile("Huso\s\d\d|HUSO\s\d\d|huso\s\d\d")
+        patron = re.compile("(huso|zona)\s\d\d", re.I)
         if patron.search(pedimento.texto):
             pedimento.huso = patron.search(pedimento.texto).group().split(" ")[-1]
-        else:
-            pedimento.huso = "No se detecta Huso"
-        patron = re.compile("[0-9]{1,2}(.?)[0-9]{1,3}\s(hectareas|Hectareas|HECTAREAS|Has|HAS|has)")
-        if patron.search(pedimento.texto):
-            pedimento.hectareas = patron.search(pedimento.texto).group().replace(".","").split(" ")[0]
+        patron = re.compile("[0-9]{1,2}(.?)[0-9]{1,3}\s?\s+?\t?\t?(hectáreas|hectareas|has)", re.I)
+        if patron.search(pedimento.texto.encode('utf-8')):
+            pedimento.hectareas = patron.search(pedimento.texto.encode('utf-8')).group().replace(".","").split(" ")[0]
         patron = re.compile("[aA-zZ][-][0-9]{1,4}[-][0-9]{1,4}")
         if patron.search(pedimento.texto):
             pedimento.roljuz = patron.search(pedimento.texto).group()
@@ -177,9 +175,12 @@ class extraction():
             mes=fecha_equivalencia[date_target[2].lower()]
             anio=date_target[-1]
             pedimento.f_presenta = anio+"/"+mes+"/"+dia
-        patron = re.compile("(fojas|FOJAS|Fojas)\s[0-9]{1,2}(.?)[0-9]{1,3}")
+        patron = re.compile("(fojas|fj|foja|fs)\.?\s*?[0-9]{1,2}(.?)[0-9]{1,3}", re.I)
         if patron.search(pedimento.texto):
-            pedimento.fojas = patron.search(pedimento.texto).group().replace(".","").split(" ")[1]
+            try:
+                pedimento.fojas = patron.search(pedimento.texto).group().replace(".","").split(" ")[1]
+            except:
+                pedimento.fojas = patron.search(pedimento.texto).group().replace(" ","").split(".")[1]
             aux_text = pedimento.texto.split(patron.search(pedimento.texto).group())[1]
             if "vta" in aux_text or "Vta" in aux_text or "Vuelta" in aux_text or "vuelta" in aux_text or "VTA" in aux_text or "VUELTA" in aux_text:
                 pedimento.fojas = pedimento.fojas+" "+"VTA"
@@ -187,43 +188,41 @@ class extraction():
             if patron.search(aux_text):
                 pedimento.numero = patron.search(aux_text).group().replace(".","").split(" ")[1]
         pedimento.obser = "(CVE "+pedimento.cve+")"
-        patron = re.compile("datum\sWGS\s\d\d|datum\sWGS\s\d\d\d\d|Datum\sWGS\s\d\d|Datum\sWGS\s\d\d\d\d|Datum\sWGS\s\d\d\d\d|DATUM\sWGS\s\d\d|DATUM\sWGS\s\d\d\d\d|datum\s\d\d|datum\s\d\d\d\d|Datum\s\d\d|Datum\s\d\d\d\d|DATUM\s\d\d|DATUM\s\d\d\d\d")
-        patron2 = re.compile("DATUM\sWGS\d\d|DATUM\sWGS\d\d\d\d|Datum\sWGS\d\d|Datum\sWGS\d\d\d\d|datum\sWGS\d\d|datum\sWGS\d\d\d\d")
+        patron = re.compile("datum\s?WGS?\s[1-9]{1,4}", re.I)
+        datum = ""
         if patron.search(pedimento.texto):
             datum = patron.search(pedimento.texto).group()
             datum = datum.split(" ")
             datum = datum[-1]
-        elif patron2.search(pedimento.texto):
-            datum = patron2.search(pedimento.texto).group()
-            datum = datum.split("WGS")
-            datum = datum[-1]
-        else:
-            datum = "No se detecta Datum"
-        if str(datum) == "84":
+        if str(datum) == "84" or str(datum) == "1984":
             datum = "WGS84"
-        elif str(datum) == "56":
+        elif str(datum) == "56" or str(datum) == "1956":
             datum = "PSAD56"
-        elif str(datum) == "69":
+        elif str(datum) == "69" or str(datum) == "1969":
             datum = "SAD69"
-        else:
-            print ""
-        patron = re.compile("La Canoa 1956|LA CANOA 1956|la canoa 1956")
+        patron = re.compile("canoa\s*?(de)?\s*?1956", re.I)
         if patron.search(pedimento.texto):
             datum = "PSAD56"
         pedimento.datum = datum
-        patron = re.compile("[1-9]{1,2}\.?[0-9]{3}\s(metro|Metro|METRO|metros|Metros|METROS|m|M)")
+        patron = re.compile("[^\d\.][1-9]{1,2}\.?[0-9]{3}\,?([0-9]{1,3})?\s*?(metro|metros|m)", re.I)
         aux_text = pedimento.texto
         try_find = 2
         lados = []
         while try_find != 0:
             if patron.search(aux_text):
-                lado = patron.search(aux_text).group().split(" ")[0].replace(".","")
+                lado = patron.search(aux_text).group()[1:].split(" ")[0].replace(".","")
                 lados.append(lado)
                 aux_text = aux_text.replace(patron.search(aux_text).group(), " ",1)
             try_find-=1
         if len(lados) == 2:
-            pedimento.n_scarasup = lados[0]
-            pedimento.e_ocarasup = lados[1]
+            if "," in lados[0]:
+                pedimento.n_scarasup = lados[0].split(",")[0]
+            else:
+                pedimento.n_scarasup = lados[0]
+            if "," in lados[1]:
+                pedimento.e_ocarasup = lados[1].split(",")[0]
+            else:
+                pedimento.e_ocarasup = lados[1]
             if pedimento.hectareas is not None:
                 if (int(pedimento.n_scarasup)*int(pedimento.e_ocarasup))/10000 != int(pedimento.hectareas):
                     pedimento.obser+=",Hectareas no congruentes con lados"
