@@ -30,6 +30,7 @@ from IPython import embed
 from core.extraction import extraction
 from core.utils import utils
 from core.download import download
+import traceback
 
 
 def getPDFContent(path):
@@ -116,67 +117,85 @@ def crear_pdf_de_boletin(request):
     region = '' # TODO: WORKING HERE
     concesion = ''
     concesiona = ''
-    for y in datos:
-        tipo = y.split("TERMINO SEPARADOR")[0]
+    try:
+        for y in datos:
+            tipo = y.split("TERMINO SEPARADOR")[0]
 
-        ###### WORKING ON ITERATE BY REGION #######
-        for inx, reg_block in enumerate(y.split('REGIÓN '.decode('utf-8'))):
-            if inx == 0:
-                pass
-            else:
-                current_region = reg_block.split('Provincia')[0]
-                current_region = current_region.split('\n')[0]
-                current_prov = current_region.replace("\n", "")
-                reg_block.replace('Provincia de ', 'Provincia de xProv')
+            ###### WORKING ON ITERATE BY REGION #######
+            for inx, reg_block in enumerate(y.split('REGIÓN '.decode('utf-8'))):
+                if inx == 0:
+                    pass
+                else:
+                    current_region = reg_block.split('Provincia')[0]
+                    current_region = current_region.split('\n')[0]
+                    codigo_region = current_region
+                    current_prov = current_region.replace("\n", "")
+                    region_to_compare = current_region.replace("\n", "").lower()
+                    for region in utils.regions():
+                        if region['nombre'].lower().decode("raw_unicode_escape") in region_to_compare:
+                            codigo_region = region['codigo']
+                            
+                    reg_block.replace('Provincia de ', 'Provincia de xProv')
 
-                ###### WORKING ON ITERATE BY PROVINCE #######
-                for inx2, reg_prov in enumerate(reg_block.split('Provincia de ')):
-                    if inx2 == 0:
-                        pass
-                    else:
-                        current_prov = reg_prov.split('xProv')[0].split('\n')[0]
-                        current_prov = current_prov.replace("\n", "")
+                    ###### WORKING ON ITERATE BY PROVINCE #######
+                    for inx2, reg_prov in enumerate(reg_block.split('Provincia de ')):
+                        if inx2 == 0:
+                            pass
+                        else:
+                            current_prov = reg_prov.split('xProv')[0].split('\n')[0]
+                            current_prov = current_prov.replace("\n", "")
 
-                        for x in reg_prov.split(")"):
-                            if "CVE:" in x:
-                                ######### MUST: improve extraction of cve concesion and else,
-                                ######### when it is in the first row of new page
-                                try:
-                                    print "NEW CVE"
-                                    temp_x = x
-                                    if current_prov in x:
-                                        x = temp_x.split(current_prov)[1].split("(")[1].replace(" ","")
-                                        cve = x.split("CVE:")[1]
-                                        concesion = temp_x.split(current_prov)[1].split('(')[0].split('/')[0]
-                                        concesiona = temp_x.split(current_prov)[1].split('(')[0].split('/')[1]
-                                    else:
-                                        if "sitio web www.diarioficial.cl" in x:
-                                            x = temp_x.split('sitio web www.diarioficial.cl')[1].split("(")[1].replace(" ","")
+                            for x in reg_prov.split(")"):
+                                if "CVE:" in x:
+                                    ######### MUST: improve extraction of cve concesion and else,
+                                    ######### when it is in the first row of new page
+                                    try:
+                                        print "NEW CVE"
+                                        temp_x = x
+                                        if current_prov in x:
+                                            x = temp_x.split(current_prov)[1].split("(")[1].replace(" ","")
                                             cve = x.split("CVE:")[1]
-                                            concesion = temp_x.split('sitio web www.diarioficial.cl')[1].split('(')[0].split('/')[0]
-                                            concesiona = temp_x.split('sitio web www.diarioficial.cl')[1].split('(')[0].split('/')[1]
+                                            concesion = temp_x.split(current_prov)[1].split('(')[0].split('/')[0]
+                                            concesiona = temp_x.split(current_prov)[1].split('(')[0].split('/')[1]
                                         else:
-                                            x = x.split("CVE:")[1].split("(")[0].replace(" ","")
-                                            cve = x.split("CVE:")[0]
-                                            concesion = temp_x.split('(')[0].split('/')[0]
-                                            concesiona = temp_x.split('(')[0].split('/')[1]
+                                            if "sitio web www.diarioficial.cl" in x:
+                                                x = temp_x.split('sitio web www.diarioficial.cl')[1].split("(")[1].replace(" ","")
+                                                cve = x.split("CVE:")[1]
+                                                concesion = temp_x.split('sitio web www.diarioficial.cl')[1].split('(')[0].split('/')[0]
+                                                concesiona = temp_x.split('sitio web www.diarioficial.cl')[1].split('(')[0].split('/')[1]
+                                            else:
+                                                x = x.split("CVE:")[1].split("(")[0].replace(" ","")
+                                                cve = x.split("CVE:")[0]
+                                                concesion = temp_x.split('(')[0].split('/')[0]
+                                                concesiona = temp_x.split('(')[0].split('/')[1]
 
-                                    concesion = concesion.replace("\n", "")
-                                    concesiona = concesiona.replace("\n", "")
-                                    os.system('wget -U "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.6) Gecko/20070802 SeaMonkey/1.1.4" ' + "http://www.diariooficial.interior.gob.cl/publicaciones/"+ str(name[4]) +"/" +str(name[3]) +"/" + str(name[2]) + "/" + name[0].split(".pdf")[0] + "/07/" + str(cve) + ".pdf")
-                                    url = "http://www.diariooficial.interior.gob.cl/publicaciones/"+ str(name[4]) +"/" +str(name[3]) +"/" + str(name[2]) + "/" + name[0].split(".pdf")[0] + "/07/" + str(cve) + ".pdf"
-                                    aux = Registro_Mineria.objects.create(region=current_region,provincia=current_prov,concesion=concesion,concesiona=concesiona,diario=diario,tipo_tramite=tipo,url=url,cve=cve,texto=getPDFContent(str(cve)+".pdf"))
-                                    aux.save()
-                                    cve_downloaded+=1
-                                    os.system('rm ' + cve+".pdf")
-                                    os.system('rm ' + cve+".txt")
+                                        concesion = concesion.split("\n")
+                                        concesion = concesion[len(concesion) - 1]
+                                        concesion = concesion.replace("\n", "").strip()
+                                        concesiona = concesiona.replace("\n", "").strip()
+                                        os.system('wget -U "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.6) Gecko/20070802 SeaMonkey/1.1.4" ' + "http://www.diariooficial.interior.gob.cl/publicaciones/"+ str(name[4]) +"/" +str(name[3]) +"/" + str(name[2]) + "/" + name[0].split(".pdf")[0] + "/07/" + str(cve) + ".pdf")
+                                        url = "http://www.diariooficial.interior.gob.cl/publicaciones/"+ str(name[4]) +"/" +str(name[3]) +"/" + str(name[2]) + "/" + name[0].split(".pdf")[0] + "/07/" + str(cve) + ".pdf"
+                                        aux = Registro_Mineria.objects.create(region=codigo_region,provincia=current_prov,concesion=concesion,concesiona=concesiona,diario=diario,tipo_tramite=tipo,url=url,cve=cve,texto=getPDFContent(str(cve)+".pdf"))
+                                        aux.save()
+                                        cve_downloaded+=1
+                                        os.system('rm ' + cve+".pdf")
+                                        os.system('rm ' + cve+".txt")
 
-                                    print "END OF CVE SUCESSFULLY"
-                                except:
-                                    print "END OF CVE WITH ERROR: " + cve
-                                    os.system('rm ' + cve+".pdf")
-                                    os.system('rm ' + cve+".txt")
-                                    pass
+                                        print "END OF CVE SUCESSFULLY"
+                                    except Exception as e:
+                                        print 'Error raised: %s  (%s)' % (e.message, type(e))
+                                        print "END OF CVE WITH ERROR: " + cve
+                                        trace_back = traceback.format_exc()
+                                        message = str(e)+ " " + str(trace_back)
+                                        print message
+                                        os.system('rm ' + cve+".pdf")
+                                        os.system('rm ' + cve+".txt")
+                                        pass
+    except Exception as e:
+        trace_back = traceback.format_exc()
+        message = str(e)+ " " + str(trace_back)
+        print message
+        
         
                 ###### STOP WORKING ON ITERATE BY PROVINCE #######
         ###### STOP WORKING ON ITERATE BY REGION #######
