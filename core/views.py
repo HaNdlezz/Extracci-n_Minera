@@ -31,22 +31,17 @@ from core.extraction import extraction
 from core.utils import utils
 from core.download import download
 import traceback
+import subprocess
 
 
 def getPDFContent(path):
     content = ""
-    # Load PDF into pyPDF
-    # pdf = pyPdf.PdfFileReader(file(path, "rb"))
-    # # Iterate pages
-    # for i in range(0, pdf.getNumPages()):
-    #     # Extract text from page and add to content
-    #     # temp_cont = unidecode.unidecode(pdf.getPage(i).extractText()) + " \n"
-    #     # content += " ".join(temp_cont.replace(u"\xa0", u" ").strip().split())
-    #     for line in pdf.getPage(i).extractText().splitlines():
-    #         content += unidecode.unidecode(line) + " \n"
-    os.system("ruby pdf_reader.rb '" + path + "'")
-    temp_file = open(path.split('.')[0] + ".txt")
-    content = temp_file.read()
+    try:
+        retcode = subprocess.check_output("ruby pdf_reader.rb '" + path + "'", shell=True)
+        print retcode
+    except OSError as e:
+        print("Execution failed:", e)
+    content = retcode
     # Collapse whitespace
     text = content.decode('utf-8')
     text = text.split("Boletin Oficial de Mineria")[::-1][0]

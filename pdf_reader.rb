@@ -3,8 +3,9 @@
 
 # Extract all text from a single PDF
 
-# require 'rubygems'
-require 'pdf/reader'
+require 'rubygems'
+gem 'pdf-reader'
+require 'pdf-reader'
 
 # dont forget to install the gem into local system using:   gem install pdf-reader
 # require 'open-uri'
@@ -23,3 +24,5 @@ end
 File. open("#{file_name.split('.')[0]}.txt", "w:UTF-8") do |file|
   file.write content
 end
+
+puts content
