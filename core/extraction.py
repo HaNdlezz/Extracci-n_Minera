@@ -227,7 +227,7 @@ class extraction():
                 if (int(pedimento.n_scarasup)*int(pedimento.e_ocarasup))/10000 != int(pedimento.hectareas):
                     pedimento.obser+=",Hectareas no congruentes con lados"
         pedimento.juzgado = utils.get_juzgado(pedimento.texto)
-        comuna_provincia_region = utils.get_comuna(pedimento.texto)
+        comuna_provincia_region = utils.get_comuna(pedimento)
         pedimento.comuna = comuna_provincia_region[0] if len(comuna_provincia_region)>0 else ""
         # pedimento.provincia = comuna_provincia_region[1][0] if len(comuna_provincia_region)>1 and len(comuna_provincia_region[1])>0 else ""
         # pedimento.region = comuna_provincia_region[1][1] if len(comuna_provincia_region)>1 and len(comuna_provincia_region[1])>1 else ""
