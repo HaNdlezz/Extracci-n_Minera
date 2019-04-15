@@ -21,7 +21,7 @@ reader.pages.each do |page|
   content += page_text
 end
 # puts content.encode("ISO-8859-1", invalid: :replace, undef: :replace)
-File. open("#{file_name.split('.')[0]}.txt", "w:UTF-8") do |file|
+File.open("#{file_name.split('.')[0]}.txt", "w:UTF-8") do |file|
   file.write content
 end
 
