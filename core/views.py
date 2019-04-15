@@ -96,14 +96,11 @@ def crear_pdf_de_boletin(request):
     os.system('wget -U "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.6) Gecko/20070802 SeaMonkey/1.1.4" ' + request["archivo"])
     name = request["archivo"].split("/")[::-1]
     archivo=str(name[0])
-    # print "ARCHIVO",type(archivo)
     text = getPDFContent(archivo)
-    # pdb.set_trace()
     for x in tipos:
         if x in text:
             text = text.replace(x,"SEPARADOR DE TIPOS DE MINERIA "+x+"TERMINO SEPARADOR")
     datos = text.split("SEPARADOR DE TIPOS DE MINERIA ")
-    # pdb.set_trace()
     datos.pop(0)
     codigo_diario = request["archivo"].split("/")
     format_fecha = codigo_diario[4] + "/" + codigo_diario[5] + "/" + codigo_diario[6]
@@ -186,23 +183,13 @@ def crear_pdf_de_boletin(request):
                                         os.system('rm ' + cve+".pdf")
                                         os.system('rm ' + cve+".txt")
                                         pass
+                ###### STOP WORKING ON ITERATE BY PROVINCE #######
+        ###### STOP WORKING ON ITERATE BY REGION #######
     except Exception as e:
         trace_back = traceback.format_exc()
         message = str(e)+ " " + str(trace_back)
-        print message
-        
-        
-                ###### STOP WORKING ON ITERATE BY PROVINCE #######
-        ###### STOP WORKING ON ITERATE BY REGION #######
-        # aux_anterior = None
-#    pedimentos = text.split("MANIFESTACIONES MINERAS")[0]
-#    text = text.split("MANIFESTACIONES MINERAS")[1]
-#    pedimentos = pedimentos.split("(")
-#    pedimentos_final = []
-#    for x in pedimentos:
-#        if "CVE" in x:
-#            x = x.split("CVE:")[1].split(")")[0].replace(" ","")
-#            pedimentos_final.append(x)
+        print message      
+
     os.system('rm ' + name[0])
     os.system('rm ' + name[0].split('.')[0] +".txt")
     data = {}
@@ -212,15 +199,20 @@ def crear_pdf_de_boletin(request):
 @login_required(login_url='/')
 def descargar_boletin(request):
     template_name = 'Historic_Data.html'
-    crear_pdf_de_boletin(request.POST)
     data = {}
-    data["alert"] = "Se esta descargando la informacion del CVE"
-    return render(request, template_name, data)
+    name = request.POST["archivo"].split("/")[::-1]
+    codigo_diario = request.POST["archivo"].split("/")
+    format_fecha = codigo_diario[4] + "/" + codigo_diario[5] + "/" + codigo_diario[6]
+    diario, created = Diario.objects.get_or_create(codigo=name[0].split(".pdf")[0],fecha=format_fecha)
+    if created:
+        crear_pdf_de_boletin(request.POST)
+        data["alert"] = "Se esta descargando la informacion del CVE"
+        return render(request, template_name, data)
+    else:
+        data["alert"] = "El diario ya ha sido descargado con anterioridad."
+        return render(request, template_name, data)
+        
 
-#    return HttpResponse(
-#        json.dumps(response),
-#        content_type="application/json"
-#        )
 def Historic_Data(request):
     template_name = "Historic_Data.html"
     data = {}
