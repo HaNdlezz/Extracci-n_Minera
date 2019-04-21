@@ -5,6 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from background_task import background
+from background_task.models import Task
+from background_task.models_completed import CompletedTask
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.conf import settings
@@ -585,3 +587,13 @@ def download_tramite(request):
     
     return render(request, template_name, data)
 
+def get_notifications(request):
+    return HttpResponse(
+                json.dumps({
+                    "result": True,
+                    "download_completed": len(CompletedTask.objects.filter(task_name="core.views.crear_pdf_de_boletin")),
+                    "download_running": len(Task.objects.filter(task_name="core.views.crear_pdf_de_boletin")),
+                    "extract_completed": len(CompletedTask.objects.filter(task_name="core.views.scrap_data")),
+                    "extract_running": len(Task.objects.filter(task_name="core.views.scrap_data")),
+                }),
+                content_type="application/json")
