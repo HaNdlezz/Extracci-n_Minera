@@ -104,9 +104,8 @@ def crear_pdf_de_boletin(request):
     datos.pop(0)
     codigo_diario = request["archivo"].split("/")
     format_fecha = codigo_diario[4] + "/" + codigo_diario[5] + "/" + codigo_diario[6]
-    diario = Diario.objects.create(codigo=name[0].split(".pdf")[0],fecha=format_fecha)
-    diario.save()
-    region = '' # TODO: WORKING HERE
+    diario = Diario.objects.filter(codigo=name[0].split(".pdf")[0],fecha=format_fecha)[0]
+    region = ''
     concesion = ''
     concesiona = ''
     try:
