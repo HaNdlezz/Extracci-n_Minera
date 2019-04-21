@@ -2,6 +2,8 @@
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.conf import settings
 from core.models import *
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 import pdb
 import os
 import re
