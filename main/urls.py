@@ -28,5 +28,6 @@ urlpatterns = [
     url(r'^ingresar_vertices/', views.ingresar_vertices, name="ingresar_vertices"),
     # url(r'^download_pedi/', views.download_pedi, name="download_pedi"),
     url(r'^download_tramite/', views.download_tramite, name="download_tramite"),
+    url(r'^get_notifications/', views.get_notifications, name="get_notifications"),
     url(r'^$', views.login_user, name="login"),
 ]
