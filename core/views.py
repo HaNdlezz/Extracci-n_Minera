@@ -98,12 +98,10 @@ def crear_pdf_de_boletin(request):
     archivo=str(name[0])
     # print "ARCHIVO",type(archivo)
     text = getPDFContent(archivo)
-    # pdb.set_trace()
     for x in tipos:
         if x in text:
             text = text.replace(x,"SEPARADOR DE TIPOS DE MINERIA "+x+"TERMINO SEPARADOR")
     datos = text.split("SEPARADOR DE TIPOS DE MINERIA ")
-    # pdb.set_trace()
     datos.pop(0)
     codigo_diario = request["archivo"].split("/")
     format_fecha = codigo_diario[4] + "/" + codigo_diario[5] + "/" + codigo_diario[6]

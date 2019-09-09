@@ -99,6 +99,7 @@ class Registro_Mineria(models.Model):
     perito = models.CharField(max_length=254,null=True,blank=True)
     oposicion = models.CharField(max_length=254,null=True,blank=True)
     cpu = models.CharField(max_length=254,null=True,blank=True)
+    dates = models.CharField(max_length=254, null=True,blank=True)
     def __str__(self):
         return self.tipo_tramite + " - " + self.cve
 
