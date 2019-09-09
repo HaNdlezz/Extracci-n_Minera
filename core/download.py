@@ -123,7 +123,6 @@ class download():
                 # response["CPU"] = solicitud.cpu or ''
                 response.store()
         db.close()
-        # pdb.set_trace()
         file_path = os.path.join(settings.BASE_DIR, "Static/" + file_name)
         if os.path.exists(file_path):
             with open(file_path, 'rb') as fh:
@@ -273,7 +272,6 @@ class download():
                 # response["CPU"] = solicitud.cpu or ''
                 response.store()
         db.close()
-        # pdb.set_trace()
         file_path = os.path.join(settings.BASE_DIR, "Static/" + file_name)
         if os.path.exists(file_path):
             with open(file_path, 'rb') as fh:
@@ -399,7 +397,6 @@ class download():
                 # response["CPU"] = solicitud.cpu or ''
                 response.store()
         db.close()
-        # pdb.set_trace()
         file_path = os.path.join(settings.BASE_DIR, "Static/" + file_name)
         if os.path.exists(file_path):
             with open(file_path, 'rb') as fh:
@@ -561,7 +558,6 @@ class download():
                 # response["CPU"] =  solicitud.cpu or ''
                 response.store()
         db.close()
-        # pdb.set_trace()
         file_path = os.path.join(settings.BASE_DIR, "Static/" + file_name)
         if os.path.exists(file_path):
             with open(file_path, 'rb') as fh:
@@ -620,7 +616,6 @@ class download():
                     # response["CPU"] = solicitud.cpu or ''
                     response.store()
         db.close()
-        # pdb.set_trace()
         file_path = os.path.join(settings.BASE_DIR, "Static/" + file_name)
         if os.path.exists(file_path):
             with open(file_path, 'rb') as fh:
@@ -678,7 +673,6 @@ class download():
                     # response["CPU"] = solicitud.cpu or ''
                     response.store()
         db.close()
-        # pdb.set_trace()
         file_path = os.path.join(settings.BASE_DIR, "Static/" + file_name)
         if os.path.exists(file_path):
             with open(file_path, 'rb') as fh:

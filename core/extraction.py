@@ -13,6 +13,75 @@ from core.utils import utils
 class extraction():
 
     @classmethod
+    def format_date(cls, fecha):
+        meses = {"enero": "1", "febrero": "2", "marzo": "3", "abril": "4", "mayo": "5", "junio": "6", "julio": "7", "agosto": "8", "septiembre": "9", "octubre": "10", "noviembre": "11", "diciembre": "12"}
+        dias = {"primero": "1", "uno": "1", "dos": "2", "tres": "3", "cuatro": "4", "cinco": "5", "seis": "6", "siete": "7", "ocho": "8", "nueve": "9", "diez": "10", "once": "11", "doce": "12", "trece": "13", "catorce": "14", "quince": "15", "dieciseis": "16", "diecisiete": "17", "dieciocho": "18", "diecinueve": "19", "veinte": "20", "veintiuno": "21", "veintidos": "22", "veintitres": "23", "veinticuatro": "24", "veinticinco": "25", "veintiseis": "26", "veintisiete": "27", "veintiocho": "28", "veintinueve": "29", "treinta": "30", "treinta y uno": "31"}
+        anios = {"mil":"2000","uno": "2001","dos": "2002","tres": "2003", "cuatro": "2004", "cinco": "2005", "seis": "2006", "siete": "2007", "ocho": "2008", "nueve": "2009", "diez": "2010", "once": "2011", "doce": "2012", "trece": "2013", "catorce": "2014", "quince": "2015", "dieciseis": "2016", "diecisiete": "2017", "dieciocho": "2018", "diecinueve": "2019", "veinte": "2020"}
+        fecha = fecha[1:].lower().split(" ")
+        dia = dias[fecha[0]] if fecha[0] in dias else fecha[0]
+        mes = meses[fecha[2]] if fecha[2] in meses else fecha[2]
+        anio = anios[fecha[-1]] if fecha[-1] in anios else fecha[-1]
+        fecha = dia+"/"+mes+"/"+anio
+        return fecha
+
+    @classmethod
+    def extract_dates(cls, texto):
+        patron3 = re.compile("\s[1-9]{1,2}\s*?(\n)?(de)\s*?(\n)?(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)(\s*)?(\n)?(de)(\s*)?(\n)?([\w]*)(\s*)?(\n)?([\w]*)(\s*)?(\n)?([\w]*)", re.I)
+        patron4 = re.compile("\s([\w\d]*)\s*?(\n)?(de)\s*?(\n)?(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)(\s*)?(\n)?(de)(\s*)?(\n)?([\w]*)(\s*)?(\n)?([\w]*)(\s*)?(\n)?([\w]*)", re.I)
+        patron1 = re.compile("\s[1-9]{1,2}\s*?(\n)?(de)\s*?(\n)?(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)(\s*)?(\n)?(del)(\s*)?(\n)?([\w]*)(\s*)?(\n)?([\w]*)(\s*)?(\n)?([\w]*)(\s*)?(\n)?([\w]*)", re.I)
+        patron2 = re.compile("\s([\w\d]*)\s*?(\n)?(de)\s*?(\n)?(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)(\s*)?(\n)?(del)(\s*)?(\n)?([\w]*)(\s*)?(\n)?([\w]*)(\s*)?(\n)?([\w]*)(\s*)?(\n)?([\w]*)", re.I)
+        patron7 = re.compile("\s[1-9]{1,2}\s*?(\n)?(de)\s*?(\n)?(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)(\s*)?(\n)?(de)(\s*)?(\n)?[0-9]{4}", re.I)
+        patron8 = re.compile("\s([\w\d]*)\s*?(\n)?(de)\s*?(\n)?(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)(\s*)?(\n)?(de)(\s*)?(\n)?[0-9]{4}", re.I)
+        patron5 = re.compile("\s[1-9]{1,2}\s*?(\n)?(de)\s*?(\n)?(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)(\s*)?(\n)?(del)(\s*)?(\n)?([\w]*)(\s*)?(\n)?[0-9]{4}", re.I)
+        patron6 = re.compile("\s([\w\d]*)\s*?(\n)?(de)\s*?(\n)?(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)(\s*)?(\n)?(del)(\s*)?(\n)?([\w]*)(\s*)?(\n)?[0-9]{4}", re.I)
+        fechas = []
+        buscar = unidecode.unidecode(texto).replace(".","")
+        try_get_fecha = 5
+        while try_get_fecha != 0:
+            if patron1.search(buscar):
+                fecha = patron1.search(buscar).group()
+                buscar = buscar.replace(fecha, " ")
+                fechas.append(extraction.format_date(fecha))
+                print "one"
+            if patron2.search(buscar):
+                fecha = patron2.search(buscar).group()
+                buscar = buscar.replace(fecha, " ")
+                fechas.append(extraction.format_date(fecha))
+                print "two"
+            if patron3.search(buscar):
+                fecha = patron3.search(buscar).group()
+                buscar = buscar.replace(fecha, " ")
+                fechas.append(extraction.format_date(fecha))
+                print "three"
+            if patron4.search(buscar):
+                fecha = patron4.search(buscar).group()
+                buscar = buscar.replace(fecha, " ")
+                fechas.append(extraction.format_date(fecha))
+                print "four"
+            if patron5.search(buscar):
+                fecha = patron5.search(buscar).group()
+                buscar = buscar.replace(fecha, " ")
+                fechas.append(extraction.format_date(fecha))
+                print "five"
+            if patron6.search(buscar):
+                fecha = patron6.search(buscar).group()
+                buscar = buscar.replace(fecha, " ")
+                fechas.append(extraction.format_date(fecha))
+                print "six"
+            if patron7.search(buscar):
+                fecha = patron7.search(buscar).group()
+                buscar = buscar.replace(fecha, " ")
+                fechas.append(extraction.format_date(fecha))
+                print "seven"
+            if patron8.search(buscar):
+                fecha = patron8.search(buscar).group()
+                buscar = buscar.replace(fecha, " ")
+                fechas.append(extraction.format_date(fecha))
+                print "eigth"
+            try_get_fecha-=1
+        return fechas
+
+    @classmethod
     def extraerConcesiones(cls, concesion):
         if "EXPLORACION" in concesion.tipo_tramite:
             concesion.tipo_conce = "PEDIMENTO"
@@ -151,9 +220,11 @@ class extraction():
         patron = re.compile("(huso|zona)\s\d\d", re.I)
         if patron.search(pedimento.texto):
             pedimento.huso = patron.search(pedimento.texto).group().split(" ")[-1]
-        patron = re.compile("[0-9]{1,2}(.?)[0-9]{1,3}\s?\s+?\t?\t?(hectáreas|hectareas|has)", re.I)
+        patron = re.compile("[0-9]{1,2}(.?)[0-9]{1,3}(\n)?\s*?\t?(hectáreas|hectareas|has)", re.I)
         if patron.search(pedimento.texto.encode('utf-8')):
             pedimento.hectareas = patron.search(pedimento.texto.encode('utf-8')).group().replace(".","").split(" ")[0]
+            pedimento.hectareas = pedimento.hectareas.replace("hectareas","")
+            pedimento.hectareas = pedimento.hectareas.replace("hectarea","")
         patron = re.compile("[aA-zZ][-][0-9]{1,4}[-][0-9]{1,4}")
         if patron.search(pedimento.texto):
             pedimento.roljuz = patron.search(pedimento.texto).group()
@@ -217,22 +288,28 @@ class extraction():
         if len(lados) == 2:
             if "," in lados[0]:
                 pedimento.n_scarasup = lados[0].split(",")[0]
+                pedimento.n_scarasup = pedimento.n_scarasup.replace("metro","")
             else:
                 pedimento.n_scarasup = lados[0]
+                pedimento.n_scarasup = pedimento.n_scarasup.replace("metro","")
             if "," in lados[1]:
                 pedimento.e_ocarasup = lados[1].split(",")[0]
+                pedimento.e_ocarasup = pedimento.e_ocarasup.replace("metro","")
             else:
                 pedimento.e_ocarasup = lados[1]
+                pedimento.e_ocarasup = pedimento.e_ocarasup.replace("metro","")
             if pedimento.hectareas is not None:
                 if (int(pedimento.n_scarasup)*int(pedimento.e_ocarasup))/10000 != int(pedimento.hectareas):
                     pedimento.obser+=",Hectareas no congruentes con lados"
         pedimento.juzgado = utils.get_juzgado(pedimento.texto)
         comuna_provincia_region = utils.get_comuna(pedimento)
         pedimento.comuna = comuna_provincia_region[0] if len(comuna_provincia_region)>0 else ""
+        pedimento.dates = extraction.extract_dates(pedimento.texto)
+        print pedimento.dates
         # pedimento.provincia = comuna_provincia_region[1][0] if len(comuna_provincia_region)>1 and len(comuna_provincia_region[1])>0 else ""
         # pedimento.region = comuna_provincia_region[1][1] if len(comuna_provincia_region)>1 and len(comuna_provincia_region[1])>1 else ""
         pedimento.save()
-        print pedimento
+        #print pedimento
 
     @classmethod
     def extraerMensuras(cls, mensura):
