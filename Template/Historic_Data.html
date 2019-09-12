@@ -190,6 +190,14 @@
                                 <input required id="CONCESIONA" name="CONCESIONA" type="text" class="form-control">
                             </dvi>
                         </div>
+                        <div class="form-group" id="RUT_CSS_FORM">
+                            <div class="col-md-2">
+                                <label for="RUT_CSS" class="control-label">RUT_CSS: </label>
+                            </div>
+                            <dvi class="col-md-10">
+                                <input required id="RUT_CSS" name="RUT_CSS" type="text" class="form-control">
+                            </dvi>
+                        </div>
                         <div class="form-group" id="REPRESENTA_FORM">
                             <div class="col-md-2">
                                 <label for="REPRESENTA" class="control-label">REPRESENTA: </label>
@@ -390,6 +398,14 @@
                                 <input required id="OBSER" name="OBSER" type="text" class="form-control">
                             </div>
                         </div>
+                        <div class="form-group" id="CVE_FORM">
+                            <div class="col-md-2">
+                                <label for="CVE" class="control-label">CVE: </label>
+                            </div>
+                            <div class="col-md-10">
+                                <input required id="CVE" name="CVE" type="text" class="form-control">
+                            </div>
+                        </div>
                         <div class="form-group" id="DATUM_FORM">
                             <div class="col-md-2">
                                 <label for="DATUM" class="control-label">DATUM: </label>
@@ -436,14 +452,6 @@
                             </div>
                             <div class="col-md-10">
                                 <input required id="EDITOR" name="EDITOR" type="text" class="form-control">
-                            </div>
-                        </div>
-                        <div class="form-group" id="CVE_FORM">
-                            <div class="col-md-2">
-                                <label for="CVE" class="control-label">CVE: </label>
-                            </div>
-                            <div class="col-md-10">
-                                <input required id="CVE" name="CVE" type="text" class="form-control">
                             </div>
                         </div>
                         <div class="form-group" style="display: none;">
@@ -813,6 +821,7 @@
             $("#TIPO_CONCE_FORM").show();
             $("#CONCESION_FORM").show();
             $("#CONCESIONA_FORM").show();
+            $("#RUT_CSS_FORM").show();
             $("#REPRESENTA_FORM").show();
             $("#DIRECCION_FORM").show();
             $("#ROLMINERO_FORM").show();
@@ -920,6 +929,7 @@
                 $("#TIPO_CONCE").val(response.TIPO_CONCE);
                 $("#CONCESION").val(response.CONCESION);
                 $("#CONCESIONA").val(response.CONCESIONA);
+                $("#RUT_CSS").val(response.RUT_CSS);
                 $("#REPRESENTA").val(response.REPRESENTA);
                 $("#DIRECCION").val(response.DIRECCION);
                 $("#ROLMINERO").val(response.ROLMINERO);
@@ -1136,6 +1146,7 @@
                     TIPO_CONCE: $("#TIPO_CONCE").val(),
                     CONCESION: $("#CONCESION").val(),
                     CONCESIONA: $("#CONCESIONA").val(),
+                    RUT_CSS: $("#RUT_CSS").val(),
                     REPRESENTA: $("#REPRESENTA").val(),
                     DIRECCION: $("#DIRECCION").val(),
                     ROLMINERO: $("#ROLMINERO").val(),
@@ -1223,6 +1234,7 @@
                 $("#TIPO_CONCE_FORM").show();
                 $("#CONCESION_FORM").show();
                 $("#CONCESIONA_FORM").show();
+                $("#RUT_CSS_FORM").show();
                 $("#REPRESENTA_FORM").show();
                 $("#DIRECCION_FORM").show();
                 $("#ROLMINERO_FORM").show();

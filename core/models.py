@@ -19,6 +19,7 @@ class Registro_Mineria(models.Model):
     tipo_conce = models.CharField(max_length=200)
     concesion = models.CharField(max_length=200,null=True,blank=True)
     concesiona = models.CharField(max_length=200,null=True,blank=True)
+    rut_css = models.CharField(max_length=200,null=True,blank=True)
     representa = models.CharField(max_length=200,null=True,blank=True)
     direccion = models.CharField(max_length=200,null=True,blank=True)
     rolminero = models.CharField(max_length=200,null=True,blank=True)

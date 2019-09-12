@@ -89,6 +89,16 @@ def index(request):
     data = {}
     return render(request, template_name, data)
 
+def extract_rut(content):
+    regex=re.compile("\d{1,2}\.?\d{3}\.?\d{3}\-?[\dk]", re.I)
+    ruts = re.findall(regex, content)
+    ruts_without_char = re.findall(regex, content)
+    if len(ruts) > 1:
+        ruts_without_char[:] = [int(re.sub("[^\d]","",rut[:-1])) for rut in ruts_without_char]
+        return ruts[ruts_without_char.index(max(ruts_without_char))]
+    else:
+        return ruts[0]
+
 @background(schedule=5)
 def crear_pdf_de_boletin(request):
     cve_downloaded = 0
@@ -168,7 +178,8 @@ def crear_pdf_de_boletin(request):
                                         concesiona = concesiona.replace("\n", "").strip()
                                         os.system('wget -U "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.6) Gecko/20070802 SeaMonkey/1.1.4" ' + "http://www.diariooficial.interior.gob.cl/publicaciones/"+ str(name[4]) +"/" +str(name[3]) +"/" + str(name[2]) + "/" + name[0].split(".pdf")[0] + "/07/" + str(cve) + ".pdf")
                                         url = "http://www.diariooficial.interior.gob.cl/publicaciones/"+ str(name[4]) +"/" +str(name[3]) +"/" + str(name[2]) + "/" + name[0].split(".pdf")[0] + "/07/" + str(cve) + ".pdf"
-                                        aux = Registro_Mineria.objects.create(region=codigo_region,provincia=current_prov,concesion=concesion,concesiona=concesiona,diario=diario,tipo_tramite=tipo,url=url,cve=cve,texto=getPDFContent(str(cve)+".pdf"))
+                                        content_asd=getPDFContent(str(cve)+".pdf")
+                                        aux = Registro_Mineria.objects.create(region=codigo_region,provincia=current_prov,concesion=concesion,concesiona=concesiona,diario=diario,tipo_tramite=tipo,url=url,cve=cve,texto=content_asd, rut_css=extract_rut(content_asd))
                                         aux.save()
                                         cve_downloaded+=1
                                         os.system('rm ' + cve+".pdf")
@@ -297,6 +308,7 @@ def get_datos(request):
     response["TIPO_CONCE"] = registro.tipo_conce
     response["CONCESION"] = registro.concesion
     response["CONCESIONA"] = registro.concesiona
+    response["RUT_CSS"] = registro.rut_css
     response["REPRESENTA"] = registro.representa
     response["DIRECCION"] = registro.direccion
     response["ROLMINERO"] = registro.rolminero
@@ -384,6 +396,7 @@ def actualizar_datos(request):
     registro.tipo_conce = request.POST["TIPO_CONCE"]
     registro.concesion = request.POST["CONCESION"]
     registro.concesiona = request.POST["CONCESIONA"]
+    registro.rut_css = request.POST["RUT_CSS"]
     registro.representa = request.POST["REPRESENTA"]
     registro.direccion = request.POST["DIRECCION"]
     registro.rolminero = request.POST["ROLMINERO"]
