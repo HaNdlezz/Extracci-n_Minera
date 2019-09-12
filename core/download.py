@@ -22,6 +22,7 @@ class download():
             ("F_BOLETIN", "D", 8),
             ("CONCESION", "C", 60),
             ("CONCESIONA", "C", 60),
+            ("RUT_CSS", "C", 12),
             ("REPRESENTA", "C", 60),
             ("DIRECCION", "C", 100),
             ("REGION", "C", 2),
@@ -48,6 +49,7 @@ class download():
             ("CIUDAD", "C", 15),
             ("CARTAIGM", "C", 6),
             ("OBSER", "C", 55),
+            ("CVE", "N", 10),
             ("DATUM", "C", 6),
             ("F_PRESTRIB", "D", 8),
             ("ARCHIVO", "C", 100),
@@ -71,6 +73,7 @@ class download():
                 response["F_BOLETIN"] = ('' if solicitud.f_boletin is None or len(solicitud.f_boletin)==0 else (datetime.datetime.strptime(solicitud.f_boletin, '%Y/%m/%d').strftime('%Y%m%d')) or '').upper()
                 response["CONCESION"] = ('' if solicitud.concesion is None else solicitud.concesion.encode('utf-8')).upper()
                 response["CONCESIONA"] = ('' if solicitud.concesiona is None else solicitud.concesiona.encode('utf-8')).upper()
+                response["RUT_CSS"] = ('' if solicitud.rut_css is None else solicitud.rut_css.encode('utf-8')).upper()
                 response["REPRESENTA"] = ('' if solicitud.representa is None else solicitud.representa.encode('utf-8')).upper()
                 response["DIRECCION"] = ('' if solicitud.direccion is None else solicitud.direccion.encode('utf-8')).upper()
                 response["REGION"] = ('' if solicitud.region is None else solicitud.region.encode('utf-8')).upper()
@@ -115,6 +118,7 @@ class download():
                 response["CIUDAD"] = ('' if solicitud.ciudad is None else solicitud.ciudad.encode('utf-8').encode('utf-8')).upper()
                 response["CARTAIGM"] = ('' if solicitud.cartaigm is None else solicitud.cartaigm.encode('utf-8')).upper()
                 response["OBSER"] = ('' if solicitud.obser is None else solicitud.obser.encode('utf-8')).upper()
+                response["CVE"] = solicitud.cve or 0
                 response["DATUM"] = ('' if solicitud.datum is None else solicitud.datum.encode('utf-8')).upper()
                 response["F_PRESTRIB"] = ('' if solicitud.f_prestrib is None or len(solicitud.f_prestrib)==0 else (datetime.datetime.strptime(solicitud.f_prestrib, '%Y/%m/%d').strftime('%Y%m%d')) or '').upper()
                 response["ARCHIVO"] = ('' if solicitud.archivo is None else solicitud.archivo.encode('utf-8')).upper()
@@ -149,6 +153,7 @@ class download():
             ("F_BOLETIN", "D", 8),
             ("CONCESION", "C", 60),
             ("CONCESIONA", "C", 60),
+            ("RUT_CSS", "C", 12),
             ("REPRESENTA", "C", 60),
             ("DIRECCION", "C", 100),
             ("REGION", "C", 2),
@@ -174,6 +179,7 @@ class download():
             ("CIUDAD", "C", 15),
             ("CARTAIGM", "C", 6),
             ("OBSER", "C", 55),
+            ("CVE", "N", 10),
             ("PED_ASOC", "C", 50),
             ("FECHAPED", "D", 8),
             ("ROLPED", "C", 10),
@@ -209,6 +215,7 @@ class download():
                 response["F_BOLETIN"] = ('' if solicitud.f_boletin is None or len(solicitud.f_boletin)==0 else (datetime.datetime.strptime(solicitud.f_boletin, '%Y/%m/%d').strftime('%Y%m%d')) or '').upper()
                 response["CONCESION"] = ('' if solicitud.concesion is None else solicitud.concesion.encode('utf-8')).upper()
                 response["CONCESIONA"] = ('' if solicitud.concesiona is None else solicitud.concesiona.encode('utf-8')).upper()
+                response["RUT_CSS"] = ('' if solicitud.rut_css is None else solicitud.rut_css.encode('utf-8')).upper()
                 response["REPRESENTA"] = ('' if solicitud.representa is None else solicitud.representa.encode('utf-8')).upper()
                 response["DIRECCION"] = ('' if solicitud.direccion is None else solicitud.direccion.encode('utf-8')).upper()
                 response["REGION"] = (solicitud.region or '').upper()
@@ -252,6 +259,7 @@ class download():
                 response["CIUDAD"] = ('' if solicitud.ciudad is None else solicitud.ciudad.encode('utf-8')).upper()
                 response["CARTAIGM"] = ('' if solicitud.cartaigm is None else solicitud.cartaigm.encode('utf-8')).upper()
                 response["OBSER"] = ('' if solicitud.obser is None else solicitud.obser.encode('utf-8')).upper()
+                response["CVE"] = solicitud.cve or 0
                 response["PED_ASOC"] = ('' if solicitud.ped_asoc is None else solicitud.ped_asoc.encode('utf-8')).upper()
                 response["FECHAPED"] = ('' if solicitud.fechaped is None or len(solicitud.fechaped)==0 else (datetime.datetime.strptime(solicitud.fechaped, '%Y/%m/%d').strftime('%Y%m%d')) or '').upper()
                 response["ROLPED"] = ('' if solicitud.rolped is None else solicitud.rolped.encode('utf-8')).upper()
@@ -299,6 +307,7 @@ class download():
             ("TIPO_CONCE", "C", 13),
             ("CONCESION", "C", 60),
             ("CONCESIONA", "C", 60),
+            ("RUT_CSS", "C", 12),
             ("REPRESENTA", "C", 60),
             ("DIRECCION", "C", 100),
             ("ROLMINERO", "C", 20),
@@ -324,6 +333,7 @@ class download():
             ("HA_PERT", "C", 6),
             ("HECTAREAS", "N", 8),
             ("OBSER", "C", 55),
+            ("CVE", "N", 10),
             ("DATUM", "C", 6),
             ("F_PRESTRIB", "D"),
             ("ARCHIVO", "C", 100),
@@ -348,6 +358,7 @@ class download():
                 response["TIPO_CONCE"] = (solicitud.tipo_conce or '').upper()
                 response["CONCESION"] = ('' if solicitud.concesion is None else solicitud.concesion.encode('utf-8')).upper()
                 response["CONCESIONA"] = ('' if solicitud.concesiona is None else solicitud.concesiona.encode('utf-8')).upper()
+                response["RUT_CSS"] = ('' if solicitud.rut_css is None else solicitud.rut_css.encode('utf-8')).upper()
                 response["REPRESENTA"] = ('' if solicitud.representa is None else solicitud.representa.encode('utf-8')).upper()
                 response["DIRECCION"] = ('' if solicitud.direccion is None else solicitud.direccion.encode('utf-8')).upper()
                 response["ROLMINERO"] = ('' if solicitud.rolminero is None else solicitud.rolminero.encode('utf-8')).upper()
@@ -385,6 +396,7 @@ class download():
                     hectareas = float(solicitud.hectareas)
                 response["HECTAREAS"] = hectareas or 0
                 response["OBSER"] = (solicitud.obser or '').upper()
+                response["CVE"] = solicitud.cve or 0
                 response["DATUM"] = (solicitud.datum or '').upper()
                 response["F_PRESTRIB"] =  ('' if solicitud.f_prestrib is None or len(solicitud.f_prestrib)==0 else (datetime.datetime.strptime(solicitud.f_prestrib, '%Y/%m/%d').strftime('%Y%m%d')) or '').upper()
                 response["ARCHIVO"] = (solicitud.archivo or '').upper()
@@ -422,6 +434,7 @@ class download():
             ("F_BOLETIN", "D", 8),
             ("CONCESION", "C", 60),
             ("CONCESIONA", "C", 60),
+            ("RUT_CSS", "C", 12),
             ("REPRESENTA", "C", 60),
             ("DIRECCION", "C", 100),
             ("JUZGADO", "C", 35),
@@ -463,6 +476,7 @@ class download():
             ("RAZON", "C", 1),
             ("PERITO", "C", 34),
             ("OPOSICION", "C", 50),
+            ("CVE", "N", 10),
             ("DATUM", "C", 6),
             ("F_PRESTRIB", "D", 8),
             ("ARCHIVO", "C", 100),
@@ -487,6 +501,7 @@ class download():
                 response["F_BOLETIN"] = ('' if solicitud.f_boletin is None or len(solicitud.f_boletin)==0 else (datetime.datetime.strptime(solicitud.f_boletin, '%Y/%m/%d').strftime('%Y%m%d')) or '').upper()
                 response["CONCESION"] =  ('' if solicitud.concesion is None else solicitud.concesion.encode('utf-8')).upper()
                 response["CONCESIONA"] =  ('' if solicitud.concesiona is None else solicitud.concesiona.encode('utf-8')).upper()
+                response["RUT_CSS"] =  ('' if solicitud.rut_css is None else solicitud.rut_css.encode('utf-8')).upper()
                 response["REPRESENTA"] =  ('' if solicitud.representa is None else solicitud.representa.encode('utf-8')).upper()
                 response["DIRECCION"] =  ('' if solicitud.direccion is None else solicitud.direccion.encode('utf-8')).upper()
                 response["JUZGADO"] =  ('' if solicitud.juzgado is None else solicitud.juzgado.encode('utf-8')).upper()
@@ -546,6 +561,7 @@ class download():
                 response["RAZON"] =  ('' if solicitud.razon is None else solicitud.razon.encode('utf-8')).upper()
                 response["PERITO"] =  ('' if solicitud.perito is None else solicitud.perito.encode('utf-8')).upper()
                 response["OPOSICION"] =  ('' if solicitud.oposicion is None else solicitud.oposicion.encode('utf-8')).upper()
+                response["CVE"] = solicitud.cve or 0
                 response["DATUM"] =  ('' if solicitud.datum is None else solicitud.datum.encode('utf-8')).upper()
                 response["F_PRESTRIB"] =  ('' if solicitud.f_prestrib is None or len(solicitud.f_prestrib)==0 else (datetime.datetime.strptime(solicitud.f_prestrib, '%Y/%m/%d').strftime('%Y%m%d')) or '').upper()
                 response["ARCHIVO"] =  ('' if solicitud.archivo is None else solicitud.archivo.encode('utf-8')).upper()

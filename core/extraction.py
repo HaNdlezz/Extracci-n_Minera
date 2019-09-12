@@ -220,6 +220,8 @@ class extraction():
         patron = re.compile("(huso|zona)\s\d\d", re.I)
         if patron.search(pedimento.texto):
             pedimento.huso = patron.search(pedimento.texto).group().split(" ")[-1]
+        else:
+            pedimento.huso = "No se detecta Huso"
         patron = re.compile("[0-9]{1,2}(.?)[0-9]{1,3}(\n)?\s*?\t?(hectáreas|hectareas|has)", re.I)
         if patron.search(pedimento.texto.encode('utf-8')):
             pedimento.hectareas = patron.search(pedimento.texto.encode('utf-8')).group().replace(".","").split(" ")[0]
