@@ -118,7 +118,9 @@ class download():
                 response["CIUDAD"] = ('' if solicitud.ciudad is None else solicitud.ciudad.encode('utf-8').encode('utf-8')).upper()
                 response["CARTAIGM"] = ('' if solicitud.cartaigm is None else solicitud.cartaigm.encode('utf-8')).upper()
                 response["OBSER"] = ('' if solicitud.obser is None else solicitud.obser.encode('utf-8')).upper()
-                response["CVE"] = solicitud.cve or 0
+                if solicitud.cve is not None:
+                    cve = float(solicitud.cve)
+                response["CVE"] = cve or 0
                 response["DATUM"] = ('' if solicitud.datum is None else solicitud.datum.encode('utf-8')).upper()
                 response["F_PRESTRIB"] = ('' if solicitud.f_prestrib is None or len(solicitud.f_prestrib)==0 else (datetime.datetime.strptime(solicitud.f_prestrib, '%Y/%m/%d').strftime('%Y%m%d')) or '').upper()
                 response["ARCHIVO"] = ('' if solicitud.archivo is None else solicitud.archivo.encode('utf-8')).upper()
@@ -259,7 +261,9 @@ class download():
                 response["CIUDAD"] = ('' if solicitud.ciudad is None else solicitud.ciudad.encode('utf-8')).upper()
                 response["CARTAIGM"] = ('' if solicitud.cartaigm is None else solicitud.cartaigm.encode('utf-8')).upper()
                 response["OBSER"] = ('' if solicitud.obser is None else solicitud.obser.encode('utf-8')).upper()
-                response["CVE"] = solicitud.cve or 0
+                if solicitud.cve is not None:
+                    cve = float(solicitud.cve)
+                response["CVE"] = cve or 0
                 response["PED_ASOC"] = ('' if solicitud.ped_asoc is None else solicitud.ped_asoc.encode('utf-8')).upper()
                 response["FECHAPED"] = ('' if solicitud.fechaped is None or len(solicitud.fechaped)==0 else (datetime.datetime.strptime(solicitud.fechaped, '%Y/%m/%d').strftime('%Y%m%d')) or '').upper()
                 response["ROLPED"] = ('' if solicitud.rolped is None else solicitud.rolped.encode('utf-8')).upper()
@@ -396,7 +400,9 @@ class download():
                     hectareas = float(solicitud.hectareas)
                 response["HECTAREAS"] = hectareas or 0
                 response["OBSER"] = (solicitud.obser or '').upper()
-                response["CVE"] = solicitud.cve or 0
+                if solicitud.cve is not None:
+                    cve = float(solicitud.cve)
+                response["CVE"] = cve or 0
                 response["DATUM"] = (solicitud.datum or '').upper()
                 response["F_PRESTRIB"] =  ('' if solicitud.f_prestrib is None or len(solicitud.f_prestrib)==0 else (datetime.datetime.strptime(solicitud.f_prestrib, '%Y/%m/%d').strftime('%Y%m%d')) or '').upper()
                 response["ARCHIVO"] = (solicitud.archivo or '').upper()
@@ -561,7 +567,9 @@ class download():
                 response["RAZON"] =  ('' if solicitud.razon is None else solicitud.razon.encode('utf-8')).upper()
                 response["PERITO"] =  ('' if solicitud.perito is None else solicitud.perito.encode('utf-8')).upper()
                 response["OPOSICION"] =  ('' if solicitud.oposicion is None else solicitud.oposicion.encode('utf-8')).upper()
-                response["CVE"] = solicitud.cve or 0
+                if solicitud.cve is not None:
+                    cve = float(solicitud.cve)
+                response["CVE"] = cve or 0
                 response["DATUM"] =  ('' if solicitud.datum is None else solicitud.datum.encode('utf-8')).upper()
                 response["F_PRESTRIB"] =  ('' if solicitud.f_prestrib is None or len(solicitud.f_prestrib)==0 else (datetime.datetime.strptime(solicitud.f_prestrib, '%Y/%m/%d').strftime('%Y%m%d')) or '').upper()
                 response["ARCHIVO"] =  ('' if solicitud.archivo is None else solicitud.archivo.encode('utf-8')).upper()
