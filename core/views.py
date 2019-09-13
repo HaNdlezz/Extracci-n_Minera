@@ -149,6 +149,7 @@ def crear_pdf_de_boletin(request):
                             current_prov = current_prov.replace("\n", "")
 
                             for x in reg_prov.split(")"):
+                                cve = ''
                                 if "CVE:" in x:
                                     ######### MUST: improve extraction of cve concesion and else,
                                     ######### when it is in the first row of new page
@@ -156,19 +157,28 @@ def crear_pdf_de_boletin(request):
                                         print "NEW CVE"
                                         temp_x = x
                                         if current_prov in x:
-                                            x = temp_x.split(current_prov)[1].split("(")[1].replace(" ","")
-                                            cve = x.split("CVE:")[1]
+                                            x = temp_x.split(current_prov)
+                                            if x is not None:
+                                                if len(x) > 1:
+                                                    x = x[1].split("(")[1].replace(" ","")
+                                                    cve = x.split("CVE:")[1]
                                             concesion = temp_x.split(current_prov)[1].split('(')[0].split('/')[0]
                                             concesiona = temp_x.split(current_prov)[1].split('(')[0].split('/')[1]
                                         else:
                                             if "sitio web www.diarioficial.cl" in x:
-                                                x = temp_x.split('sitio web www.diarioficial.cl')[1].split("(")[1].replace(" ","")
-                                                cve = x.split("CVE:")[1]
+                                                x = temp_x.split('sitio web www.diarioficial.cl')
+                                                if x is not None:
+                                                    if len(x) > 1:
+                                                        x = x[1].split("(")[1].replace(" ","")
+                                                        cve = x.split("CVE:")[1]
                                                 concesion = temp_x.split('sitio web www.diarioficial.cl')[1].split('(')[0].split('/')[0]
                                                 concesiona = temp_x.split('sitio web www.diarioficial.cl')[1].split('(')[0].split('/')[1]
                                             else:
-                                                x = x.split("CVE:")[1].split("(")[0].replace(" ","")
-                                                cve = x.split("CVE:")[0]
+                                                x = x.split("CVE:")
+                                                if x is not None:
+                                                    if len(x) > 1:
+                                                        x = x[1].split("(")[0].replace(" ","")
+                                                        cve = x.split("CVE:")[0]
                                                 concesion = temp_x.split('(')[0].split('/')[0]
                                                 concesiona = temp_x.split('(')[0].split('/')[1]
 
@@ -178,22 +188,29 @@ def crear_pdf_de_boletin(request):
                                         concesiona = concesiona.replace("\n", "").strip()
                                         os.system('wget -U "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.6) Gecko/20070802 SeaMonkey/1.1.4" ' + "http://www.diariooficial.interior.gob.cl/publicaciones/"+ str(name[4]) +"/" +str(name[3]) +"/" + str(name[2]) + "/" + name[0].split(".pdf")[0] + "/07/" + str(cve) + ".pdf")
                                         url = "http://www.diariooficial.interior.gob.cl/publicaciones/"+ str(name[4]) +"/" +str(name[3]) +"/" + str(name[2]) + "/" + name[0].split(".pdf")[0] + "/07/" + str(cve) + ".pdf"
-                                        content_asd=getPDFContent(str(cve)+".pdf")
-                                        aux = Registro_Mineria.objects.create(region=codigo_region,provincia=current_prov,concesion=concesion,concesiona=concesiona,diario=diario,tipo_tramite=tipo,url=url,cve=cve,texto=content_asd, rut_css=extract_rut(content_asd))
+                                        aux = Registro_Mineria.objects.create(region=codigo_region,provincia=current_prov,concesion=concesion,concesiona=concesiona,diario=diario,tipo_tramite=tipo,url=url)
+                                        if cve != '':
+                                            content_asd=getPDFContent(str(cve)+".pdf")
+                                            aux.cve = cve
+                                            aux.texto = content_asd
+                                            aux.rut_css = extract_rut(content_asd)
+                                            cve_downloaded+=1
+                                            os.system('rm ' + cve+".pdf")
+                                            os.system('rm ' + cve+".txt")
+                                            print "END OF CVE SUCESSFULLY"
+                                        else:
+                                            print "END OF CVE WITH OBSERVATIONS"
                                         aux.save()
-                                        cve_downloaded+=1
-                                        os.system('rm ' + cve+".pdf")
-                                        os.system('rm ' + cve+".txt")
 
-                                        print "END OF CVE SUCESSFULLY"
                                     except Exception as e:
                                         print 'Error raised: %s  (%s)' % (e.message, type(e))
                                         print "END OF CVE WITH ERROR: " + cve
                                         trace_back = traceback.format_exc()
                                         message = str(e)+ " " + str(trace_back)
                                         print message
-                                        os.system('rm ' + cve+".pdf")
-                                        os.system('rm ' + cve+".txt")
+                                        if cve != '':
+                                            os.system('rm ' + cve+".pdf")
+                                            os.system('rm ' + cve+".txt")
                                         pass
                 ###### STOP WORKING ON ITERATE BY PROVINCE #######
         ###### STOP WORKING ON ITERATE BY REGION #######
