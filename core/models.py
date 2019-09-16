@@ -10,6 +10,9 @@ from datetime import date
 class Diario(models.Model):
 	codigo = models.CharField(max_length=50)
 	fecha = models.CharField(max_length=50)
+        def __str__(self):
+            return self.codigo + " - " + self.fecha
+
 
 class Registro_Mineria(models.Model):
     #concesiones
