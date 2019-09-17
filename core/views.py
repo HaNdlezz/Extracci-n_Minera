@@ -40,7 +40,7 @@ def getPDFContent(path):
     content = ""
     try:
         retcode = subprocess.check_output("ruby pdf_reader.rb '" + path + "'", shell=True)
-        print retcode
+        # print retcode
     except OSError as e:
         print("Execution failed:", e)
     content = retcode
@@ -127,141 +127,72 @@ def crear_pdf_de_boletin(request):
         for y in datos:
             tipo = y.split("TERMINO SEPARADOR")[0]
 
-
-            #################################
-
-
-            # patron_region = re.compile("\n[a-z]{1,4}\sREGIÓN\s[a-z]{1,3}?[^0-9]*\n", re.I)
-
-            # patron_provincia = re.compile("\nprovincia\s[a-z]{1,3}?\s?[^0-9]*\n", re.I)
-
-            
-
-
-
-
-
-
-
-            #################################
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             ###### WORKING ON ITERATE BY REGION #######
-            for inx, reg_block in enumerate(y.split('REGIÓN '.decode('utf-8'))):
-                if inx == 0:
-                    pass
-                else:
-                    current_region = reg_block.split('Provincia')[0]
-                    current_region = current_region.split('\n')[0]
-                    # patron_region = re.compile("\n[a-z]{1,4}\sREGIÓN\s[a-z]{1,3}?[^0-9]*\n", re.I)
-                    # current_region = patron_region.search(reg_block).group()
-                    codigo_region = current_region
-                    # current_prov = current_region.replace("\n", "")
-                    region_to_compare = current_region.replace("\n", "").lower()
-                    for region in utils.regions():
-                        if region['nombre'].lower().decode("raw_unicode_escape") in region_to_compare:
-                            codigo_region = region['codigo']
-                            
-                    # reg_block.replace('Provincia de ', 'Provincia de xProv')
+            for  reg_block in y.split('REGIÓN '.decode('utf-8')):
+                current_region = reg_block.split('Provincia')[0]
+                current_region = current_region.split('\n')[0]
+                # patron_region = re.compile("\n[a-z]{1,4}\sREGIÓN\s[a-z]{1,3}?[^0-9]*\n", re.I)
+                # current_region = patron_region.search(reg_block).group()
+                codigo_region = current_region
+                # current_prov = current_region.replace("\n", "")
+                region_to_compare = current_region.replace("\n", "").lower()
+                for region in utils.regions():
+                    if region['nombre'].lower().decode("raw_unicode_escape") in region_to_compare:
+                        codigo_region = region['codigo']
+                        
+                # reg_block.replace('Provincia de ', 'Provincia de xProv')
 
-                    ###### WORKING ON ITERATE BY PROVINCE #######
-                    for inx2, reg_prov in enumerate(reg_block.split('Provincia de ')):
-                        if inx2 == 0:
-                            pass
-                        else:
-                            # current_prov = reg_prov.split('xProv')[0].split('\n')[0]
-                            # current_prov = current_prov.replace("\n", "")
-                            patron_provincia = re.compile("\nprovincia\s[a-z]{1,3}?\s?[^0-9]*\n", re.I)
-                            current_prov = patron_provincia.search(reg_prov)
+                ###### WORKING ON ITERATE BY PROVINCE #######
+                for  reg_prov in reg_block.split('Provincia '):
+                    reg_prov = 'Provincia ' + reg_prov
+                    patron_provincia = re.compile("\nprovincia\s[a-z]{1,3}?\s?[^0-9]*\n", re.I)
+                    current_prov = patron_provincia.search(reg_prov)
+                    for x in reg_prov.split("\n"):
+                        cve = ''
+                        if "(CVE: " in x:
+                            try:
+                                temp_x = x
+                                patron_cve = re.compile("\d{7}")
+                                cve = patron_cve.search(temp_x).group()
+                                print "NEW CVE: " + cve
 
-                            for x in reg_prov.split("\n"):
-                                # if '1648361' in x:
-                                #     pdb.set_trace()
-                                #     print '1648361'
-                                cve = ''
-                                if "(CVE: " in x:
-                                    ######### MUST: improve extraction of cve concesion and else,
-                                    ######### when it is in the first row of new page
-                                    try:
-                                        print "NEW CVE"
-                                        temp_x = x
+                                concesion = ''
+                                concesiona = ''
+                                if ' / ' in temp_x:
+                                    concesion = temp_x.split('(')[0].split('/')[0].strip()
+                                    concesiona = temp_x.split('(')[0].split('/')[1].strip()
 
-                                        # if current_prov in x:
-                                        #     x = temp_x.split(current_prov)
-                                        #     if x is not None:
-                                        #         if len(x) > 1:
-                                        #             # x = x[1].split("(")[1].replace(" ","")
-                                        #             cve = ''.join(x).split("CVE:")[1].replace(" ","")
-                                        #     concesion = temp_x.split(current_prov)[1].split('(')[0].split('/')[0]
-                                        #     concesiona = temp_x.split(current_prov)[1].split('(')[0].split('/')[1]
-                                        # else:
-                                        #     if "sitio web www.diarioficial.cl" in x:
-                                        #         x = temp_x.split('sitio web www.diarioficial.cl')
-                                        #         if x is not None:
-                                        #             if len(x) > 1:
-                                        #                 # x = x[1].split("(")[1].replace(" ","")
-                                        #                 cve = ''.join(x).split("CVE:")[1].replace(" ","")
-                                        #         concesion = temp_x.split('sitio web www.diarioficial.cl')[1].split('(')[0].split('/')[0]
-                                        #         concesiona = temp_x.split('sitio web www.diarioficial.cl')[1].split('(')[0].split('/')[1]
-                                        #     else:
-                                        #         # x = x.split("CVE:")
-                                        #         if x is not None:
-                                        #             if len(x) > 1:
-                                        #                 # x = x[1].split("(")[0].replace(" ","")
-                                        #                 cve = ''.join(x).split("CVE:")[1].replace(" ","")
-                                        #         concesion = temp_x.split('(')[0].split('/')[0]
-                                        #         concesiona = temp_x.split('(')[0].split('/')[1]
-                                        patron_cve = re.compile("\d{7}")
-                                        cve = patron_cve.search(temp_x).group()
-                                        concesion = temp_x.split('(')[0].split('/')[0].strip()
-                                        concesiona = temp_x.split('(')[0].split('/')[1].strip()
+                                os.system('wget -U "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.6) Gecko/20070802 SeaMonkey/1.1.4" ' + "http://www.diariooficial.interior.gob.cl/publicaciones/"+ str(name[4]) +"/" +str(name[3]) +"/" + str(name[2]) + "/" + name[0].split(".pdf")[0] + "/07/" + str(cve) + ".pdf")
+                                url = "http://www.diariooficial.interior.gob.cl/publicaciones/"+ str(name[4]) +"/" +str(name[3]) +"/" + str(name[2]) + "/" + name[0].split(".pdf")[0] + "/07/" + str(cve) + ".pdf"
+                                aux = Registro_Mineria.objects.create(region=codigo_region,provincia=current_prov,concesion=concesion,concesiona=concesiona,diario=diario,tipo_tramite=tipo,url=url)
+                                if cve != '':
+                                    content_asd=getPDFContent(str(cve)+".pdf")
+                                    aux.cve = cve
+                                    aux.texto = content_asd
+                                    aux.rut_css = extract_rut(content_asd)
+                                    cve_downloaded+=1
+                                    os.system('rm ' + cve+".pdf")
+                                    os.system('rm ' + cve+".txt")
+                                    print "END OF CVE SUCESSFULLY"
+                                else:
+                                    print "END OF CVE WITH OBSERVATIONS"
+                                aux.save()
 
-                                        # concesion = concesion.split("\n")
-                                        # concesion = concesion[len(concesion) - 1]
-                                        # concesion = concesion.replace("\n", "").strip()
-                                        # concesiona = concesiona.replace("\n", "").strip()
-                                        os.system('wget -U "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.6) Gecko/20070802 SeaMonkey/1.1.4" ' + "http://www.diariooficial.interior.gob.cl/publicaciones/"+ str(name[4]) +"/" +str(name[3]) +"/" + str(name[2]) + "/" + name[0].split(".pdf")[0] + "/07/" + str(cve) + ".pdf")
-                                        url = "http://www.diariooficial.interior.gob.cl/publicaciones/"+ str(name[4]) +"/" +str(name[3]) +"/" + str(name[2]) + "/" + name[0].split(".pdf")[0] + "/07/" + str(cve) + ".pdf"
-                                        aux = Registro_Mineria.objects.create(region=codigo_region,provincia=current_prov,concesion=concesion,concesiona=concesiona,diario=diario,tipo_tramite=tipo,url=url)
-                                        if cve != '':
-                                            content_asd=getPDFContent(str(cve)+".pdf")
-                                            aux.cve = cve
-                                            aux.texto = content_asd
-                                            aux.rut_css = extract_rut(content_asd)
-                                            cve_downloaded+=1
-                                            os.system('rm ' + cve+".pdf")
-                                            os.system('rm ' + cve+".txt")
-                                            print "END OF CVE SUCESSFULLY"
-                                        else:
-                                            print "END OF CVE WITH OBSERVATIONS"
-                                        aux.save()
-
-                                    except Exception as e:
-                                        print 'Error raised: %s  (%s)' % (e.message, type(e))
-                                        print "END OF CVE WITH ERROR: " + cve
-                                        trace_back = traceback.format_exc()
-                                        message = str(e)+ " " + str(trace_back)
-                                        print message
-                                        if cve != '':
-                                            os.system('rm ' + cve+".pdf")
-                                            os.system('rm ' + cve+".txt")
-                                        pass
-                ###### STOP WORKING ON ITERATE BY PROVINCE #######
+                            except Exception as e:
+                                pdb.set_trace()
+                                print 'Error raised: %s  (%s)' % (e.message, type(e))
+                                print "END OF CVE WITH ERROR: " + cve
+                                trace_back = traceback.format_exc()
+                                message = str(e)+ " " + str(trace_back)
+                                print message
+                                if cve != '':
+                                    os.system('rm ' + cve+".pdf")
+                                    os.system('rm ' + cve+".txt")
+                                pass
+            ###### STOP WORKING ON ITERATE BY PROVINCE #######
         ###### STOP WORKING ON ITERATE BY REGION #######
     except Exception as e:
+        pdb.set_trace()
         trace_back = traceback.format_exc()
         message = str(e)+ " " + str(trace_back)
         print message      
