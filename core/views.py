@@ -145,8 +145,8 @@ def crear_pdf_de_boletin(request):
                 ###### WORKING ON ITERATE BY PROVINCE #######
                 for  reg_prov in reg_block.split('Provincia '):
                     reg_prov = 'Provincia ' + reg_prov
-                    patron_provincia = re.compile("\nprovincia\s[a-z]{1,3}?\s?[^0-9]*\n", re.I)
-                    current_prov = patron_provincia.search(reg_prov)
+                    patron_provincia = re.compile("\n?provincia\s[a-z]{1,3}?\s?[^0-9]*\n", re.I)
+                    current_prov = patron_provincia.search(reg_prov).group()
                     for x in reg_prov.split("\n"):
                         cve = ''
                         if "(CVE: " in x:
@@ -179,7 +179,6 @@ def crear_pdf_de_boletin(request):
                                 aux.save()
 
                             except Exception as e:
-                                pdb.set_trace()
                                 print 'Error raised: %s  (%s)' % (e.message, type(e))
                                 print "END OF CVE WITH ERROR: " + cve
                                 trace_back = traceback.format_exc()
@@ -192,7 +191,6 @@ def crear_pdf_de_boletin(request):
             ###### STOP WORKING ON ITERATE BY PROVINCE #######
         ###### STOP WORKING ON ITERATE BY REGION #######
     except Exception as e:
-        pdb.set_trace()
         trace_back = traceback.format_exc()
         message = str(e)+ " " + str(trace_back)
         print message      
@@ -279,7 +277,7 @@ def scrap_data(request):
         if x.tipo_tramite=="EXTRACTOS DE SENTENCIA DE EXPLORACION" or x.tipo_tramite=="EXTRACTOS DE SENTENCIA DE EXPLOTACION":
             extraction.extraerConcesiones(x)
         if x.tipo_tramite=="PEDIMENTOS MINEROS":
-            extraction.extraerPedimentos(x)
+            extraction.extraerPedimentos(x) 
         if x.tipo_tramite=="MANIFESTACIONES MINERAS":
             extraction.extraerManifestaciones(x)
         if x.tipo_tramite=="SOLICITUDES DE MENSURA":
