@@ -231,6 +231,9 @@ class extraction():
         if patron.search(pedimento.texto):
             pedimento.roljuz = patron.search(pedimento.texto).group()
             pedimento.year = patron.search(pedimento.texto).group().split("-")[-1]
+        patron = re.compile("(JUZGADO:)\s?[\w\s\.]{1,}\s?(CAUSA)", re.I)
+        if patron.search(pedimento.texto):
+            pedimento.juzgado = patron.search(pedimento.texto).group().replace('JUZGADO:', '').replace('CAUSA', '').strip()
         patron = re.compile("[0-9]{1,2}\s[dD-eE]{2}\s[aA-zZ]{4,9}\s[dD-lL]{2,3}\s([aA-oO]{3}\s)?[0-9]{4}")
         n_fechas = 5
         fechas = []
