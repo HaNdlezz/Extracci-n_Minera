@@ -138,7 +138,7 @@ def crear_pdf_de_boletin(request):
                 region_to_compare = current_region.replace("\n", "").lower()
                 for region in utils.regions():
                     if region['nombre'].lower().decode("raw_unicode_escape") in region_to_compare:
-                        codigo_region = region['codigo']
+                        codigo_region = (region['codigo'] or '').lstrip('0')
                         
                 # reg_block.replace('Provincia de ', 'Provincia de xProv')
 
