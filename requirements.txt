@@ -33,7 +33,7 @@ openpyxl==2.5.0
 pathlib2==2.3.3
 pexpect==4.6.0
 pickleshare==0.7.5
-pkg-resources==0.0.0
+#pkg-resources==0.0.0
 prompt-toolkit==1.0.15
 psycopg2==2.7.7
 ptyprocess==0.6.0
