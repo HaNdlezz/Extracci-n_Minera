@@ -39,7 +39,7 @@ psycopg2==2.7.7
 ptyprocess==0.6.0
 pycparser==2.19
 pycrypto==2.6.1
-Pygments==2.3.1
+Pygments==2.7.4
 pyPdf==1.13
 python-openid==2.2.5
 pytz==2018.9
